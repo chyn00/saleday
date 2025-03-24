@@ -1,10 +1,8 @@
-package com.commerce.saleday.infra.database.repository;
+package com.commerce.saleday.infra.database.health;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Slf4j
