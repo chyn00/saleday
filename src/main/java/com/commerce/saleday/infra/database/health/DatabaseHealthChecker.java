@@ -1,11 +1,8 @@
-package com.commerce.saleday.infra.database;
+package com.commerce.saleday.infra.database.health;
 
 
-import com.commerce.saleday.infra.database.repository.DatabaseHealthCheckRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +21,7 @@ public class DatabaseHealthChecker {
         try {
             databaseHealthCheckRepository.checkConnection();
             log.info("Database connection is alive");
-        } catch (Exception e) {
+        } catch (CannotGetJdbcConnectionException e) {
             log.error("Database connection failed: {}", e.getMessage());
             throw new CannotGetJdbcConnectionException("Database connection failed.");
         }
