@@ -2,6 +2,8 @@ server:
   port: '9999'
 
 spring:
+  profiles:
+    active: local
   jpa:
     hibernate:
       ddl-auto: none
@@ -9,3 +11,6 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/saleday
+logging:
+  level:
+    org.hibernate.orm.connections.pooling: WARN #connection 관련로그 warn 레벨 이상 부터 출력
