@@ -38,7 +38,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	//Querydsl 추가
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta' // tomcat 버전 업으로 문제없음
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
