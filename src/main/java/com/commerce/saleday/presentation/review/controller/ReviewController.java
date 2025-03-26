@@ -11,11 +11,10 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    //item 정보를 사용자에게 노출
+    //Review 생성
     @PostMapping("/review")
-    public String saveReviewForItem(@RequestBody ReviewRequestDto dto){
+    public Long saveReviewForItem(@RequestBody ReviewRequestDto dto){
 
-//        return reviewService.saveReview("1234", dto.toEntity());
-        return "0";
+        return reviewService.saveReview(dto.getItemCode(), dto.toEntity());
     }
 }

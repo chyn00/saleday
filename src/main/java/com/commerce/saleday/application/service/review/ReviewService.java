@@ -18,7 +18,7 @@ public class ReviewService {
     @Transactional
     public Long saveReview(String itemCode, Review review){
         Item item = itemService.getItem(itemCode);
-        review.mapTo(item);
+        review.mapTo(item);//item을 리뷰에 매핑
         return reviewRepository.createItemReview(review).getId();
     }
 }
