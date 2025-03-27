@@ -9,13 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class ReviewServiceTest {
 
     @Autowired
     ReviewService reviewService;
 
     @Test
-    @Transactional
     void saveReview() {
         //given
         String itemCode = "1234";
