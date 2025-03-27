@@ -1,6 +1,5 @@
 package com.commerce.saleday.infra.database.repository.review;
 
-import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
 import com.commerce.saleday.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;

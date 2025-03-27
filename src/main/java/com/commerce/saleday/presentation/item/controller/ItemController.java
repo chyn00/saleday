@@ -1,7 +1,6 @@
 package com.commerce.saleday.presentation.item.controller;
 
 import com.commerce.saleday.application.service.item.ItemService;
-import com.commerce.saleday.domain.item.model.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
