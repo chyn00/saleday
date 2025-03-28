@@ -1,6 +1,5 @@
 package com.commerce.saleday.presentation.review.model;
 
-import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
