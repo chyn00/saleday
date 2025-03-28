@@ -1,10 +1,14 @@
 package com.commerce.saleday.presentation.item.controller;
 
 import com.commerce.saleday.application.service.item.ItemService;
+import com.commerce.saleday.presentation.item.model.ItemReviewResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,10 +23,10 @@ public class ItemController {
     }
 
     //Item에 매핑된 리뷰의 정보를 읽음
-//    @GetMapping("/item/{itemCode}/reviews")
-//    public List<Review> getItemReviews(@PathVariable String itemCode){
-//
-//        return itemService.findItemReviews(itemCode);
-//    }
+    @GetMapping("/item/{itemCode}/reviews")
+    public List<ItemReviewResponseDto> getItemReviews(@PathVariable String itemCode){
+
+        return ItemReviewResponseDto.toResponse(itemService.getItemReviews(itemCode));
+    }
 
 }
