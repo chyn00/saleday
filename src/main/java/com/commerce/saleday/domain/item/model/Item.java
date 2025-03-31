@@ -25,6 +25,8 @@ public class Item extends BaseEntity {
 
     private String content;// 내용
 
+    private double price;// 가격
+
     //연관관계 지워질때도 연관되도록 구현
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
