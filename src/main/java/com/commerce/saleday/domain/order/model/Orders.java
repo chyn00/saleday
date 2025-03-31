@@ -27,6 +27,6 @@ public class Orders extends BaseEntity {
   private String orderDate;//주문한 날짜
 
   //연관관계 지워질때도 연관되도록 구현
-  @OneToMany(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItem> orderItems;
 }
