@@ -12,23 +12,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class ReviewServiceTest {
 
-    @Autowired
-    ReviewService reviewService;
+  @Autowired
+  ReviewService reviewService;
 
-    @Test
-    void saveReview() {
-        //given
-        String itemCode = "1234";
-        Review review = Review.builder()
-                .userId("SYSTEM")
-                .score(4.5)
-                .content("아주 훌륭한 아이템입니다.")
-                .build();
+  @Test
+  void saveReview() {
+    //given
+    String itemCode = "1234";
+    Review review = Review.builder()
+        .userId("SYSTEM")
+        .score(4.5)
+        .content("아주 훌륭한 아이템입니다.")
+        .build();
 
-        //when
-        Long id = reviewService.saveReview(itemCode, review);
+    //when
+    Long id = reviewService.saveReview(itemCode, review);
 
-        //then
-        assertThat(id).isGreaterThan(0);
-    }
+    //then
+    assertThat(id).isGreaterThan(0);
+  }
 }

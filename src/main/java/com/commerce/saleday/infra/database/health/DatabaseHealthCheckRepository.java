@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class DatabaseHealthCheckRepository{
+public class DatabaseHealthCheckRepository {
 
-    private final EntityManager entityManager;
+  private final EntityManager entityManager;
 
-    public void checkConnection() {
-        entityManager.createNativeQuery("SELECT 1").getSingleResult();
-    }
+  public void checkConnection() {
+    entityManager.createNativeQuery("SELECT 1").getSingleResult();
+  }
 }

@@ -17,22 +17,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemReviewRepositoryImpl implements ItemReviewRepository {
 
-    private final JPAQueryFactory jpaQueryFactory;
+  private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public List<Review> findReviewsWithItem(String itemCode) {
-        QItem item = QItem.item;
-        QReview review = QReview.review;
+  @Override
+  public List<Review> findReviewsWithItem(String itemCode) {
+    QItem item = QItem.item;
+    QReview review = QReview.review;
 
-        return Optional.ofNullable(
-                        jpaQueryFactory
-                                .selectFrom(item)
-                                .join(item.reviews, review)
-                                .fetchJoin()
-                                .where(item.code.eq(itemCode))
-                                .fetchOne()
-                )
-                .map(Item::getReviews)
-                .orElseThrow(() -> new EntityNotFoundException("상품 정보가 없습니다."));
-    }
+    return Optional.ofNullable(
+            jpaQueryFactory
+                .selectFrom(item)
+                .join(item.reviews, review)
+                .fetchJoin()
+                .where(item.code.eq(itemCode))
+                .fetchOne()
+        )
+        .map(Item::getReviews)
+        .orElseThrow(() -> new EntityNotFoundException("상품 정보가 없습니다."));
+  }
 }

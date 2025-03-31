@@ -12,10 +12,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepository {
 
-    private final ItemJpaRepository itemJpaRepository;
+  private final ItemJpaRepository itemJpaRepository;
 
-    @Override
-    public Optional<Item> findItemByCode(String itemCode) {
-        return itemJpaRepository.findByCode(itemCode);
-    }
+  @Override
+  public Optional<Item> findItemByCode(String itemCode) {
+    return itemJpaRepository.findByCode(itemCode);
+  }
 }

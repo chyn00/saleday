@@ -14,20 +14,22 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// 하이버네이트 Proxy에서 사용하도록 단계 조정
 @AllArgsConstructor(access = AccessLevel.PRIVATE)// 외부에서 사용안할거지만, Lombok기본 Builder 생성에 필요
 public class Item extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;// 고유번호가 아닌, +1로 생성되는 id
 
-    @Column(nullable = false)
-    private String code;//상품코드
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;// 고유번호가 아닌, +1로 생성되는 id
 
-    @Column(nullable = false)
-    private String name;// 이름
+  @Column(nullable = false)
+  private String code;//상품코드
 
-    private String content;// 내용
+  @Column(nullable = false)
+  private String name;// 이름
 
-    private double price;// 가격
+  private String content;// 내용
 
-    //연관관계 지워질때도 연관되도록 구현
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+  private double price;// 가격
+
+  //연관관계 지워질때도 연관되도록 구현
+  @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Review> reviews;
 }

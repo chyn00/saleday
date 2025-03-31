@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class SaledayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SaledayApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(SaledayApplication.class, args);
+  }
 
 }

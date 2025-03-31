@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ReviewRepositoryImpl implements ReviewRepository {
 
-    private final ReviewJpaRepository reviewJpaRepository;
+  private final ReviewJpaRepository reviewJpaRepository;
 
-    @Override
-    public Review createItemReview(Review review) {
-        return reviewJpaRepository.save(review);
-    }
+  @Override
+  public Review createItemReview(Review review) {
+    return reviewJpaRepository.save(review);
+  }
 }
