@@ -1,6 +1,7 @@
-package com.commerce.saleday.domain.order.Entity;
+package com.commerce.saleday.domain.order.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.domain.item.model.Item;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,4 +18,11 @@ public class Orders extends BaseEntity {
 
     @Column(nullable = false)
     private String code;//주문 코드
+
+    @Column(nullable = false)
+    private String orderDate;//주문한 날짜
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item; //아이템
 }
