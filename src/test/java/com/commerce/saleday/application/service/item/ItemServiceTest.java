@@ -1,17 +1,16 @@
 package com.commerce.saleday.application.service.item;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.commerce.saleday.application.service.review.ReviewService;
 import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional

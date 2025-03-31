@@ -1,9 +1,12 @@
 package com.commerce.saleday.presentation.item.model;
 
 import com.commerce.saleday.domain.review.model.Review;
-import lombok.*;
-
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
