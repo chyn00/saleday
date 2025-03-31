@@ -3,7 +3,9 @@ package com.commerce.saleday.presentation.review.controller;
 import com.commerce.saleday.application.service.review.ReviewService;
 import com.commerce.saleday.presentation.review.model.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor

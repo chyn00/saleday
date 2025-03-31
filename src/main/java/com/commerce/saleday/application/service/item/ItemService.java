@@ -5,10 +5,9 @@ import com.commerce.saleday.domain.item.repository.ItemRepository;
 import com.commerce.saleday.domain.item.repository.ItemReviewRepository;
 import com.commerce.saleday.domain.review.model.Review;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
