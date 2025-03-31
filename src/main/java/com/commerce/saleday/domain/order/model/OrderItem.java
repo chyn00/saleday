@@ -1,18 +1,40 @@
 package com.commerce.saleday.domain.order.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.domain.item.model.Item;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
 @Builder
-@Table(name = "orderItem")
+@Table(name = "order_Item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// 하이버네이트 Proxy에서 사용하도록 단계 조정
 @AllArgsConstructor(access = AccessLevel.PRIVATE)// 외부에서 사용안할거지만, Lombok기본 Builder 생성에 필요
 public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이템 정보를 저장하는 객체
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;// 고유번호가 아닌, +1로 생성되는 id
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;// 고유번호가 아닌, +1로 생성되는 id
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id", nullable = false)
+  private Item item; //아이템
+
+  // 연관관계의 주인
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)//Order없이 존재 불가
+  @JoinColumn(name = "orders_id", nullable = false)
+  private Orders order;
+
+  @Column(nullable = false)
+  private int quantity; // 주문 수량
+
+  @Column(nullable = false)
+  private int discountAmount;//할인 금액
+
+  @Column(nullable = false)
+  private String discountPolicyContent;//할인 정책 이유
+
+  @Column(nullable = false)
+  private int orderPrice; // (item에 있는 price) * qty - discountAmount
 
 }
