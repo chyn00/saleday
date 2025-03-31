@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 //Jpa Data Repository 인터페이스
-public interface ItemJpaRepository extends JpaRepository<Item,Long> {
-    Optional<Item> findByCode(String itemCode);
+public interface ItemJpaRepository extends JpaRepository<Item, Long> {
+
+  Optional<Item> findByCode(String itemCode);
 }

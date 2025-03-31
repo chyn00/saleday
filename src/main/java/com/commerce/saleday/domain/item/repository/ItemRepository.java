@@ -5,5 +5,6 @@ import com.commerce.saleday.domain.item.model.Item;
 import java.util.Optional;
 
 public interface ItemRepository {
-    Optional<Item> findItemByCode(String itemCode);
+
+  Optional<Item> findItemByCode(String itemCode);
 }

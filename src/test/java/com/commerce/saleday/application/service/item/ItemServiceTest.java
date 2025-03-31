@@ -17,49 +17,49 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class ItemServiceTest {
 
-    @Autowired
-    ItemService itemService;
+  @Autowired
+  ItemService itemService;
 
-    @Autowired
-    ReviewService reviewService;
+  @Autowired
+  ReviewService reviewService;
 
-    @BeforeEach
-    void reviewSetUp() {
-        //given
-        String itemCode = "1234";
-        Review review = Review.builder()
-                .userId("SYSTEM")
-                .score(4.5)
-                .content("아주 훌륭한 아이템입니다.")
-                .build();
+  @BeforeEach
+  void reviewSetUp() {
+    //given
+    String itemCode = "1234";
+    Review review = Review.builder()
+        .userId("SYSTEM")
+        .score(4.5)
+        .content("아주 훌륭한 아이템입니다.")
+        .build();
 
-        // 저장
-        reviewService.saveReview(itemCode, review);
-    }
+    // 저장
+    reviewService.saveReview(itemCode, review);
+  }
 
 
-    @Test
-    void getItem() {
-        //given
-        String itemCode = "1234";
+  @Test
+  void getItem() {
+    //given
+    String itemCode = "1234";
 
-        //when
-        Item item = itemService.getItem(itemCode);
+    //when
+    Item item = itemService.getItem(itemCode);
 
-        //then
-        assertThat(item).isNotNull();
-    }
+    //then
+    assertThat(item).isNotNull();
+  }
 
-    @Test
-    void getItemReviews() {
-        //given
-        String itemCode = "1234";
+  @Test
+  void getItemReviews() {
+    //given
+    String itemCode = "1234";
 
-        //when
-        List<Review> reviews = itemService.getItemReviews(itemCode);
+    //when
+    List<Review> reviews = itemService.getItemReviews(itemCode);
 
-        //then
-        // 초기 단계이기 때문에 추후 수정 필요
-        assertThat(reviews).isNotEmpty();
-    }
+    //then
+    // 초기 단계이기 때문에 추후 수정 필요
+    assertThat(reviews).isNotEmpty();
+  }
 }

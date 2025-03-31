@@ -14,15 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
 
-    private final ItemRepository itemRepository;
-    private final ItemReviewRepository itemReviewRepository;
+  private final ItemRepository itemRepository;
+  private final ItemReviewRepository itemReviewRepository;
 
-    public Item getItem(String itemCode){
-        return itemRepository.findItemByCode(itemCode).orElseThrow(() -> new EntityNotFoundException("상품 정보가 없습니다."));
-    }
+  public Item getItem(String itemCode) {
+    return itemRepository.findItemByCode(itemCode)
+        .orElseThrow(() -> new EntityNotFoundException("상품 정보가 없습니다."));
+  }
 
-    //Item을 기준으로 Review를 조회하기 때문에, Item package 하위에 위치
-    public List<Review> getItemReviews(String itemCode) {
-        return itemReviewRepository.findReviewsWithItem(itemCode);
-    }
+  //Item을 기준으로 Review를 조회하기 때문에, Item package 하위에 위치
+  public List<Review> getItemReviews(String itemCode) {
+    return itemReviewRepository.findReviewsWithItem(itemCode);
+  }
 }

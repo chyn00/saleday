@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewRepository {
-    Review createItemReview(Review review);
+
+  Review createItemReview(Review review);
 }

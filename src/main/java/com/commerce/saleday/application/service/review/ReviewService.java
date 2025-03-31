@@ -11,14 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-    private final ReviewRepository reviewRepository;
-    private final ItemService itemService;
 
-    //리뷰를 저장한다.
-    @Transactional
-    public Long saveReview(String itemCode, Review review){
-        Item item = itemService.getItem(itemCode);
-        review.mapTo(item);//item을 리뷰에 매핑
-        return reviewRepository.createItemReview(review).getId();
-    }
+  private final ReviewRepository reviewRepository;
+  private final ItemService itemService;
+
+  //리뷰를 저장한다.
+  @Transactional
+  public Long saveReview(String itemCode, Review review) {
+    Item item = itemService.getItem(itemCode);
+    review.mapTo(item);//item을 리뷰에 매핑
+    return reviewRepository.createItemReview(review).getId();
+  }
 }

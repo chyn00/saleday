@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService reviewService;
+  private final ReviewService reviewService;
 
-    //Review 생성
-    @PostMapping("/review")
-    public Long saveReviewForItem(@RequestBody ReviewRequestDto dto){
+  //Review 생성
+  @PostMapping("/review")
+  public Long saveReviewForItem(@RequestBody ReviewRequestDto dto) {
 
-        return reviewService.saveReview(dto.getItemCode(), dto.toEntity());
-    }
+    return reviewService.saveReview(dto.getItemCode(), dto.toEntity());
+  }
 }

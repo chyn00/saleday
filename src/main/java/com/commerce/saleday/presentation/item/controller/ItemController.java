@@ -14,19 +14,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
 
-    private final ItemService itemService;
-    //Item 정보를 사용자에게 노출
-    @GetMapping("/item")
-    public String explainItem(@RequestParam String code){
+  private final ItemService itemService;
 
-        return "요청하신 Item Code : " + code + "의 상품명은 ("+ itemService.getItem(code).getName() + ") 입니다.";
-    }
+  //Item 정보를 사용자에게 노출
+  @GetMapping("/item")
+  public String explainItem(@RequestParam String code) {
 
-    //Item에 매핑된 리뷰의 정보를 읽음
-    @GetMapping("/item/{itemCode}/reviews")
-    public List<ItemReviewResponseDto> getItemReviews(@PathVariable String itemCode){
+    return "요청하신 Item Code : " + code + "의 상품명은 (" + itemService.getItem(code).getName() + ") 입니다.";
+  }
 
-        return ItemReviewResponseDto.toResponse(itemService.getItemReviews(itemCode));
-    }
+  //Item에 매핑된 리뷰의 정보를 읽음
+  @GetMapping("/item/{itemCode}/reviews")
+  public List<ItemReviewResponseDto> getItemReviews(@PathVariable String itemCode) {
+
+    return ItemReviewResponseDto.toResponse(itemService.getItemReviews(itemCode));
+  }
 
 }

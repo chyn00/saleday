@@ -5,5 +5,6 @@ import com.commerce.saleday.domain.review.model.Review;
 import java.util.List;
 
 public interface ItemReviewRepository {
-    List<Review> findReviewsWithItem(String itemCode);
+
+  List<Review> findReviewsWithItem(String itemCode);
 }

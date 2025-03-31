@@ -10,20 +10,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabaseHealthChecker {
 
-    private final DatabaseHealthCheckRepository databaseHealthCheckRepository ;
+  private final DatabaseHealthCheckRepository databaseHealthCheckRepository;
 
-    public DatabaseHealthChecker(DatabaseHealthCheckRepository databaseHealthCheckRepository) {
-        this.databaseHealthCheckRepository = databaseHealthCheckRepository;
-    }
+  public DatabaseHealthChecker(DatabaseHealthCheckRepository databaseHealthCheckRepository) {
+    this.databaseHealthCheckRepository = databaseHealthCheckRepository;
+  }
 
-    @PostConstruct
-    public void checkHealth() {
-        try {
-            databaseHealthCheckRepository.checkConnection();
-            log.info("Database connection is alive");
-        } catch (CannotGetJdbcConnectionException e) {
-            log.error("Database connection failed: {}", e.getMessage());
-            throw new CannotGetJdbcConnectionException("Database connection failed.");
-        }
+  @PostConstruct
+  public void checkHealth() {
+    try {
+      databaseHealthCheckRepository.checkConnection();
+      log.info("Database connection is alive");
+    } catch (CannotGetJdbcConnectionException e) {
+      log.error("Database connection failed: {}", e.getMessage());
+      throw new CannotGetJdbcConnectionException("Database connection failed.");
     }
+  }
 }
