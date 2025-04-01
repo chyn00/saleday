@@ -1,4 +1,11 @@
 package com.commerce.saleday.infra.database.repository.order;
 
-public class OrderJpaRepository {
+import com.commerce.saleday.domain.order.model.Orders;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+//Jpa Data Repository 인터페이스
+public interface OrderJpaRepository extends JpaRepository<Orders, Long> {
+
+  Optional<Orders> findOrderByCode(String orderCode);
 }
