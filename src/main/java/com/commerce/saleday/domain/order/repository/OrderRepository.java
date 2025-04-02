@@ -6,4 +6,6 @@ import java.util.Optional;
 public interface OrderRepository {
 
   Optional<Orders> findOrderByCode(String orderCode);
+
+  Orders createOrder(Orders order);
 }

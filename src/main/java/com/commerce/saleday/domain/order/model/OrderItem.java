@@ -49,4 +49,8 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
   @Column(nullable = false)
   private int orderPrice; // (item에 있는 price) * qty - discountAmount
 
+  // Order Mapping
+  public void mapTo(Orders orders) {
+    this.order = orders;
+  }
 }
