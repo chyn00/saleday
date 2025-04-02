@@ -1,15 +1,24 @@
 package com.commerce.saleday.presentation.order.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import com.commerce.saleday.application.service.order.OrderService;
+import com.commerce.saleday.domain.order.model.OrderItem;
+import com.commerce.saleday.presentation.order.model.OrderRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class OrderController {
 
-  //단건 주문
-  @PostMapping("/order/item/{code}")
-  public String orderItem(@PathVariable String code) {
-    return "요청하신 Item Code" + code + "를 주문 성공했습니다.";
+  private final OrderService orderService;
+
+  //단건 주문 저장
+  @PostMapping("/orders")
+  public Long orderItem(@RequestBody OrderRequestDto requestDto) {
+
+    return orderService.saveOrder(requestDto);
   }
+
 }

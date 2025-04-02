@@ -10,7 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +22,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// 하이버네이트 Proxy에서 사용하도록 단계 조정
 @AllArgsConstructor(access = AccessLevel.PRIVATE)// 외부에서 사용안할거지만, Lombok기본 Builder 생성에 필요
@@ -27,15 +29,49 @@ public class Orders extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;// 고유번호가 아닌, +1로 생성되는 id
+  private Long id;
 
   @Column(nullable = false)
-  private String code;//주문 코드
+  private String code;
 
   @Column(nullable = false)
-  private String orderDate;//주문한 날짜
+  private LocalDate orderDate;
 
-  //연관관계 지워질때도 연관되도록 구현
   @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrderItem> orderItems;
+  private List<OrderItem> orderItems = new ArrayList<>();
+
+  @Builder(access = AccessLevel.PRIVATE)
+  private Orders(String code, LocalDate orderDate) {
+    this.code = code;
+    this.orderDate = orderDate;
+    this.orderItems = new ArrayList<>();
+  }
+
+  public static Orders create(String userId, List<OrderItem> items) {
+
+    String code = generateOrderCode(userId);
+    LocalDate orderDate = LocalDate.now();
+
+    Orders order = Orders.builder()
+        .code(code)
+        .orderDate(orderDate)
+        .build();
+
+    for (OrderItem item : items) {
+      order.addOrderItem(item); // 연관관계 설정
+    }
+
+    return order;
+  }
+
+  // 객체 List 저장 및 연관관계 주인 쪽에도 매핑 데이터 세팅
+  public void addOrderItem(OrderItem orderItem) {
+    this.orderItems.add(orderItem);// 객체 List 저장
+    orderItem.mapTo(this); // 연관관계 주인 세팅
+  }
+
+  private static String generateOrderCode(String userId) {
+    String random = UUID.randomUUID().toString().substring(0, 8).toUpperCase(); // 랜덤값 일부
+    return String.format("ORDER-%s-%s", userId, random);
+  }
 }

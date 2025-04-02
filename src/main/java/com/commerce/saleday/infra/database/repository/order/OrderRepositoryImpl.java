@@ -11,8 +11,14 @@ import org.springframework.stereotype.Repository;
 public class OrderRepositoryImpl implements OrderRepository {
 
   private final OrderJpaRepository orderJpaRepository;
+
   @Override
   public Optional<Orders> findOrderByCode(String orderCode) {
     return orderJpaRepository.findOrderByCode(orderCode);
+  }
+
+  @Override
+  public Orders createOrder(Orders order) {
+    return orderJpaRepository.save(order);
   }
 }
