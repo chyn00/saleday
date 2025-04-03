@@ -16,7 +16,7 @@ public class OrderController {
 
   //단건 주문 저장
   @PostMapping("/orders")
-  public Long orderItem(@RequestBody OrderRequestDto requestDto) {
+  public String orderItem(@RequestBody OrderRequestDto requestDto) {
 
     return orderService.saveOrder(requestDto);
   }

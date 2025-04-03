@@ -47,7 +47,7 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
   private String discountPolicyContent;//할인 정책 이유
 
   @Column(nullable = false)
-  private int orderPrice; // (item에 있는 price) * qty - discountAmount
+  private double orderPrice; // (item에 있는 price) * qty - discountAmount
 
   // Order Mapping
   public void mapTo(Orders orders) {
