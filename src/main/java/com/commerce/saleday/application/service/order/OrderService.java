@@ -28,7 +28,7 @@ public class OrderService {
 
   //주문 정보를 저장한다.
   @Transactional
-  public Long saveOrder(OrderRequestDto requestDto) {
+  public String saveOrder(OrderRequestDto requestDto) {
 
     Item item = itemService.getItem(requestDto.getItemCode());
     OrderItem orderItem = OrderItem
@@ -37,7 +37,7 @@ public class OrderService {
         .quantity(requestDto.getQuantity())
         .discountAmount(0)
         .discountPolicyContent("할인 정책 없음")
-        .orderPrice(0)
+        .orderPrice(item.getPrice())
         .build();
 
     List<OrderItem> orderItems = new ArrayList<>();
@@ -45,7 +45,7 @@ public class OrderService {
 
     Orders order = Orders.create(requestDto.getUserId(), orderItems);
 
-    return orderRepository.createOrder(order).getId();
+    return orderRepository.createOrder(order).getCode();
   }
 
 }
