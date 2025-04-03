@@ -66,8 +66,8 @@ public class Orders extends BaseEntity {
 
   // 객체 List 저장 및 연관관계 주인 쪽에도 매핑 데이터 세팅
   public void addOrderItem(OrderItem orderItem) {
+    orderItem.mapTo(this); // 연관관계 주인 세팅(객체참조라서 .add와 순서 바뀌어도 상관없으나 명시성을 위해 앞에 배치)
     this.orderItems.add(orderItem);// 객체 List 저장
-    orderItem.mapTo(this); // 연관관계 주인 세팅
   }
 
   private static String generateOrderCode(String userId) {

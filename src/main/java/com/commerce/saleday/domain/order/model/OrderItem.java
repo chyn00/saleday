@@ -30,7 +30,7 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id", nullable = false)
-  private Item item; //아이템
+  private Item item; //아이템(같은 상품인데, 할인정책이 초과되어 몇개만 할인 되는 경우 ManyToOne)
 
   // 연관관계의 주인
   @ManyToOne(fetch = FetchType.LAZY, optional = false)//Order없이 존재 불가
