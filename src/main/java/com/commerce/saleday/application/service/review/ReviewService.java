@@ -4,6 +4,7 @@ import com.commerce.saleday.application.service.item.ItemService;
 import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
 import com.commerce.saleday.domain.review.repository.ReviewRepository;
+import com.commerce.saleday.presentation.review.model.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,11 @@ public class ReviewService {
 
   //리뷰를 저장한다.
   @Transactional
-  public Long saveReview(String itemCode, Review review) {
-    Item item = itemService.getItem(itemCode);
-    review.mapTo(item);//item을 리뷰에 매핑
+  public Long saveReview(ReviewRequestDto dto) {
+    Item item = itemService.getItem(dto.getItemCode());
+    Review review = Review
+        .create(dto.getUserId(), dto.getScore(), dto.getContent(), item);
+
     return reviewRepository.createItemReview(review).getId();
   }
 }
