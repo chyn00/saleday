@@ -17,6 +17,6 @@ public class ReviewController {
   @PostMapping("/review")
   public Long saveReviewForItem(@RequestBody ReviewRequestDto dto) {
 
-    return reviewService.saveReview(dto.getItemCode(), dto.toEntity());
+    return reviewService.saveReview(dto);
   }
 }

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.commerce.saleday.application.service.review.ReviewService;
 import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
+import com.commerce.saleday.presentation.review.model.ReviewRequestDto;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,14 +27,15 @@ class ItemServiceTest {
   void reviewSetUp() {
     //given
     String itemCode = "1234";
-    Review review = Review.builder()
+    ReviewRequestDto dto = ReviewRequestDto.builder()
+        .itemCode(itemCode)
         .userId("SYSTEM")
         .score(4.5)
         .content("아주 훌륭한 아이템입니다.")
         .build();
 
     // 저장
-    reviewService.saveReview(itemCode, review);
+    reviewService.saveReview(dto);
   }
 
 

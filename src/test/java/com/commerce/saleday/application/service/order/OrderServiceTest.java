@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.commerce.saleday.domain.order.model.Orders;
 import com.commerce.saleday.presentation.order.model.OrderRequestDto;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

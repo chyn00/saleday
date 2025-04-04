@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @Table(name = "order_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// 하이버네이트 Proxy에서 사용하도록 단계 조정
 @AllArgsConstructor(access = AccessLevel.PRIVATE)// 외부에서 사용안할거지만, Lombok기본 Builder 생성에 필요
 public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이템 정보를 저장하는 객체
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;// 고유번호가 아닌, +1로 생성되는 id
@@ -49,6 +49,16 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
   @Column(nullable = false)
   private double orderPrice; // (item에 있는 price) * qty - discountAmount
 
+  @Builder
+  private OrderItem(Item item, int quantity, int discountAmount,
+      String discountPolicyContent, double orderPrice) {
+    this.item = item;
+    this.quantity = quantity;
+    this.discountAmount = discountAmount;
+    this.discountPolicyContent = discountPolicyContent;
+    this.orderPrice = orderPrice;
+  }
+  
   // Order Mapping
   public void mapTo(Orders orders) {
     this.order = orders;
