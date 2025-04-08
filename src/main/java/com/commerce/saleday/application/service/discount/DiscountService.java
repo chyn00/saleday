@@ -13,7 +13,7 @@ public class DiscountService {
   private final DiscountPolicySelector discountPolicySelector;
   private final FixedDiscountCalculator fixedDiscountCalculator;
 
-  public DiscountResult findDiscountResult(double price) {
+  public DiscountResult getDiscountResult(double price) {
     return discountPolicySelector.select(fixedDiscountCalculator, price);
   }
 

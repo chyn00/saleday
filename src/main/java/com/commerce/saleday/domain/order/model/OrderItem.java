@@ -1,7 +1,9 @@
 package com.commerce.saleday.domain.order.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.domain.discount.model.DiscountResult;
 import com.commerce.saleday.domain.item.model.Item;
+import com.commerce.saleday.presentation.order.model.OrderRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -49,7 +51,7 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
   @Column(nullable = false)
   private double orderPrice; // (item에 있는 price) * qty - discountPrice
 
-  @Builder
+  @Builder(access = AccessLevel.PRIVATE)
   private OrderItem(Item item, int quantity, double discountPrice,
       String discountPolicyContent, double orderPrice) {
     this.item = item;
@@ -58,7 +60,17 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
     this.discountPolicyContent = discountPolicyContent;
     this.orderPrice = orderPrice;
   }
-  
+
+  public static OrderItem create(Item item, OrderRequestDto requestDto, DiscountResult discountResult) {
+    return OrderItem.builder()
+        .item(item)
+        .quantity(requestDto.getQuantity())
+        .discountPrice(discountResult.getDiscountAmount())
+        .discountPolicyContent(discountResult.getReason())
+        .orderPrice(item.getPrice() * requestDto.getQuantity() - discountResult.getDiscountAmount())
+        .build();
+  }
+
   // Order Mapping
   public void mapTo(Orders orders) {
     this.order = orders;
