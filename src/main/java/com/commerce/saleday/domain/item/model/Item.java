@@ -13,7 +13,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// 하이버네이트 Proxy에서 사용하도록 단계 조정
-@AllArgsConstructor(access = AccessLevel.PRIVATE)// 외부에서 사용안할거지만, Lombok기본 Builder 생성에 필요
 public class Item extends BaseEntity {
 
   @Id
