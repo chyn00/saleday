@@ -37,7 +37,7 @@ public class OrderService {
     //아이템 객체 조회
     Item item = itemService.getItem(requestDto.getItemCode());
 
-    //할인 객체 조회
+    //할인 객체 조회(Transactional에 묶이게 하기 위해(+객체지향 개발을 위해) this, private를 피하고 service 분리)
     DiscountResult discountResult = discountService.findDiscountResult(item.getPrice());
 
     //주문 정보 저장을 위해 orderItem에 세팅
