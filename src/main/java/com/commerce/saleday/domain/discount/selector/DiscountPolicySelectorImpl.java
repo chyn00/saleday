@@ -12,7 +12,7 @@ public class DiscountPolicySelectorImpl implements DiscountPolicySelector {
 
     return DiscountResult
         .builder()
-        .discountedPrice(price - discountCalculator.applyDiscount(price))
+        .discountAmount(discountCalculator.applyDiscount(price))
         .reason(discountCalculator.getReason())
         .build();
   }
