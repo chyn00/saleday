@@ -1,6 +1,8 @@
 package com.commerce.saleday.application.service.order;
 
+import com.commerce.saleday.application.service.discount.DiscountService;
 import com.commerce.saleday.application.service.item.ItemService;
+import com.commerce.saleday.domain.discount.model.DiscountResult;
 import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.order.model.OrderItem;
 import com.commerce.saleday.domain.order.model.Orders;
@@ -21,6 +23,8 @@ public class OrderService {
 
   private final ItemService itemService;
 
+  private final DiscountService discountService;
+
   public Orders getOrder(String orderCode) {
     return orderRepository.findOrderByCode(orderCode)
         .orElseThrow(() -> new EntityNotFoundException("주문 정보가 없습니다."));
@@ -30,21 +34,28 @@ public class OrderService {
   @Transactional
   public String saveOrder(OrderRequestDto requestDto) {
 
+    //아이템 객체 조회
     Item item = itemService.getItem(requestDto.getItemCode());
+
+    //할인 객체 조회
+    DiscountResult discountResult = discountService.findDiscountResult(item.getPrice());
+
+    //주문 정보 저장을 위해 orderItem에 세팅
     OrderItem orderItem = OrderItem
         .builder()
         .item(item)
         .quantity(requestDto.getQuantity())
-        .discountAmount(0)
-        .discountPolicyContent("할인 정책 없음")
+        .discountPrice(discountResult.getDiscountedPrice())
+        .discountPolicyContent(discountResult.getReason())
         .orderPrice(item.getPrice())
         .build();
 
+    // 연관 관계 매핑 -> 추후 리팩토링 필요
     List<OrderItem> orderItems = new ArrayList<>();
     orderItems.add(orderItem);
 
+    // 주문 생성 및 저장
     Orders order = Orders.create(requestDto.getUserId(), orderItems);
-
     return orderRepository.createOrder(order).getCode();
   }
 
