@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class DiscountResult {
 
-  private double price;
+  private double discountedPrice;
   private String reason;
 }

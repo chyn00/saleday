@@ -2,7 +2,9 @@ package com.commerce.saleday.domain.discount.selector;
 
 import com.commerce.saleday.domain.discount.calculator.DiscountCalculator;
 import com.commerce.saleday.domain.discount.model.DiscountResult;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DiscountPolicySelectorImpl implements DiscountPolicySelector {
 
   @Override
@@ -10,7 +12,7 @@ public class DiscountPolicySelectorImpl implements DiscountPolicySelector {
 
     return DiscountResult
         .builder()
-        .price(discountCalculator.calculate(price))
+        .discountedPrice(price - discountCalculator.applyDiscount(price))
         .reason(discountCalculator.getReason())
         .build();
   }
