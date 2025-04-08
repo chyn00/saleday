@@ -41,20 +41,20 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
   private int quantity; // 주문 수량
 
   @Column(nullable = false)
-  private int discountAmount;//할인 금액
+  private double discountPrice;//할인 금액
 
   @Column(nullable = false)
   private String discountPolicyContent;//할인 정책 이유
 
   @Column(nullable = false)
-  private double orderPrice; // (item에 있는 price) * qty - discountAmount
+  private double orderPrice; // (item에 있는 price) * qty - discountPrice
 
   @Builder
-  private OrderItem(Item item, int quantity, int discountAmount,
+  private OrderItem(Item item, int quantity, double discountPrice,
       String discountPolicyContent, double orderPrice) {
     this.item = item;
     this.quantity = quantity;
-    this.discountAmount = discountAmount;
+    this.discountPrice = discountPrice;
     this.discountPolicyContent = discountPolicyContent;
     this.orderPrice = orderPrice;
   }
@@ -62,5 +62,9 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
   // Order Mapping
   public void mapTo(Orders orders) {
     this.order = orders;
+  }
+
+  public double applyDiscountPrice(double originPrice, double discountPrice){
+    return originPrice - discountPrice;
   }
 }
