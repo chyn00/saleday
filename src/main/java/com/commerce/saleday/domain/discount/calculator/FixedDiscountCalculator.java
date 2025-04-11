@@ -1,5 +1,6 @@
 package com.commerce.saleday.domain.discount.calculator;
 
+import com.commerce.saleday.domain.item.model.Item;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class FixedDiscountCalculator implements DiscountCalculator {
 
   @Override
-  public double applyDiscount(double price) {
-    return this.discountRule(price);
+  public double applyDiscount(Item item) {
+    return this.discountRule(item);
   }
 
   @Override
@@ -21,7 +22,8 @@ public class FixedDiscountCalculator implements DiscountCalculator {
   }
 
   //할인 룰 적용
-  private double discountRule(double price) {
+  private double discountRule(Item item) {
+    double price = item.getPrice();
     if (price >= 50000) {
       return 8000;
     } else if (price >= 30000) {
