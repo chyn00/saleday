@@ -46,7 +46,7 @@ public class Orders extends BaseEntity {
     this.orderItems = new ArrayList<>();
   }
 
-  public static Orders create(String userId, OrderItem orderItem) {
+  public static Orders create(String userId, List<OrderItem> orderItems) {
 
     String code = generateOrderCode(userId);
     LocalDate orderDate = LocalDate.now();
@@ -56,7 +56,9 @@ public class Orders extends BaseEntity {
         .orderDate(orderDate)
         .build();
 
-    order.addOrderItem(orderItem); // 연관관계 설정
+    for (OrderItem item : orderItems) {
+      order.addOrderItem(item); // 연관관계 설정
+    }
 
     return order;
   }

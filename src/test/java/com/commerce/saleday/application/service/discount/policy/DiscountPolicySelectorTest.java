@@ -6,6 +6,7 @@ import com.commerce.saleday.domain.discount.calculator.FixedDiscountCalculator;
 import com.commerce.saleday.domain.discount.calculator.RateDiscountCalculator;
 import com.commerce.saleday.domain.discount.model.DiscountResult;
 import com.commerce.saleday.domain.discount.selector.DiscountPolicySelector;
+import com.commerce.saleday.domain.item.model.Item;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -28,8 +29,13 @@ public class DiscountPolicySelectorTest {
     @ParameterizedTest
     @CsvSource({"10000,2000", "30000,5000", "50000,8000"})
     void fixedDiscountCalculatorTest(double price, double expected){
+      //given
+      Item item = Item.builder()
+          .price(price)
+          .build();
+
       // when
-      DiscountResult discountResult = discountPolicySelector.select(fixedDiscountCalculator, price);
+      DiscountResult discountResult = discountPolicySelector.select(fixedDiscountCalculator, item);
 
       // then
       assertThat(discountResult.getDiscountAmount()).isEqualTo(expected);
@@ -38,8 +44,13 @@ public class DiscountPolicySelectorTest {
     @ParameterizedTest
     @CsvSource({"10000,500", "30000,3000", "50000,10000"})
     void rateDiscountCalculatorTest(double price,double expected){
+      //given
+      Item item = Item.builder()
+          .price(price)
+          .build();
+
       // when
-      DiscountResult discountResult = discountPolicySelector.select(rateDiscountCalculator, price);
+      DiscountResult discountResult = discountPolicySelector.select(rateDiscountCalculator, item);
 
       // then
       assertThat(discountResult.getDiscountAmount()).isEqualTo(expected);

@@ -60,13 +60,13 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
     this.orderPrice = orderPrice;
   }
 
-  public static OrderItem create(Item item, OrderRequestDto requestDto, DiscountResult discountResult) {
+  public static OrderItem create(Item item, int quantity, DiscountResult discountResult) {
     return OrderItem.builder()
         .item(item)
-        .quantity(requestDto.getQuantity())
+        .quantity(quantity)
         .discountPrice(discountResult.getDiscountAmount())
         .discountPolicyContent(discountResult.getReason())
-        .orderPrice(item.getPrice() * requestDto.getQuantity() - discountResult.getDiscountAmount())
+        .orderPrice(item.getPrice() * quantity - discountResult.getDiscountAmount())
         .build();
   }
 
