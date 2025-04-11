@@ -43,7 +43,7 @@ public class OrderService {
     //아이템 객체 조회
     Item item = itemService.getItem(requestDto.getItemCode());
 
-    //할인 객체 조회(Transactional에 묶이게 하기 위해(+객체지향 개발을 위해) this, private를 피하고 service 분리)
+    //할인 객체 조회
     DiscountResult discountResult = discountService.getDiscountResult(item);
 
     //주문 정보 저장을 위해 orderItem에 세팅
@@ -94,7 +94,7 @@ public class OrderService {
   private List<OrderItem> getCalculatedOrderItemList(Map<String, Integer> quantityMapByItemCode, List<Item> itemList) {
     List<OrderItem> orderItemList = new ArrayList<>();
 
-    //할인 객체 조회(Transactional에 묶이게 하기 위해(+객체지향 개발을 위해) this, private를 피하고 service 분리)
+    //할인 객체 조회
     for (Item item : itemList) {
       DiscountResult discountResult = discountService.getDiscountResult(item);
 
