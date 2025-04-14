@@ -67,10 +67,12 @@ public class OrderService {
             .toList());
 
     // 수량 관련된 로직, 중복합산, 0초과인 경우만 필터링도 함께 포함(트랜잭션 관련없어서 private 분리)
-    Map<String, Integer> quantityMapByItemCode = this.getCalculatedQuantity(bulkOrderRequestDto.getOrderItemRequestList());
+    Map<String, Integer> quantityMapByItemCode = this.getCalculatedQuantity(
+        bulkOrderRequestDto.getOrderItemRequestList());
 
     //주문 아이템은 주문당 리스트로 저장(추후 주문 여러개로 확장 가능성 있음)
-    List<OrderItem> orderItemList = this.getCalculatedOrderItemList(quantityMapByItemCode, itemList);
+    List<OrderItem> orderItemList = this.getCalculatedOrderItemList(quantityMapByItemCode,
+        itemList);
 
     // 주문 생성 및 저장
     Orders order = Orders.create(bulkOrderRequestDto.getUserId(), orderItemList);
@@ -79,7 +81,8 @@ public class OrderService {
   }
 
   // 아이템별 수량 계산
-  private Map<String, Integer> getCalculatedQuantity(@Valid @NotEmpty List<OrderItemRequest> orderItemRequestList) {
+  private Map<String, Integer> getCalculatedQuantity(
+      @Valid @NotEmpty List<OrderItemRequest> orderItemRequestList) {
     return orderItemRequestList.stream()
         .filter(item -> item.getQuantity() > 0) // 0 초과만 필터링
         .collect(Collectors.toMap(
@@ -91,7 +94,8 @@ public class OrderService {
   }
 
   //주문 아이템 목록 계산
-  private List<OrderItem> getCalculatedOrderItemList(Map<String, Integer> quantityMapByItemCode, List<Item> itemList) {
+  private List<OrderItem> getCalculatedOrderItemList(Map<String, Integer> quantityMapByItemCode,
+      List<Item> itemList) {
     List<OrderItem> orderItemList = new ArrayList<>();
 
     //할인 객체 조회
@@ -108,7 +112,6 @@ public class OrderService {
 
     return orderItemList;
   }
-
 
 
 }
