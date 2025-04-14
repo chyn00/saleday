@@ -2,11 +2,14 @@ package com.commerce.saleday.presentation.order.controller;
 
 import com.commerce.saleday.application.service.order.OrderService;
 import com.commerce.saleday.presentation.order.model.OrderRequestDto;
+import com.commerce.saleday.presentation.order.model.OrderResponseDto;
 import com.commerce.saleday.presentation.order.model.bulk.BulkOrderRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,6 +30,13 @@ public class OrderController {
   public String orderItems(@Valid @RequestBody BulkOrderRequestDto bulkOrderRequestDto) {
 
     return orderService.saveOrders(bulkOrderRequestDto);
+  }
+
+  //단건 주문 조회
+  @GetMapping("/order")
+  public OrderResponseDto getOrder(@RequestParam String orderCode) {
+
+    return OrderResponseDto.toResponse(orderService.getOrder(orderCode));
   }
 
 }
