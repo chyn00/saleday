@@ -1,6 +1,7 @@
 package com.commerce.saleday.presentation.order.model;
 
 import com.commerce.saleday.domain.order.model.Orders;
+import com.commerce.saleday.presentation.item.model.ItemResponseDto;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AccessLevel;
@@ -32,6 +33,7 @@ public class OrderResponseDto {
         .stream()
         .map(orderItem -> OrderItemResponse
             .builder()
+            .itemResponse(ItemResponseDto.toResponse(orderItem.getItem()))
             .id(orderItem.getId())
             .quantity(orderItem.getQuantity())
             .discountPrice(orderItem.getDiscountPrice())

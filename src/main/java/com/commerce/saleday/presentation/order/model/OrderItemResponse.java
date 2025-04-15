@@ -1,5 +1,7 @@
 package com.commerce.saleday.presentation.order.model;
 
+import com.commerce.saleday.presentation.item.model.ItemResponseDto;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +21,7 @@ public class OrderItemResponse {
   private String discountPolicyContent;//할인 정책 이유
 
   private double orderPrice; // (item에 있는 price) * qty - discountPrice
+
+  private ItemResponseDto itemResponse;//item 결과
 
 }
