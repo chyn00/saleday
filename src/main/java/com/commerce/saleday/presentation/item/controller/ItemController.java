@@ -1,6 +1,7 @@
 package com.commerce.saleday.presentation.item.controller;
 
 import com.commerce.saleday.application.service.item.ItemService;
+import com.commerce.saleday.presentation.item.model.ItemResponseDto;
 import com.commerce.saleday.presentation.item.model.ItemReviewResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public class ItemController {
 
   //Item 정보를 사용자에게 노출
   @GetMapping("/item")
-  public String explainItem(@RequestParam String code) {
+  public ItemResponseDto explainItem(@RequestParam String code) {
 
-    return "요청하신 Item Code : " + code + "의 상품명은 (" + itemService.getItem(code).getName() + ") 입니다.";
+    return ItemResponseDto.toResponse(itemService.getItem(code));
   }
 
   //Item에 매핑된 리뷰의 정보를 읽음

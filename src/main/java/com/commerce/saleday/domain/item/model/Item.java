@@ -25,7 +25,7 @@ public class Item extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;// 고유번호가 아닌, +1로 생성되는 id
+  private Long id;// +1로 생성되는 id(고유번호)
 
   @Column(nullable = false)
   private String code;//상품코드

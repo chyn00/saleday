@@ -27,7 +27,7 @@ public class OrderItem extends BaseEntity {//주문할 당시의 주문 아이�
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;// 고유번호가 아닌, +1로 생성되는 id
+  private Long id;// +1로 생성되는 id(고유번호)
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id", nullable = false)
