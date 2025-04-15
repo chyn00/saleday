@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderItemResponse {
 
-  private Long id;// 고유번호가 아닌, +1로 생성되는 id
+  private Long id;// +1로 생성되는 id(고유번호)
 
   private int quantity; // 주문 수량
 
