@@ -2,8 +2,6 @@ package com.commerce.saleday.domain.review.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
 import com.commerce.saleday.domain.item.model.Item;
-import com.commerce.saleday.domain.order.model.OrderItem;
-import com.commerce.saleday.domain.order.model.Orders;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,9 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

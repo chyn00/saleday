@@ -1,7 +1,6 @@
 package com.commerce.saleday.presentation.order.model;
 
 import com.commerce.saleday.presentation.item.model.ItemResponseDto;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

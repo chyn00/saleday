@@ -2,7 +2,6 @@ package com.commerce.saleday.domain.stock.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
 import com.commerce.saleday.domain.item.model.Item;
-import com.commerce.saleday.domain.order.model.Orders;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

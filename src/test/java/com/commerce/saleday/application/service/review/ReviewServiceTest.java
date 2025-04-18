@@ -2,7 +2,6 @@ package com.commerce.saleday.application.service.review;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.commerce.saleday.domain.review.model.Review;
 import com.commerce.saleday.presentation.review.model.ReviewRequestDto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
