@@ -2,6 +2,7 @@ package com.commerce.saleday.domain.stock.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
 import com.commerce.saleday.domain.item.model.Item;
+import com.commerce.saleday.domain.order.model.Orders;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,11 @@ public class ItemStock extends BaseEntity {
   private Item item;
 
   private int quantity; // 재고 수량(세팅 안되어 있으면, 0일수도 있음)
+
+  // Item Mapping
+  public void mapTo(Item item) {
+    this.item = item;
+  }
 
   @Builder
   public ItemStock(Item item, int quantity) {

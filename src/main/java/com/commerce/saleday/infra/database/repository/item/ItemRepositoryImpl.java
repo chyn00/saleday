@@ -24,4 +24,9 @@ public class ItemRepositoryImpl implements ItemRepository {
   public List<Item> findItemsByCode(List<String> itemCodeList) {
     return itemJpaRepository.findByCodeIn(itemCodeList);
   }
+
+  @Override
+  public Item save(Item item) {
+    return itemJpaRepository.save(item);
+  }
 }

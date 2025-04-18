@@ -1,6 +1,7 @@
 package com.commerce.saleday.domain.item.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.domain.order.model.OrderItem;
 import com.commerce.saleday.domain.review.model.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,7 +42,7 @@ public class Item extends BaseEntity {
   @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Review> reviews;
 
-  @Builder
+  @Builder(access = AccessLevel.PRIVATE)
   private Item(String code, String name, String content, double price, List<Review> reviews) {
     this.code = code;
     this.name = name;
@@ -49,4 +50,27 @@ public class Item extends BaseEntity {
     this.price = price;
     this.reviews = reviews;
   }
+
+  public static Item create(String code, String name, String content, double price, List<Review> reviews){
+    Item item = Item
+        .builder()
+        .code(code)
+        .name(name)
+        .content(content)
+        .price(price)
+        .reviews(reviews)
+        .build();
+
+    for (Review review : reviews) {
+      item.addReview(review);
+    }
+    return item;
+  }
+
+  // 객체 List 저장 및 연관관계 주인 쪽에도 매핑 데이터 세팅
+  public void addReview(Review review) {
+    review.mapTo(this); // 연관관계 주인 세팅(객체참조라서 .add와 순서 바뀌어도 상관없으나 명시성을 위해 앞에 배치)
+    this.reviews.add(review);// 객체 List 저장
+  }
+
 }

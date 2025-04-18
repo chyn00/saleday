@@ -58,9 +58,13 @@ public class Review extends BaseEntity {
         .userId(userId)
         .score(score)
         .content(content)
-        .item(item)//연관관계 주인 매핑
+        .item(item)
         .build();
     item.getReviews().add(review);//양방향 매핑
     return review;
+  }
+
+  public void mapTo(Item item) {
+    this.item = item;
   }
 }
