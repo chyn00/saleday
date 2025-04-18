@@ -4,7 +4,6 @@ import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.item.repository.ItemRepository;
 import com.commerce.saleday.domain.item.repository.ItemReviewRepository;
 import com.commerce.saleday.domain.review.model.Review;
-import com.commerce.saleday.presentation.review.model.ReviewRequestDto;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

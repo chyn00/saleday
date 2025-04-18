@@ -1,10 +1,6 @@
 package com.commerce.saleday.presentation.item.model;
 
 import com.commerce.saleday.domain.item.model.Item;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
