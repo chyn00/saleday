@@ -1,6 +1,5 @@
 package com.commerce.saleday.infra.database.repository.stock;
 
-import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.item.model.QItem;
 import com.commerce.saleday.domain.stock.model.ItemStock;
 import com.commerce.saleday.domain.stock.model.QItemStock;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ItemStockRepositoryImpl implements ItemStockRepository {
 
+  private final ItemStockJpaRepository itemStockJpaRepository;
   private final JPAQueryFactory jpaQueryFactory;
 
   @Override
@@ -31,5 +31,10 @@ public class ItemStockRepositoryImpl implements ItemStockRepository {
                 .fetchOne()
         )
         .orElseThrow(() -> new EntityNotFoundException("상품 정보가 없습니다."));
+  }
+
+  @Override
+  public ItemStock save(ItemStock itemStock) {
+    return itemStockJpaRepository.save(itemStock);
   }
 }
