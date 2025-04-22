@@ -20,4 +20,14 @@ public class ItemStockAdaptor implements ItemStockPort {
   public Long incrementItemStock(String itemCode) {
     return redisTemplate.opsForValue().increment(itemCode);
   }
+
+  @Override//레디스 싱글 쓰레드 세팅(세팅할때 동시성 문제 있을 수 있어, 분산락 필요)
+  public void setInitialItemStock(String itemCode, Long quantity) {
+    redisTemplate.opsForValue().set(itemCode, quantity.toString());
+  }
+
+  @Override
+  public Long getItemStock(String itemCode) {
+    return Long.parseLong(redisTemplate.opsForValue().get(itemCode));
+  }
 }
