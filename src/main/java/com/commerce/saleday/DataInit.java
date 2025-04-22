@@ -9,9 +9,11 @@ import com.commerce.saleday.domain.stock.model.ItemStock;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+@Slf4j
 @RequiredArgsConstructor//빈 등록이 Application class에 있다.(로컬만 설정해주기 위해 수동 빈 등록)
 public class DataInit {
   private final ItemService itemService;
@@ -21,6 +23,7 @@ public class DataInit {
   @EventListener(ApplicationReadyEvent.class)
   public void initData() {
 
+    log.info("------data init start line -----");
     String code = "1234";
     String name = "과자";
     String content = "달달한과자";
@@ -39,5 +42,6 @@ public class DataInit {
     itemService.save(item);
     //item의 수량 세팅
     itemStockOrchestratorService.saveItemWithRLock(code, itemStock);
+    log.info("------data init end line -----");
   }
 }

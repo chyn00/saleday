@@ -27,7 +27,7 @@ public class ItemStockAdaptor implements ItemStockPort {
   }
 
   @Override
-  public Long getItemStock(String itemCode) {
-    return Long.parseLong(redisTemplate.opsForValue().get(itemCode));
+  public String getItemStock(String itemCode) {
+    return redisTemplate.opsForValue().get(itemCode);
   }
 }
