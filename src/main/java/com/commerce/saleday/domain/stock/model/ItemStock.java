@@ -29,7 +29,7 @@ public class ItemStock extends BaseEntity {
   @JoinColumn(name = "item_id", unique = true)//유니크는 사실 강제로 걸리는데, 명시용으로 코딩
   private Item item;
 
-  private int quantity; // 재고 수량(세팅 안되어 있으면, 0일수도 있음)
+  private long quantity; // 재고 수량(세팅 안되어 있으면, 0일수도 있음)
 
   // Item Mapping
   public void mapTo(Item item) {
@@ -37,7 +37,7 @@ public class ItemStock extends BaseEntity {
   }
 
   @Builder
-  public ItemStock(Item item, int quantity) {
+  public ItemStock(Item item, long quantity) {
     this.item = item;
     this.quantity = quantity;
   }

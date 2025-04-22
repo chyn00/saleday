@@ -1,4 +1,4 @@
-package com.commerce.saleday.domain.stock.service;
+package com.commerce.saleday.application.service.stock;
 
 import com.commerce.saleday.domain.stock.model.ItemStock;
 import com.commerce.saleday.domain.stock.port.ItemStockPort;
@@ -9,14 +9,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ItemStockDomainService {
+public class ItemStockService {
 
   private final ItemStockRepository itemStockRepository;
   private final ItemStockPort itemStockPort;
 
+  //동시성 제어 측면에서 그냥 사용하면 위험, 멀티 인스턴스 환경에서 분산락 필요
   //관리자 입장에서의 상품 "개수" 저장 로직 - 재고관리가 되게 되면 단순 재고수량 외에 관리 포인트가 늘어난다.
   @Transactional
-  public Long setUpItemStock(ItemStock itemStock) {
+  public Long setUpItemStock(String itemCode, ItemStock itemStock) {
+
+    Long remainingStock = itemStockPort.getItemStock(itemCode);
+
+    //남은 재고 수량이 있을 경우
+    if(remainingStock > 0){
+      itemStockPort.setInitialItemStock(itemCode, itemStock.getQuantity() + remainingStock);
+    }else{//남은 재고 수량이 없을 경우
+      itemStockPort.setInitialItemStock(itemCode, itemStock.getQuantity());
+    }
 
     return itemStockRepository.save(itemStock).getId();
   }

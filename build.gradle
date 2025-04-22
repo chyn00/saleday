@@ -25,7 +25,8 @@ repositories {
 
 dependencies {
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'//redis(redisTemplate)
+	implementation 'org.redisson:redisson-spring-boot-starter:3.45.1'//redis(분산락 등 구현체 교체)
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'//jpa
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'//validator 사용시 필요

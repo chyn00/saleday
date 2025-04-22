@@ -1,7 +1,8 @@
 package com.commerce.saleday;
 
 import com.commerce.saleday.application.service.item.ItemService;
-import com.commerce.saleday.domain.stock.service.ItemStockDomainService;
+import com.commerce.saleday.application.service.orchestrator.ItemStockOrchestratorService;
+import com.commerce.saleday.application.service.stock.ItemStockService;
 import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
 import com.commerce.saleday.domain.stock.model.ItemStock;
@@ -14,7 +15,7 @@ import org.springframework.context.event.EventListener;
 @RequiredArgsConstructor//빈 등록이 Application class에 있다.(로컬만 설정해주기 위해 수동 빈 등록)
 public class DataInit {
   private final ItemService itemService;
-  private final ItemStockDomainService itemStockDomainService;
+  private final ItemStockOrchestratorService itemStockOrchestratorService;
 
   //스프링 부트가 빈 세팅 외부 설정 등 모두 boot up 되고 나서, 실행되도록 개발
   @EventListener(ApplicationReadyEvent.class)
@@ -37,6 +38,6 @@ public class DataInit {
     //item세팅
     itemService.save(item);
     //item의 수량 세팅
-    itemStockDomainService.setUpItemStock(itemStock);
+    itemStockOrchestratorService.saveItemWithRLock(code, itemStock);
   }
 }
