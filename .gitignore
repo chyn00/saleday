@@ -51,4 +51,4 @@ node_modules/
 # Environment variable files and local configuration
 .env
 *.env
-src/main/resources/application-local.yml
+api/src/src/main/resources/application-local.yml
