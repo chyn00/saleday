@@ -1,4 +1,3 @@
 rootProject.name = 'saleday'
 include 'consumer'
 include 'api'
-
