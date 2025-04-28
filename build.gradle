@@ -4,59 +4,70 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7' apply false
 }
 
+def excludedModules = ['message']
+
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
+    subprojects ->
+        apply plugin: 'java'
 
-    group = 'com.commerce'
-    version = '0.0.1-SNAPSHOT'
+        group = 'com.commerce'
+        version = '0.0.1-SNAPSHOT'
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(17)
+            }
         }
-    }
 
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
+    if (!excludedModules.contains(subprojects.name)) {
+        apply plugin: 'org.springframework.boot'
+        apply plugin: 'io.spring.dependency-management'
+
+        configurations {
+            compileOnly {
+                extendsFrom annotationProcessor
+            }
         }
-    }
 
-    repositories {
-        mavenCentral()
-    }
+        repositories {
+            mavenCentral()
+        }
 
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'//jpa
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'//validator 사용시 필요
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-data-jpa'//jpa
+            implementation 'org.springframework.boot:spring-boot-starter-web'
+            implementation 'org.springframework.boot:spring-boot-starter-validation'//validator 사용시 필요
+            testImplementation 'org.springframework.boot:spring-boot-starter-test'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'//redis(redisTemplate)
-        implementation 'org.redisson:redisson-spring-boot-starter:3.45.1'//redis(분산락 등 구현체 교체)
+            implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//redis(redisTemplate)
+            implementation 'org.redisson:redisson-spring-boot-starter:3.45.1'//redis(분산락 등 구현체 교체)
 
-        //connector
-        runtimeOnly 'com.mysql:mysql-connector-j'
+            //connector
+            runtimeOnly 'com.mysql:mysql-connector-j'
 
-        //lombok
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
+            //lombok
+            compileOnly 'org.projectlombok:lombok'
+            annotationProcessor 'org.projectlombok:lombok'
 
-        //lombok(test)
-        testCompileOnly 'org.projectlombok:lombok'
-        testAnnotationProcessor 'org.projectlombok:lombok'
+            //lombok(test)
+            testCompileOnly 'org.projectlombok:lombok'
+            testAnnotationProcessor 'org.projectlombok:lombok'
 
-        //Querydsl 추가
-        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta' // tomcat 버전 업으로 문제없음
-        annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-    }
+            //Querydsl 추가
+            implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta' // tomcat 버전 업으로 문제없음
+            annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+            annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+            annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-    tasks.named('test') {
-        useJUnitPlatform()
+            //kafka
+            implementation 'org.springframework.kafka:spring-kafka'
+            testImplementation 'org.springframework.kafka:spring-kafka-test'
+        }
+
+        tasks.named('test') {
+            useJUnitPlatform()
+        }
     }
 }

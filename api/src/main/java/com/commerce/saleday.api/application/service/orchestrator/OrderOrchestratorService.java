@@ -26,6 +26,8 @@ public class OrderOrchestratorService {
     }
 
     try {
+      //todo: 여기에 개수가 같이 넘어가도록(카프카 producer)
+      //todo: 어차피 saveOrder에는 트랜잭션이 물리지 않기 떄문에 카프카로 넘겨주는 거 명시
       return orderService.saveOrder(orderRequestDto);
     } catch (Exception e) {
       itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode()); // 주문 실패시 보상 트랜잭션
