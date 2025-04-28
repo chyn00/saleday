@@ -1,13 +1,13 @@
 package com.commerce.saleday.api.infra.redis;
 
-import com.commerce.saleday.api.domain.stock.port.ItemStockPort;
+import com.commerce.saleday.api.domain.stock.port.ItemStockRedisPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ItemStockAdaptor implements ItemStockPort {
+public class ItemStockRedisAdaptor implements ItemStockRedisPort {
 
   private final RedisTemplate<String, String> redisTemplate;
 

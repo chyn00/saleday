@@ -1,7 +1,7 @@
 package com.commerce.saleday.api.application.service.stock;
 
 import com.commerce.saleday.api.domain.stock.model.ItemStock;
-import com.commerce.saleday.api.domain.stock.port.ItemStockPort;
+import com.commerce.saleday.api.domain.stock.port.ItemStockRedisPort;
 import com.commerce.saleday.api.domain.stock.repository.ItemStockRepository;
 import jodd.util.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,21 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class ItemStockService {
 
   private final ItemStockRepository itemStockRepository;
-  private final ItemStockPort itemStockPort;
+  private final ItemStockRedisPort itemStockRedisPort;
 
   //동시성 제어 측면에서 그냥 사용하면 위험, 멀티 인스턴스 환경에서 분산락 필요
   //관리자 입장에서의 상품 "개수" 저장 로직 - 재고관리가 되게 되면 단순 재고수량 외에 관리 포인트가 늘어난다.
   @Transactional
   public Long setUpItemStock(String itemCode, ItemStock itemStock) {
 
-    String remaining = itemStockPort.getItemStock(itemCode);
+    String remaining = itemStockRedisPort.getItemStock(itemCode);
     if (StringUtil.isNotEmpty(remaining)) {
       //남은 재고 수량이 있을 경우
       long remainingStock = Long.parseLong(remaining);
-      itemStockPort.setInitialItemStock(itemCode, itemStock.getQuantity() + remainingStock);
+      itemStockRedisPort.setInitialItemStock(itemCode, itemStock.getQuantity() + remainingStock);
     } else {
       //남은 재고 수량이 없을 경우
-      itemStockPort.setInitialItemStock(itemCode, itemStock.getQuantity());
+      itemStockRedisPort.setInitialItemStock(itemCode, itemStock.getQuantity());
     }
 
     return itemStockRepository.save(itemStock).getId();
@@ -41,12 +41,12 @@ public class ItemStockService {
    */
   public Long decrementAndCountItemStock(String itemCode) {
 
-    return itemStockPort.decrementItemStock(itemCode);
+    return itemStockRedisPort.decrementItemStock(itemCode);
   }
 
   //재고 수량 증가
   public Long incrementAndCountItemStock(String itemCode) {
 
-    return itemStockPort.incrementItemStock(itemCode);
+    return itemStockRedisPort.incrementItemStock(itemCode);
   }
 }
