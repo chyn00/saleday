@@ -1,5 +1,6 @@
 dependencies {
-    implementation project(':message')      // 메세지 의존성 추가
+    implementation project(':message')      // message module 의존성 추가
+    implementation project(':domain')      // domain module 의존성 추가
 }
 
 bootJar.enabled = true
