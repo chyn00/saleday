@@ -51,4 +51,21 @@ node_modules/
 # Environment variable files and local configuration
 .env
 *.env
-api/src/src/main/resources/application-local.yml
+
+# Build and dependency directories (모든 하위 디렉토리 포함)
+**/build/
+**/out/
+**/target/
+**/.gradle/
+**/.mvn/
+
+# Gradle Wrapper
+!**/gradle/wrapper/gradle-wrapper.jar
+
+# Maven Wrapper
+**/mvnw
+**/mvnw.cmd
+
+#하위 디렉토리
+**/application-local.yml
+**/build/tmp/

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class StockProducerAdaptor implements ItemStockKafkaPort {
+public class ItemStockProducerAdaptor implements ItemStockKafkaPort {
 
   private final KafkaTemplate<String, DecreaseStockEvent> kafkaTemplate;
 
