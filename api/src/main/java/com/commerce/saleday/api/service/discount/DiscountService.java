@@ -1,8 +1,8 @@
 package com.commerce.saleday.api.service.discount;
 
 
-import com.commerce.saleday.api.strategy.calculator.FixedDiscountCalculator;
-import com.commerce.saleday.api.strategy.selector.DiscountPolicySelector;
+import com.commerce.saleday.api.service.discount.strategy.calculator.FixedDiscountCalculator;
+import com.commerce.saleday.api.service.discount.strategy.selector.DiscountPolicySelector;
 import com.commerce.saleday.domain.discount.model.DiscountResult;
 import com.commerce.saleday.domain.item.model.Item;
 import lombok.RequiredArgsConstructor;

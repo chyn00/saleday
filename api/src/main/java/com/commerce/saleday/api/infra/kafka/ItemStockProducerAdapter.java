@@ -1,7 +1,7 @@
 package com.commerce.saleday.api.infra.kafka;
 
 import com.commerce.saleday.domain.stock.model.ItemStock;
-import com.commerce.saleday.domain.stock.port.ItemStockKafkaPort;
+import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ItemStockProducerAdaptor implements ItemStockKafkaPort {
+public class ItemStockProducerAdapter implements ItemStockPublisherKafkaPort {
 
   private final KafkaTemplate<String, Object> kafkaTemplate;
 
