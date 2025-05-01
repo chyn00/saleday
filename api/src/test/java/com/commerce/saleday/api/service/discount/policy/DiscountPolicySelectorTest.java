@@ -2,10 +2,10 @@ package com.commerce.saleday.api.service.discount.policy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.commerce.saleday.api.strategy.calculator.FixedDiscountCalculator;
-import com.commerce.saleday.api.strategy.calculator.RateDiscountCalculator;
+import com.commerce.saleday.api.service.discount.strategy.calculator.FixedDiscountCalculator;
+import com.commerce.saleday.api.service.discount.strategy.calculator.RateDiscountCalculator;
 import com.commerce.saleday.domain.discount.model.DiscountResult;
-import com.commerce.saleday.api.strategy.selector.DiscountPolicySelector;
+import com.commerce.saleday.api.service.discount.strategy.selector.DiscountPolicySelector;
 import com.commerce.saleday.domain.item.model.Item;
 import com.commerce.saleday.domain.review.model.Review;
 import jakarta.transaction.Transactional;

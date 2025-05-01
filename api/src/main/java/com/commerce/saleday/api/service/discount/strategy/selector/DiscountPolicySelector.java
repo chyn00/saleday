@@ -1,7 +1,7 @@
-package com.commerce.saleday.api.strategy.selector;
+package com.commerce.saleday.api.service.discount.strategy.selector;
 
 
-import com.commerce.saleday.api.strategy.calculator.DiscountCalculator;
+import com.commerce.saleday.api.service.discount.strategy.calculator.DiscountCalculator;
 import com.commerce.saleday.domain.discount.model.DiscountResult;
 import com.commerce.saleday.domain.item.model.Item;
 
