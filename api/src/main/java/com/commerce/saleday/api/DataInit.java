@@ -35,7 +35,7 @@ public class DataInit {
     ItemStock itemStock = ItemStock
         .builder()
         .item(item)
-        .quantity(11)
+        .quantity(100)
         .build();
 
     //item세팅

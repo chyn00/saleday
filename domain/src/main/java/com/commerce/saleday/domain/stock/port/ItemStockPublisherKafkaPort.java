@@ -1,9 +1,9 @@
 package com.commerce.saleday.domain.stock.port;
 
 
-import com.commerce.saleday.domain.stock.model.ItemStock;
+import com.commerce.saleday.message.stock.DecreaseStockEvent;
 
 public interface ItemStockPublisherKafkaPort {
 
-  void publishDecreaseStock(ItemStock itemStock);
+  void publishDecreaseStock(DecreaseStockEvent decreaseStockEvent);
 }

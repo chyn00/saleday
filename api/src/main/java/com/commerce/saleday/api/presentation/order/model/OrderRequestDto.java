@@ -1,5 +1,6 @@
 package com.commerce.saleday.api.presentation.order.model;
 
+import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -23,4 +24,7 @@ public class OrderRequestDto {
   @Positive(message = "상품 수량은 양수값으로 필수입니다.")
   private int quantity; // 주문 수량
 
+  public DecreaseStockEvent toDecreaseStockEvent() {
+    return new DecreaseStockEvent(this.itemCode, this.quantity);
+  }
 }

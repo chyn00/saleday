@@ -22,7 +22,7 @@ class OrderOrchestratorServiceTest {
         .builder()
         .itemCode("1234")
         .userId("USER01")
-        .quantity(5)
+        .quantity(1)
         .build();
 
     //when

@@ -1,5 +1,6 @@
 package com.commerce.saleday.api.presentation.order.controller;
 
+import com.commerce.saleday.api.service.orchestrator.OrderOrchestratorService;
 import com.commerce.saleday.api.service.order.OrderService;
 import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
 import com.commerce.saleday.api.presentation.order.model.OrderResponseDto;
@@ -17,12 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
   private final OrderService orderService;
+  private final OrderOrchestratorService orderOrchestratorService;
 
   //단건 주문 저장
   @PostMapping("/order")
   public String orderItem(@Valid @RequestBody OrderRequestDto requestDto) {
 
     return orderService.saveOrder(requestDto);
+  }
+
+  //단건 주문 저장(대용량 트래픽 제한된 재고 내에서, 동시성 보장)
+  @PostMapping("/order/limited-stock")
+  public String orderLimitedStock(@Valid @RequestBody OrderRequestDto requestDto) throws Exception {
+
+    return orderOrchestratorService.orderWithLimitedStock(requestDto);
   }
 
   //다건 주문 저장

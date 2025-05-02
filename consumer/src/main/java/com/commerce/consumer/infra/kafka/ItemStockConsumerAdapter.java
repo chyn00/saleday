@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.infra.kafka;
+package com.commerce.consumer.infra.kafka;
 
 import com.commerce.saleday.domain.stock.port.ItemStockConsumerKafkaPort;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
@@ -14,5 +14,7 @@ public class ItemStockConsumerAdapter implements ItemStockConsumerKafkaPort {
   @KafkaListener(topics = "stock.decreased", groupId = "stock.decreased.consumer")
   public void decreaseStockListener(DecreaseStockEvent decreaseStockEvent) {
       log.info("listen completed!");
+      log.info(decreaseStockEvent.toString());
+      log.info("--------");
   }
 }
