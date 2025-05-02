@@ -1,8 +1,10 @@
 package com.commerce.saleday.api.service.orchestrator;
 
+import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
 import com.commerce.saleday.api.service.order.OrderService;
 import com.commerce.saleday.api.service.stock.ItemStockService;
-import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
+import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
+import jodd.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderOrchestratorService {
 
+  private final ItemStockPublisherKafkaPort itemStockPublisherKafkaPort;
   private final ItemStockService itemStockService;
   private final OrderService orderService;
 
@@ -26,14 +29,20 @@ public class OrderOrchestratorService {
     }
 
     try {
-      //todo: 여기에 개수가 같이 넘어가도록(카프카 producer)
-      //todo: 어차피 saveOrder에는 트랜잭션이 물리지 않기 떄문에 카프카로 넘겨주는 거 명시
-      return orderService.saveOrder(orderRequestDto);
+      //saveOrder에는 트랜잭션이 물리지 않기 떄문에 카프카로 넘겨주는 거 명시
+      String orderCode = orderService.saveOrder(orderRequestDto);
 
-      //todo: 주문이 성공한 경우에, decrease item Stock pub 실행
-      //todo: 주문이 성공해야만 재고가 감소되며, 이미 redis 에서 감소되었기 때문에 실패할 경우 outBox pattern으로 재시도
+      //주문이 성공한 경우에, decrease item Stock pub 실행
+      //주문이 성공해야만 재고가 감소되며, 이미 redis 에서 감소되었기 때문에 실패할 경우 outBox pattern으로 재시도
+      if(StringUtil.isNotEmpty(orderCode)){
+        //주문이 성공한 경우
+        itemStockPublisherKafkaPort.publishDecreaseStock(orderRequestDto.toDecreaseStockEvent());
+      }
+
+      return orderCode;
     } catch (Exception e) {
       itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode()); // 주문 실패시 보상 트랜잭션
+      //todo: DLQ가 아닌 outbox 패턴으로 재시도 할 수 있도록 로직 작성
       throw e;
     }
   }
