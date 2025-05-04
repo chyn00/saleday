@@ -6,5 +6,12 @@ public record DecreaseStockEvent(
     long quantity
 ) {
 
+  public String getItemCode() {
+    return itemCode;
+  }
+
+  public long getQuantity() {
+    return quantity;
+  }
 }
 

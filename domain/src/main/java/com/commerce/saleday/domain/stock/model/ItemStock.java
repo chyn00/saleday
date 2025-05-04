@@ -36,6 +36,12 @@ public class ItemStock extends BaseEntity {
     this.item = item;
   }
 
+  public void decrease(long quantity) {
+    //todo: exception refactoring 필요.
+    if (this.quantity <= 0) throw new IllegalStateException("재고가 부족합니다.");
+    this.quantity -= 1;
+  }
+
   @Builder
   public ItemStock(Item item, long quantity) {
     this.item = item;

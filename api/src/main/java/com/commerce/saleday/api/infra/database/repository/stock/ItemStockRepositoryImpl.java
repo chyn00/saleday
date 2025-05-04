@@ -6,6 +6,7 @@ import com.commerce.saleday.domain.stock.model.QItemStock;
 import com.commerce.saleday.domain.stock.repository.ItemStockRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
