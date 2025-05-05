@@ -16,12 +16,14 @@ public class ItemStockConsumerAdapter implements ItemStockConsumerKafkaPort {
 
   private final ItemStockService itemStockService;
 
-  //todo: 카프카 listen 에서 배치처리 해서 미리 oom 방지 500개 제한
-  //todo: config 설정 연관됨.
+  //500개씩 처리
   @Override
-  @KafkaListener(topics = "stock.decreased", groupId = "stock.decreased.consumer")
+  @KafkaListener(topics = "stock.decreased", groupId = "stock.decreased.consumer", containerFactory = "kafkaListenerContainerFactory")
   public void decreaseStockListener(List<DecreaseStockEvent> decreaseStockEvents) {
-
-    itemStockService.decreaseStock(decreaseStockEvents);
+    try {
+      itemStockService.decreaseStock(decreaseStockEvents);
+    } catch (Exception e) {
+      // 필요 시 재처리 로직 or DLQ 연동
+    }
   }
 }
