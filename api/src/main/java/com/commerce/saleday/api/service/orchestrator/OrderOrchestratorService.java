@@ -4,8 +4,8 @@ import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
 import com.commerce.saleday.api.service.order.OrderService;
 import com.commerce.saleday.api.service.stock.ItemStockService;
 import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
-import jodd.util.StringUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 // 고트래픽 대응을 위한 재고 수량 감소, 트랜잭션 등을 처리하기 위한 Order 퍼사드 서비스
@@ -16,6 +16,7 @@ public class OrderOrchestratorService {
   private final ItemStockPublisherKafkaPort itemStockPublisherKafkaPort;
   private final ItemStockService itemStockService;
   private final OrderService orderService;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   //고트래픽 대용으로 제한된 재고에서 동시성제어로 주문하며, 주문 코드를 리턴한다.
   //레디스의 트랜잭션은 보상트랜잭션을 활용한다.
@@ -34,15 +35,12 @@ public class OrderOrchestratorService {
 
       //주문이 성공한 경우에, decrease item Stock pub 실행
       //주문이 성공해야만 재고가 감소되며, 이미 redis 에서 감소되었기 때문에 실패할 경우 outBox pattern으로 재시도
-      if(StringUtil.isNotEmpty(orderCode)){
-        //주문이 성공한 경우
-        itemStockPublisherKafkaPort.publishDecreaseStock(orderRequestDto.toDecreaseStockEvent());
-      }
+      //주문의 성공 여부는 transaction이 commit된 시점에 pub이 실행되도록함.(OrderEventHandler)
+      applicationEventPublisher.publishEvent(orderRequestDto.toDecreaseStockEvent());
 
       return orderCode;
     } catch (Exception e) {
-      itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode()); // 주문 실패시 보상 트랜잭션
-      //todo: DLQ가 아닌 outbox 패턴으로 재시도 할 수 있도록 로직 작성
+      itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode()); // 주문 실패시 redis 보상 트랜잭션
       throw e;
     }
   }
