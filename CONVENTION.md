@@ -1,4 +1,4 @@
-# Schema 생성 규칙
+# Convention 규칙
 
 ## 1. Application Level 설정은 validate
 
