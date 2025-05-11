@@ -10,6 +10,6 @@
 
 ---
 
-## 2. Entity 설계는 스크립트로 한다.
+## 2. 구글 style java convention 사용
 
-**이유**: DBA와의 협업이 필요하기 때문에, Script로 스키마 설계
+**이유**: code format 통일을 위해 xml을 활용한 공용 convention을 유지한다.
