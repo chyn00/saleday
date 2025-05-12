@@ -1,6 +1,7 @@
 package com.commerce.saleday.domain.outbox.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,6 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//todo: 직렬화/역직렬화는 공통으로 빼 줄 필요가 있다.
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,7 +40,7 @@ public class OutboxMessage extends BaseEntity {
 
   @Lob
   @Column(nullable = false)
-  private Object payload;
+  private String payload;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -53,7 +55,7 @@ public class OutboxMessage extends BaseEntity {
   private OutboxMessage(String type, Object payload, OutboxStatus status, LocalDate createDate,
       LocalDateTime sentAt) {
     this.type = type;
-    this.payload = payload;
+    this.payload = this.serializePayload(payload); // 직렬화 책임 위임
     this.status = status;
     this.createDate = createDate;
     this.sentAt = sentAt;
@@ -76,6 +78,24 @@ public class OutboxMessage extends BaseEntity {
   public void markFailed() {
     this.status = OutboxStatus.FAILED;
     this.sentAt = LocalDateTime.now();
+  }
+
+  // 직렬화로 저장
+  private String serializePayload(Object payload) {
+    try {
+      return new ObjectMapper().writeValueAsString(payload);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Payload 직렬화 실패", e);
+    }
+  }
+
+  //역직렬화 코드
+  public <T> T getPayloadAs(Class<T> clazz) {
+    try {
+      return new ObjectMapper().readValue(this.payload, clazz);
+    } catch (Exception e) {
+      throw new RuntimeException("Payload 역직렬화 실패", e);
+    }
   }
 }
 

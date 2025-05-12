@@ -21,12 +21,12 @@ public class ItemReviewRepositoryImpl implements ItemReviewRepository {
   @Override
   public List<Review> findReviewsWithItem(String itemCode) {
     QItem item = QItem.item;
-    QReview review = QReview.review;
+//    QReview review = QReview.review;
 
     return Optional.ofNullable(
             jpaQueryFactory
                 .selectFrom(item)
-                .join(item.reviews, review)
+                .join(item.reviews)
                 .fetchJoin()
                 .where(item.code.eq(itemCode))
                 .fetchOne()
