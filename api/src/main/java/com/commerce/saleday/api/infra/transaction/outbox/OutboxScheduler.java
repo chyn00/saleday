@@ -18,19 +18,20 @@ public class OutboxScheduler {
   private final OutboxRepository outboxRepository;
   private final ItemStockPublisherKafkaPort itemStockPublisherKafkaPort;
 
-  @Scheduled(fixedDelay = 10000)
+  @Scheduled(cron = "0 0/30 * * * *")//정합성을 위해, 30분 마다 스케쥴링
   public void resendFailedItemStockEvents() {
     List<OutboxMessage> failedMessages = outboxRepository.findSentFailStockMessage();
 
+    //실패된 메세지 재전송
     for (OutboxMessage msg : failedMessages) {
       try {
         itemStockPublisherKafkaPort.publishDecreaseStock(msg.getPayloadAs(DecreaseStockEvent.class));
-        msg.markSuccess();
+        msg.markSuccess();//재전송 성공
       } catch (Exception e) {
-        msg.markFailed();
+        msg.markFailed();// 재전송 실패
         log.error("재전송 실패: {}", msg.getId(), e);
       }
     }
-    outboxRepository.saveAll(failedMessages);
+    outboxRepository.saveAll(failedMessages);//기록을 위해, 성공/실패 모두 저장, 변경감지로 업데이트 되어있음
   }
 }
