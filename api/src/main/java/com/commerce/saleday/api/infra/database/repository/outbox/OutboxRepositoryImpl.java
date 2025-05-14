@@ -6,6 +6,7 @@ import com.commerce.saleday.domain.outbox.model.QOutboxMessage;
 import com.commerce.saleday.domain.outbox.repository.OutboxRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -39,5 +40,11 @@ public class OutboxRepositoryImpl implements OutboxRepository {
             outbox.status.eq(OutboxStatus.FAILED)
         )
         .fetch();
+  }
+
+  @Override
+  public void deleteOldMessages(LocalDateTime oneMonthAgo) {
+    outboxJpaRepository.deleteByStatusAndCreatedAtBefore(OutboxStatus.INIT, oneMonthAgo);
+    outboxJpaRepository.deleteByStatusAndCreatedAtBefore(OutboxStatus.SUCCESS, oneMonthAgo);
   }
 }
