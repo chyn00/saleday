@@ -1,4 +1,4 @@
-package com.commerce.saleday.domain.payment.model;
+package com.commerce.saleday.pay.domain.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
 import com.commerce.saleday.domain.order.model.Orders;
