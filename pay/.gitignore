@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# 카카오페이 클라이언트 설정 파일 무시
+application-kakaopay-client.yaml
