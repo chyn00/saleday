@@ -1,5 +1,6 @@
 package com.commerce.saleday.api.presentation.review.model;
 
+import com.commerce.saleday.order.service.review.model.CreateReviewCommand;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -28,4 +29,8 @@ public class ReviewRequestDto {
   @NotBlank(message = "리뷰 내용은 필수입니다")
   private String content;
 
+  //모듈 분리로 불변 객체 변환
+  public CreateReviewCommand toCommand() {
+    return new CreateReviewCommand(itemCode, userId, score, content);
+  }
 }

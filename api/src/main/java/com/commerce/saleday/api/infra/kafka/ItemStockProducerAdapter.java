@@ -1,7 +1,6 @@
 package com.commerce.saleday.api.infra.kafka;
 
-import com.commerce.saleday.domain.stock.model.ItemStock;
-import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
+import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;

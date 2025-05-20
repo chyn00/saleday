@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-@EntityScan(basePackages = "com.commerce.saleday.domain")//모듈로 옮겼기 떄문에 scan 달아줌
+@EntityScan(basePackages = "com.commerce.saleday")//모듈로 옮겼기 떄문에 scan 달아줌
 public class ConsumerApplication {
 
   public static void main(String[] args) {

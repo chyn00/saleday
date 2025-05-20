@@ -12,8 +12,8 @@ public class QuerydslConfig {
   @PersistenceContext//쓰레드 세이프한 빈을 주입받아 사용
   private EntityManager entityManager;
 
-  @Bean
-  public JPAQueryFactory queryFactory() {
+  @Bean("apiQueryFactory")
+  public JPAQueryFactory apiQueryFactory() {
     return new JPAQueryFactory(entityManager);
   }
 }

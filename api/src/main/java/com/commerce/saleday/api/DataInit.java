@@ -1,11 +1,12 @@
 package com.commerce.saleday.api;
 
-import com.commerce.saleday.api.service.item.ItemService;
+import com.commerce.saleday.order.service.ItemService;
 import com.commerce.saleday.api.service.orchestrator.ItemStockOrchestratorService;
 
-import com.commerce.saleday.domain.review.model.Review;
-import com.commerce.saleday.domain.item.model.Item;
-import com.commerce.saleday.domain.stock.model.ItemStock;
+import com.commerce.saleday.order.domain.review.model.Review;
+import com.commerce.saleday.order.domain.item.model.Item;
+import com.commerce.saleday.order.domain.stock.model.ItemStock;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class DataInit {
     String code = "1234";
     String name = "과자";
     String content = "달달한과자";
-    double price = 10000;
+    BigDecimal price = BigDecimal.valueOf(10000);
     List<Review> reviews = new ArrayList<>();
 
     Item item = Item.create(code, name, content, price, reviews);

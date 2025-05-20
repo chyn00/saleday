@@ -9,14 +9,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
 public class OutboxRepositoryImpl implements OutboxRepository {
 
   private final OutboxJpaRepository outboxJpaRepository;
   private final JPAQueryFactory jpaQueryFactory;
+
+  //생성자에 qualifier 명시 필요
+  public OutboxRepositoryImpl(
+      OutboxJpaRepository outboxJpaRepository,
+      @Qualifier("apiQueryFactory") JPAQueryFactory jpaQueryFactory
+  ) {
+    this.outboxJpaRepository = outboxJpaRepository;
+    this.jpaQueryFactory = jpaQueryFactory;
+  }
 
   @Override
   public OutboxMessage save(OutboxMessage outboxMessage) {

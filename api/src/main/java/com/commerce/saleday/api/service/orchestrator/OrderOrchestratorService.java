@@ -1,9 +1,9 @@
 package com.commerce.saleday.api.service.orchestrator;
 
 import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
-import com.commerce.saleday.api.service.order.OrderService;
-import com.commerce.saleday.api.service.stock.ItemStockService;
-import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
+import com.commerce.saleday.order.service.order.OrderService;
+import com.commerce.saleday.order.service.stock.ItemStockService;
+import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class OrderOrchestratorService {
 
     try {
       //saveOrder에는 트랜잭션이 물리지 않기 떄문에 카프카로 넘겨주는 거 명시
-      String orderCode = orderService.saveOrder(orderRequestDto);
+      String orderCode = orderService.saveOrder(orderRequestDto.toCommand());
 
       //주문이 성공한 경우에, decrease item Stock pub 실행
       //주문이 성공해야만 재고가 감소되며, 이미 redis 에서 감소되었기 때문에 실패할 경우 outBox pattern으로 재시도

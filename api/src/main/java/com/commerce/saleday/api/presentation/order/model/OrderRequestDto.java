@@ -1,6 +1,7 @@
 package com.commerce.saleday.api.presentation.order.model;
 
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
+import com.commerce.saleday.order.service.order.model.CreateOrderCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -26,5 +27,9 @@ public class OrderRequestDto {
 
   public DecreaseStockEvent toDecreaseStockEvent() {
     return new DecreaseStockEvent(this.itemCode, this.quantity);
+  }
+
+  public CreateOrderCommand toCommand() {
+    return new CreateOrderCommand(this.itemCode, this.userId, this.quantity);
   }
 }

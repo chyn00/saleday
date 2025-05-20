@@ -1,5 +1,6 @@
 package com.commerce.saleday.api.presentation.order.model.bulk;
 
+import com.commerce.saleday.order.service.order.model.bulk.CreateOrderItemCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -19,4 +20,8 @@ public class OrderItemRequest {
 
   @Positive(message = "상품 수량은 양수값으로 필수입니다.")
   private int quantity; // 주문 수량
+
+  public CreateOrderItemCommand toCommand() {
+    return new CreateOrderItemCommand(itemCode, quantity);
+  }
 }

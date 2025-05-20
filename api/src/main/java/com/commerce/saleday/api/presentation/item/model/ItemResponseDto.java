@@ -1,6 +1,7 @@
 package com.commerce.saleday.api.presentation.item.model;
 
-import com.commerce.saleday.domain.item.model.Item;
+import com.commerce.saleday.order.domain.item.model.Item;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class ItemResponseDto {
 
   private String content;// 내용
 
-  private double price;// 가격
+  private BigDecimal price;// 가격
 
   public static ItemResponseDto toResponse(Item item){
     return ItemResponseDto

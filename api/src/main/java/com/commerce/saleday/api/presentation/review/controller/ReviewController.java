@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.presentation.review.controller;
 
-import com.commerce.saleday.api.service.review.ReviewService;
+import com.commerce.saleday.order.service.review.ReviewService;
 import com.commerce.saleday.api.presentation.review.model.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +17,6 @@ public class ReviewController {
   @PostMapping("/review")
   public Long saveReviewForItem(@RequestBody ReviewRequestDto dto) {
 
-    return reviewService.saveReview(dto);
+    return reviewService.saveReview(dto.toCommand());
   }
 }

@@ -1,6 +1,7 @@
 package com.commerce.saleday.api.presentation.order.model;
 
 import com.commerce.saleday.api.presentation.item.model.ItemResponseDto;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +16,11 @@ public class OrderItemResponse {
 
   private int quantity; // 주문 수량
 
-  private double discountPrice;//할인 금액
+  private BigDecimal discountPrice;//할인 금액
 
   private String discountPolicyContent;//할인 정책 이유
 
-  private double orderPrice; // (item에 있는 price) * qty - discountPrice
+  private BigDecimal orderPrice; // (item에 있는 price) * qty - discountPrice
 
   private ItemResponseDto itemResponse;//item 결과
 

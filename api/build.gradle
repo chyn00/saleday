@@ -1,6 +1,8 @@
 dependencies {
     implementation project(':message')      // message module 의존성 추가
     implementation project(':domain')      // domain module 의존성 추가
+    implementation project(':order')      // order module 의존성 추가
 }
+//MSA 분리 전까지는 API 모듈을 최상위 모듈로 사용
 
 bootJar.enabled = true
