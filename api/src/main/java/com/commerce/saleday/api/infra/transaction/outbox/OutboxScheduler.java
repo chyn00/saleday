@@ -2,7 +2,7 @@ package com.commerce.saleday.api.infra.transaction.outbox;
 
 import com.commerce.saleday.domain.outbox.model.OutboxMessage;
 import com.commerce.saleday.domain.outbox.repository.OutboxRepository;
-import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
+import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

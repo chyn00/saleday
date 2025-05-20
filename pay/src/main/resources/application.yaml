@@ -6,7 +6,7 @@ spring:
     active: local
   jpa:
     hibernate:
-      ddl-auto: create #data init ?????? ?? create
+      ddl-auto: create #data init
     show-sql: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

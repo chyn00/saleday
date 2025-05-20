@@ -1,7 +1,7 @@
 package com.commerce.saleday.pay.domain.model;
 
 import com.commerce.saleday.domain.common.BaseEntity;
-import com.commerce.saleday.domain.order.model.Orders;
+import com.commerce.saleday.order.domain.order.model.Orders;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

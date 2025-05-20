@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.presentation.item.controller;
 
-import com.commerce.saleday.api.service.item.ItemService;
+import com.commerce.saleday.order.service.ItemService;
 import com.commerce.saleday.api.presentation.item.model.ItemResponseDto;
 import com.commerce.saleday.api.presentation.item.model.ItemReviewResponseDto;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.presentation.order.model;
 
-import com.commerce.saleday.domain.order.model.Orders;
+import com.commerce.saleday.order.domain.order.model.Orders;
 import com.commerce.saleday.api.presentation.item.model.ItemResponseDto;
 import java.time.LocalDate;
 import java.util.List;

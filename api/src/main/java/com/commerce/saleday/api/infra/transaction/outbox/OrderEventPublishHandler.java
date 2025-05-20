@@ -4,7 +4,7 @@ import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMI
 
 import com.commerce.saleday.domain.outbox.model.OutboxMessage;
 import com.commerce.saleday.domain.outbox.repository.OutboxRepository;
-import com.commerce.saleday.domain.stock.port.ItemStockPublisherKafkaPort;
+import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
