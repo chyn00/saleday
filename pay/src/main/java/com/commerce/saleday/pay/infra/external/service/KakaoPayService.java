@@ -77,7 +77,7 @@ public class KakaoPayService {
 
     return restClient.post()
         .uri(kakaopayUrl + "/v1/payment/ready")
-        .header(HttpHeaders.AUTHORIZATION, "SECRET_KEY " + kakaopaySecretKey)
+        .header(HttpHeaders.AUTHORIZATION, kakaopaySecretKey)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .body(requestBody)
         .retrieve()
