@@ -15,6 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,4 +47,25 @@ public class Payment extends BaseEntity {
   private String pgTransactionId; // PG사에서 발급해주는 transaction id (ex. tid)
 
   private LocalDateTime approvedAt; // 승인 DateTime
+
+  @Builder(access = AccessLevel.PRIVATE)
+  public Payment(Orders order, PaymentStatus status, PaymentProvider provider,
+      String saleDayExternalSecretKey, String pgTransactionId, LocalDateTime approvedAt) {
+    this.order = order;
+    this.status = status;
+    this.provider = provider;
+    this.saleDayExternalSecretKey = saleDayExternalSecretKey;
+    this.pgTransactionId = pgTransactionId;
+    this.approvedAt = approvedAt;
+  }
+
+  //최초 생성시
+  public static Payment create(Orders order, PaymentStatus status, PaymentProvider provider){
+    return Payment.builder()
+        .order(order)
+        .status(status)
+        .provider(provider)
+        .build();
+  }
+
 }

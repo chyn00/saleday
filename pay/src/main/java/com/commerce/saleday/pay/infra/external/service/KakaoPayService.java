@@ -1,4 +1,4 @@
-package com.commerce.saleday.pay.infra.external;
+package com.commerce.saleday.pay.infra.external.service;
 
 import com.commerce.saleday.order.domain.order.model.OrderItem;
 import com.commerce.saleday.order.domain.order.model.Orders;
@@ -26,6 +26,7 @@ public class KakaoPayService {
   private String failUrl;
   private String cancelUrl;
 
+  //yaml 설정 때문에 직접 구현
   public KakaoPayService(@Value("${external.kakaopay.url}") String kakaopayUrl,
       @Value("${external.kakaopay.headers.client-id}") String kakaopayClientId,
       @Value("${external.kakaopay.headers.client-secret-key}") String kakaopaySecretKey,
@@ -75,7 +76,7 @@ public class KakaoPayService {
     requestBody.put("cancel_url", cancelUrl);
 
     return restClient.post()
-        .uri("/online/v1/payment/ready")
+        .uri(kakaopayUrl + "/v1/payment/ready")
         .header(HttpHeaders.AUTHORIZATION, "SECRET_KEY " + kakaopaySecretKey)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .body(requestBody)

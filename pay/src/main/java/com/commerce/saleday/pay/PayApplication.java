@@ -6,11 +6,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing
 @SpringBootApplication
 @ComponentScan(basePackages = {
     "com.commerce.saleday.domain",
-    "com.commerce.saleday.order"
+    "com.commerce.saleday.order",
+    "com.commerce.saleday.pay"
 })
 public class PayApplication {
 
