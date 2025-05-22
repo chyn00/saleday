@@ -20,7 +20,7 @@ class OrderOrchestratorServiceTest {
     //given
     OrderRequestDto orderRequestDto = OrderRequestDto
         .builder()
-        .itemCode("1234")
+        .itemCode("1235")
         .userId("USER01")
         .quantity(1)
         .build();
