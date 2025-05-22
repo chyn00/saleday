@@ -60,4 +60,10 @@ class ItemServiceTest {
     // 초기 단계이기 때문에 추후 수정 필요
     assertThat(reviews).isNotEmpty();
   }
+
+
+  //todo: 페이징 테스트 구현
+  @Test
+  void getItemsByCodeContaining() {
+  }
 }
