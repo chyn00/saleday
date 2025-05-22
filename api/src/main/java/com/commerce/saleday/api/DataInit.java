@@ -25,10 +25,10 @@ public class DataInit {
   public void initData() {
 
     log.info("------data init start line -----");
-    String code = "1234";
-    String name = "과자";
-    String content = "달달한과자";
-    BigDecimal price = BigDecimal.valueOf(10000);
+    String code = "1235";
+    String name = "1235과자";
+    String content = "1235과자는 맛있어요";
+    BigDecimal price = BigDecimal.valueOf(5000);
     List<Review> reviews = new ArrayList<>();
 
     Item item = Item.create(code, name, content, price, reviews);

@@ -28,10 +28,10 @@ class ItemStockOrchestratorServiceTest {
   void saveItemWithRLock() {
 
     log.info("–--------test start line----------------");
-    String code = "1235";
-    String name = "테스트과자";
-    String content = "테스트달달한과자";
-    BigDecimal price = BigDecimal.valueOf(10000);
+    String code = "1236";
+    String name = "추가과자";
+    String content = "추가된과자에요";
+    BigDecimal price = BigDecimal.valueOf(3000);
     List<Review> reviews = new ArrayList<>();
 
     Item item = Item.create(code, name, content, price, reviews);
@@ -46,7 +46,7 @@ class ItemStockOrchestratorServiceTest {
     itemService.save(item);
 
     //itemStock 세팅
-    itemStockOrchestratorService.saveItemWithRLock("1235", itemStock);
+    itemStockOrchestratorService.saveItemWithRLock("1236", itemStock);
     log.info("–--------test end line----------------");
   }
 }
