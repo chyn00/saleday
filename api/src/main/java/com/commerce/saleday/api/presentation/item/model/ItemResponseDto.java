@@ -2,10 +2,13 @@ package com.commerce.saleday.api.presentation.item.model;
 
 import com.commerce.saleday.order.domain.item.model.Item;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -31,5 +34,9 @@ public class ItemResponseDto {
         .content(item.getContent())
         .price(item.getPrice())
         .build();
+  }
+
+  public static Page<ItemResponseDto> toResponsePage(Page<Item> items) {
+    return items.map(ItemResponseDto::toResponse);
   }
 }

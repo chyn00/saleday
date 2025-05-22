@@ -17,7 +17,7 @@ public class OrderApplication {
 
   @Bean
   @Profile("local")//수동 등록시에는 주입이 필요함, 로컬 환경일떄만 사용을 위해 이렇게 구성
-  public DataInitForOrderTest testDataInit(ItemService itemService) {
+  public DataInitForOrderTest dataInitForOrderTest(ItemService itemService) {
     return new DataInitForOrderTest(itemService);
   }
 }

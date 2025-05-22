@@ -1,10 +1,14 @@
 package com.commerce.saleday.api.presentation.item.controller;
 
+import com.commerce.saleday.api.common.utils.PageUtils;
 import com.commerce.saleday.order.service.ItemService;
 import com.commerce.saleday.api.presentation.item.model.ItemResponseDto;
 import com.commerce.saleday.api.presentation.item.model.ItemReviewResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +25,16 @@ public class ItemController {
   public ItemResponseDto explainItem(@RequestParam String code) {
 
     return ItemResponseDto.toResponse(itemService.getItem(code));
+  }
+
+  //Item List를 사용자에게 노출(페이징 처리)
+  @GetMapping("/items")
+  public Page<ItemResponseDto> getItems(
+      @RequestParam(required = false) String code,
+      Pageable pageable
+  ) {
+    pageable = PageUtils.sanitizePageable(pageable, 100);
+    return ItemResponseDto.toResponsePage(itemService.getItemsByCodeContaining(code, pageable));
   }
 
   //Item에 매핑된 리뷰의 정보를 읽음
