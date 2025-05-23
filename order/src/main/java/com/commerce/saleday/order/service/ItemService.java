@@ -24,6 +24,7 @@ public class ItemService {
         .orElseThrow(() -> new EntityNotFoundException("상품 정보가 없습니다."));
   }
 
+  //eqauls 로 복수조회
   public List<Item> getItemsByItemCode(List<String> itemCodeList) {
     return itemRepository.findItemsByCode(itemCodeList);
   }
@@ -40,6 +41,7 @@ public class ItemService {
     return itemRepository.save(item).getId();
   }
 
+  //containing으로 복수조회
   public Page<Item> getItemsByCodeContaining(String code, Pageable pageable) {
     return itemRepository.findByCodeContains(code, pageable);
   }
