@@ -1,12 +1,15 @@
 package com.commerce.saleday.order.infra.database.repository.item;
 
 import static com.commerce.saleday.order.domain.item.model.QItem.item;
+import static com.commerce.saleday.order.domain.review.model.QReview.review;
 
 import com.commerce.saleday.order.domain.item.model.Item;
 import com.commerce.saleday.order.domain.item.repository.ItemRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -45,13 +48,31 @@ public class ItemRepositoryImpl implements ItemRepository {
   @Override
   public Page<Item> findByCodeContains(String code, Pageable pageable) {
     // 콘텐츠 조회
-    List<Item> content = jpaQueryFactory
+    // Item만 페이징 (리뷰는 join하지 않음)
+    // 페이징 처리 할때는 fetch join 쓰지 않는것 권장. offset limit이 join된 결과를 return하여 문제 일어남
+    List<Item> items = jpaQueryFactory
         .selectFrom(item)
-        .join(item.reviews).fetchJoin()
         .where(item.code.contains(code))
-        .orderBy(item.id.asc())//추후 유동적으로 변경가능하나 페이지의 일관성을 보장하기 위해, 인덱스 정렬 기준을 부여
+        .orderBy(item.id.asc())
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
+        .fetch();
+
+    // Step 2: Item ID 목록 추출
+    List<Long> itemIds = items.stream()
+        .map(Item::getId)
+        .toList();
+
+    if (itemIds.isEmpty()) {
+      return new PageImpl<>(List.of(), pageable, 0);
+    }
+
+    // Step 3: ID 기반으로 리뷰 join fetch
+    List<Item> content = jpaQueryFactory
+        .selectFrom(item)
+        .leftJoin(item.reviews, review).fetchJoin()
+        .where(item.id.in(itemIds))
+        .orderBy(item.id.asc())
         .fetch();
 
     //todo: count 총 계산은 비효율적(CUD 할 때만 item 총 개수의 캐싱이 변경되도록 하면됨.)

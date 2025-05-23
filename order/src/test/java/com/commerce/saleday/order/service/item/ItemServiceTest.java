@@ -13,6 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @SpringBootTest
 @Transactional
@@ -62,8 +66,21 @@ class ItemServiceTest {
   }
 
 
-  //todo: 페이징 테스트 구현
+  //페이징 테스트 구현
+  //PageRequest.of of(pageNumber, pageSize, Sort.unsorted());
   @Test
   void getItemsByCodeContaining() {
+    //given
+    String itemCode = "123";
+
+    int page = 0; //첫번째 페이지
+    int size = 10; //한 페이지에 10개
+    Pageable pageable = PageRequest.of(page,size);
+
+    //when
+    Page<Item> items = itemService.getItemsByCodeContaining(itemCode, pageable);
+
+    //then
+    assertThat(items).size().isEqualTo(3);
   }
 }
