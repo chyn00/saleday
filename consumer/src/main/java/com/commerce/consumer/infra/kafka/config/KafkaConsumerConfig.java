@@ -1,4 +1,4 @@
-package com.commerce.consumer.config;
+package com.commerce.consumer.infra.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;

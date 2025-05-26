@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':domain')      // domain module 의존성 추가
+    implementation project(':common')      // common module 의존성 추가
     implementation project(':order')      // order module 의존성 추가
 }
 

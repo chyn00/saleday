@@ -7,10 +7,7 @@ import com.commerce.saleday.order.domain.item.model.Item;
 import com.commerce.saleday.order.domain.item.repository.ItemRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +22,7 @@ public class ItemRepositoryImpl implements ItemRepository {
   private final JPAQueryFactory jpaQueryFactory;
 
   public ItemRepositoryImpl(ItemJpaRepository itemJpaRepository,
-      @Qualifier("orderQueryFactory") JPAQueryFactory jpaQueryFactory) {
+      JPAQueryFactory jpaQueryFactory) {
     this.itemJpaRepository = itemJpaRepository;
     this.jpaQueryFactory = jpaQueryFactory;
   }

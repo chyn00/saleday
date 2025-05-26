@@ -1,4 +1,4 @@
-package com.commerce.saleday.domain.common;
+package com.commerce.saleday.common.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

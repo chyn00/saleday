@@ -1,6 +1,6 @@
 package com.commerce.saleday.order.domain.order.model;
 
-import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.common.model.BaseEntity;
 import com.commerce.saleday.order.domain.discount.DiscountResult;
 import com.commerce.saleday.order.domain.item.model.Item;
 import jakarta.persistence.Column;
