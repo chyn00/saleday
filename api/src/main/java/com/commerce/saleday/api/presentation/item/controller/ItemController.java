@@ -21,10 +21,10 @@ public class ItemController {
   private final ItemService itemService;
 
   //Item 정보를 사용자에게 노출
-  @GetMapping("/item")
-  public ItemResponseDto explainItem(@RequestParam String code) {
+  @GetMapping("/item/{itemCode}")
+  public ItemResponseDto explainItem(@PathVariable String itemCode) {
 
-    return ItemResponseDto.toResponse(itemService.getItem(code));
+    return ItemResponseDto.toResponse(itemService.getItem(itemCode));
   }
 
   //Item List를 사용자에게 노출(페이징 처리)

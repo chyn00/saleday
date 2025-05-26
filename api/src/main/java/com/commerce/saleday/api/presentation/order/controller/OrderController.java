@@ -8,6 +8,7 @@ import com.commerce.saleday.api.presentation.order.model.bulk.BulkOrderRequestDt
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,8 +43,8 @@ public class OrderController {
   }
 
   //단건 주문 조회
-  @GetMapping("/order")
-  public OrderResponseDto getOrder(@RequestParam String orderCode) {
+  @GetMapping("/order/{orderCode}")
+  public OrderResponseDto getOrder(@PathVariable String orderCode) {
 
     return OrderResponseDto.toResponse(orderService.getOrder(orderCode));
   }
