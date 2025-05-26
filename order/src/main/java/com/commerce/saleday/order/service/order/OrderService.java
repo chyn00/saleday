@@ -82,8 +82,7 @@ public class OrderService {
   }
 
   // 아이템별 수량 계산
-  private Map<String, Integer> getCalculatedQuantity(
-      @Valid @NotEmpty List<CreateOrderItemCommand> orderItemCommandList) {
+  private Map<String, Integer> getCalculatedQuantity(List<CreateOrderItemCommand> orderItemCommandList) {
     return orderItemCommandList.stream()
         .filter(item -> item.quantity() > 0) // 0 초과만 필터링
         .collect(Collectors.toMap(
