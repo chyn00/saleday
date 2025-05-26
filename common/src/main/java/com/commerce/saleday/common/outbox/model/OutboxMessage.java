@@ -1,6 +1,6 @@
-package com.commerce.saleday.domain.outbox.model;
+package com.commerce.saleday.common.outbox.model;
 
-import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.common.model.BaseEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

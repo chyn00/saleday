@@ -1,4 +1,4 @@
-package com.commerce.saleday.domain.outbox.model;
+package com.commerce.saleday.common.outbox.model;
 
 /**
  * 아웃박스 메시지의 상태값.

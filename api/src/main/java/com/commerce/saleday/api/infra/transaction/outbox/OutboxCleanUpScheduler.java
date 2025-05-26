@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.infra.transaction.outbox;
 
-import com.commerce.saleday.domain.outbox.repository.OutboxRepository;
+import com.commerce.saleday.common.outbox.repository.OutboxRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

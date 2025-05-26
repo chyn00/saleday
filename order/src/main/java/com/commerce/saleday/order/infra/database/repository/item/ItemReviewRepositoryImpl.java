@@ -8,8 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,7 +16,7 @@ public class ItemReviewRepositoryImpl implements ItemReviewRepository {
   private final JPAQueryFactory jpaQueryFactory;
 
   public ItemReviewRepositoryImpl(
-      @Qualifier("orderQueryFactory") JPAQueryFactory jpaQueryFactory) {
+      JPAQueryFactory jpaQueryFactory) {
     this.jpaQueryFactory = jpaQueryFactory;
   }
 

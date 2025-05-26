@@ -1,6 +1,6 @@
 package com.commerce.saleday.order.domain.item.model;
 
-import com.commerce.saleday.domain.common.BaseEntity;
+import com.commerce.saleday.common.model.BaseEntity;
 import com.commerce.saleday.order.domain.review.model.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

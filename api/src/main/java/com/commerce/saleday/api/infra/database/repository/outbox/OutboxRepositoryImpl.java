@@ -1,14 +1,13 @@
 package com.commerce.saleday.api.infra.database.repository.outbox;
 
-import com.commerce.saleday.domain.outbox.model.OutboxMessage;
-import com.commerce.saleday.domain.outbox.model.OutboxStatus;
-import com.commerce.saleday.domain.outbox.model.QOutboxMessage;
-import com.commerce.saleday.domain.outbox.repository.OutboxRepository;
+import com.commerce.saleday.common.outbox.model.OutboxMessage;
+import com.commerce.saleday.common.outbox.model.OutboxStatus;
+import com.commerce.saleday.common.outbox.model.QOutboxMessage;
+import com.commerce.saleday.common.outbox.repository.OutboxRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +17,10 @@ public class OutboxRepositoryImpl implements OutboxRepository {
   private final OutboxJpaRepository outboxJpaRepository;
   private final JPAQueryFactory jpaQueryFactory;
 
-  //생성자에 qualifier 명시 필요
+  // queryDsl 설정 한곳으로 통합(따로 사용시, 트랜잭션 문제)
   public OutboxRepositoryImpl(
       OutboxJpaRepository outboxJpaRepository,
-      @Qualifier("apiQueryFactory") JPAQueryFactory jpaQueryFactory
+      JPAQueryFactory jpaQueryFactory
   ) {
     this.outboxJpaRepository = outboxJpaRepository;
     this.jpaQueryFactory = jpaQueryFactory;

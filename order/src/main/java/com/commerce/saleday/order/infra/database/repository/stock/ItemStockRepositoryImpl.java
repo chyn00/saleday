@@ -3,14 +3,11 @@ package com.commerce.saleday.order.infra.database.repository.stock;
 
 import com.commerce.saleday.order.domain.item.model.QItem;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
-
 import com.commerce.saleday.order.domain.stock.model.QItemStock;
 import com.commerce.saleday.order.domain.stock.repository.ItemStockRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,7 +17,7 @@ public class ItemStockRepositoryImpl implements ItemStockRepository {
   private final JPAQueryFactory jpaQueryFactory;
 
   public ItemStockRepositoryImpl(ItemStockJpaRepository itemStockJpaRepository,
-      @Qualifier("orderQueryFactory") JPAQueryFactory jpaQueryFactory) {
+      JPAQueryFactory jpaQueryFactory) {
     this.itemStockJpaRepository = itemStockJpaRepository;
     this.jpaQueryFactory = jpaQueryFactory;
   }

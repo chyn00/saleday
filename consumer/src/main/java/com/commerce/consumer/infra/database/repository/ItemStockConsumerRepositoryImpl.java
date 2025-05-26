@@ -18,7 +18,7 @@ public class ItemStockConsumerRepositoryImpl implements ItemStockConsumerReposit
   private final JPAQueryFactory jpaQueryFactory;
 
   public ItemStockConsumerRepositoryImpl(ItemStockConsumerJpaRepository itemStockJpaRepository,
-      @Qualifier("consumerQueryFactory")JPAQueryFactory jpaQueryFactory) {
+      JPAQueryFactory jpaQueryFactory) {
     this.itemStockJpaRepository = itemStockJpaRepository;
     this.jpaQueryFactory = jpaQueryFactory;
   }

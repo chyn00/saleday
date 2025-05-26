@@ -1,14 +1,17 @@
 package com.commerce.saleday.order;
 
+import com.commerce.saleday.common.jpa.config.QuerydslConfig;
 import com.commerce.saleday.order.service.ItemService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
+@Import(QuerydslConfig.class)// 같은 queryDslConfig쓰고 있음을 명시
 public class OrderApplication {
 
   public static void main(String[] args) {

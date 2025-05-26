@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.infra.config;
+package com.commerce.saleday.common.jpa.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -9,11 +9,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QuerydslConfig {
 
-  @PersistenceContext//쓰레드 세이프한 빈을 주입받아 사용
-  private EntityManager entityManager;
+  //쓰레드 세이프한 엔티티 매니저를 주입 받아서 사용
+  private final EntityManager entityManager;
 
-  @Bean("apiQueryFactory")
-  public JPAQueryFactory apiQueryFactory() {
+  public QuerydslConfig(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
+
+  @Bean
+  public JPAQueryFactory jpaQueryFactory() {
     return new JPAQueryFactory(entityManager);
   }
 }
