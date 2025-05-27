@@ -47,9 +47,9 @@ public class KakaoPayService {
   public String singleRequestToKakaoPay(Payment payment) {
 
     Orders order = payment.getOrder();
-    KakaoPayReadyRequest
+    KakaoPayReadyRequest kakaoPayReadyRequest = KakaoPayReadyRequest
         .builder()
-        .cid("TC0ONETIME")
+        .cid(kakaopayClientId)
         .partner_order_id(order.getCode())
         .partner_user_id("UserId")
         .item_name(summarizeItemName(order.getOrderItems()))
@@ -62,24 +62,11 @@ public class KakaoPayService {
         .cancel_url(cancelUrl)
         .build();
 
-    Map<String, Object> requestBody = new HashMap<>();
-    requestBody.put("cid", "TC0ONETIME");
-    requestBody.put("partner_order_id", "partner_order_id");
-    requestBody.put("partner_user_id", "partner_user_id");
-    requestBody.put("item_name", "초코파이");
-    requestBody.put("quantity", "1");
-    requestBody.put("total_amount", "2200");
-    requestBody.put("vat_amount", "200");
-    requestBody.put("tax_free_amount", "0");
-    requestBody.put("approval_url", approvalUrl);
-    requestBody.put("fail_url", failUrl);
-    requestBody.put("cancel_url", cancelUrl);
-
     return restClient.post()
         .uri(kakaopayUrl + "/v1/payment/ready")
         .header(HttpHeaders.AUTHORIZATION, kakaopaySecretKey)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .body(requestBody)
+        .body(kakaoPayReadyRequest)
         .retrieve()
         .body(String.class);
   }
