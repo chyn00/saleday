@@ -1,4 +1,4 @@
-package com.commerce.saleday.pay.infra.external.model;
+package com.commerce.saleday.pay.infra.external.kakaopay.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
