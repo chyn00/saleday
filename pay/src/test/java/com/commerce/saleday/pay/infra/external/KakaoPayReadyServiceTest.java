@@ -11,7 +11,7 @@ import com.commerce.saleday.order.service.order.OrderService;
 import com.commerce.saleday.pay.domain.model.Payment;
 import com.commerce.saleday.pay.domain.model.PaymentProvider;
 import com.commerce.saleday.pay.domain.model.PaymentStatus;
-import com.commerce.saleday.pay.infra.external.service.KakaoPayService;
+import com.commerce.saleday.pay.infra.external.kakaopay.service.KakaoPayReadyService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,16 +22,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @Transactional
 @SpringBootTest
-class KakaoPayServiceTest {
+class KakaoPayReadyServiceTest {
 
   @Autowired
-  KakaoPayService kakaoPayService;
+  KakaoPayReadyService kakaoPayReadyService;
 
   @Autowired
   OrderService orderService;
 
   @Test
-  void singleRequestToKakaoPay() {
+  void singleRequest() {
     //given
     Orders order = this.createOrderForTest();
 
@@ -39,7 +39,7 @@ class KakaoPayServiceTest {
     Payment payment = Payment.create(order, PaymentStatus.PENDING, PaymentProvider.KAKAO_PAY);
 
     //then
-    assertThat(kakaoPayService.singleRequestToKakaoPay(payment)).isNotBlank();
+    assertThat(kakaoPayReadyService.singlePayReadyRequest(payment)).isNotBlank();
   }
 
   private Orders createOrderForTest() {
