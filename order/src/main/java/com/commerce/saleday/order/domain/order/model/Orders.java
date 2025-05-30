@@ -76,7 +76,8 @@ public class Orders extends BaseEntity {
 
   private static String generateOrderCode(String userId) {
     String random = UUID.randomUUID().toString().substring(0, 8).toUpperCase(); // 랜덤값 일부
-    return String.format("ORDER-%s-%s", userId, random);
+
+    return String.format("ORDER-%s-%s", userId.hashCode(), random);
   }
 
 

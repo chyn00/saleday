@@ -29,7 +29,7 @@ public class KakaoPayClient {
 
   public String requestApprove(KakaoPayApproveRequest kakaoPayApproveRequest){
     return restClient.post()
-        .uri(kakaoPayProperties.getUrl() + "/v1/payment/ready")
+        .uri(kakaoPayProperties.getUrl() + "/v1/payment/approve")
         .header(HttpHeaders.AUTHORIZATION, kakaoPayProperties.getClientSecretKey())
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .body(kakaoPayApproveRequest)

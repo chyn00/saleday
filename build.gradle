@@ -40,9 +40,11 @@ subprojects {
             testImplementation 'org.springframework.boot:spring-boot-starter-test'
             testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-            implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-//redis(redisTemplate)
+            implementation 'org.springframework.boot:spring-boot-starter-data-redis'//redis
             implementation 'org.redisson:redisson-spring-boot-starter:3.45.1'//redis(분산락 등 구현체 교체)
+
+            //캐시 편하게 사용위해 스프링 캐시
+            implementation 'org.springframework.boot:spring-boot-starter-cache'
 
             //connector
             runtimeOnly 'com.mysql:mysql-connector-j'
