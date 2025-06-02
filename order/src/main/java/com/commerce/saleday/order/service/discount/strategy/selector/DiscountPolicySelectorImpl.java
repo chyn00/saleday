@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DiscountPolicySelectorImpl implements DiscountPolicySelector {
 
+  //Map을 빈으로 활용해서, 설정된 값을 한 곳에서 관리할 수 있도록 변경
   private final Map<DiscountType, DiscountCalculator> discountCalculatorRegistry;
 
   @Override
