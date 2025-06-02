@@ -35,7 +35,6 @@ public class KakaoPayReadyService {
     return kakaoPayClient.requestReady(kakaoPayReadyRequest);
   }
 
-
   //스프링 캐시 또한 proxy 때문에 public 메서드로 만들어야함
   public KakaoPayReadyRequest createKakaoPayReadyRequest(Payment payment) {
     Orders order = payment.getOrder();

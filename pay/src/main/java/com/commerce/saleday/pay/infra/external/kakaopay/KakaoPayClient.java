@@ -27,6 +27,8 @@ public class KakaoPayClient {
         .body(String.class);
   }
 
+  //todo: id랑 device token을 기반으로 한 분산락 필요. 및 id, device token을 활용해서, 아이디와 트랜잭션 1대1 매핑
+  //todo: 흐름 시퀀스 다이어그램 추가 필요
   public String requestApprove(KakaoPayApproveRequest kakaoPayApproveRequest){
     return restClient.post()
         .uri(kakaoPayProperties.getUrl() + "/v1/payment/approve")
