@@ -1,7 +1,6 @@
 package com.commerce.saleday.order.service.discount.strategy.selector;
 
 
-import com.commerce.saleday.order.service.discount.strategy.calculator.DiscountCalculator;
 import com.commerce.saleday.order.domain.discount.DiscountResult;
 import com.commerce.saleday.order.domain.item.model.Item;
 
@@ -9,5 +8,5 @@ import com.commerce.saleday.order.domain.item.model.Item;
 //selector는 템플릿 역할을 하고, strategy 역할은 각 구현체(calculator)가 한다.
 public interface DiscountPolicySelector {
 
-  DiscountResult select(DiscountCalculator discountCalculator, Item item);
+  DiscountResult select(Item item);
 }

@@ -1,5 +1,6 @@
 package com.commerce.saleday.order.service.discount.strategy.calculator;
 
+import com.commerce.saleday.order.domain.discount.model.DiscountType;
 import com.commerce.saleday.order.domain.item.model.Item;
 import java.math.BigDecimal;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,13 @@ public class FixedDiscountCalculator implements DiscountCalculator {
 
   @Override
   public String getReason() {
-
     return "정액 할인";
+  }
+
+  @Override
+  public DiscountType getType() {
+
+    return DiscountType.FIXED;
   }
 
   //할인 룰 적용

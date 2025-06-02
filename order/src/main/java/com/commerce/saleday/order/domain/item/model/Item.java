@@ -1,10 +1,13 @@
 package com.commerce.saleday.order.domain.item.model;
 
 import com.commerce.saleday.common.model.BaseEntity;
+import com.commerce.saleday.order.domain.discount.model.DiscountType;
 import com.commerce.saleday.order.domain.review.model.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,17 +42,22 @@ public class Item extends BaseEntity {
 
   private BigDecimal price;// 가격
 
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING) //enum Type을 string으로 저장
+  private DiscountType discountType;
+
   //연관관계 지워질때도 연관되도록 구현
   @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Review> reviews;
 
   @Builder(access = AccessLevel.PRIVATE)
-  private Item(String code, String name, String content, BigDecimal price, List<Review> reviews) {
+  private Item(String code, String name, String content, BigDecimal price, List<Review> reviews, DiscountType discountType) {
     this.code = code;
     this.name = name;
     this.content = content;
     this.price = price;
     this.reviews = reviews;
+    this.discountType = discountType;
   }
 
   public static Item create(String code, String name, String content, BigDecimal price, List<Review> reviews){
@@ -60,6 +68,7 @@ public class Item extends BaseEntity {
         .content(content)
         .price(price)
         .reviews(reviews)
+        .discountType(DiscountType.NONE)
         .build();
 
     for (Review review : reviews) {
