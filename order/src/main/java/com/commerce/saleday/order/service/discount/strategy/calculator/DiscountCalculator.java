@@ -1,5 +1,6 @@
 package com.commerce.saleday.order.service.discount.strategy.calculator;
 
+import com.commerce.saleday.order.domain.discount.model.DiscountType;
 import com.commerce.saleday.order.domain.item.model.Item;
 import java.math.BigDecimal;
 
@@ -10,4 +11,6 @@ public interface DiscountCalculator {
   BigDecimal applyDiscount(Item item);
 
   String getReason();
+
+  DiscountType getType();
 }

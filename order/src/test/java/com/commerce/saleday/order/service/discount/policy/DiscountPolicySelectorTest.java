@@ -42,7 +42,7 @@ public class DiscountPolicySelectorTest {
       Item item = Item.create(code, name, content, price, reviews);
 
       // when
-      DiscountResult discountResult = discountPolicySelector.select(fixedDiscountCalculator, item);
+      DiscountResult discountResult = discountPolicySelector.select(item);
 
       // then
       assertThat(discountResult.getDiscountAmount()).isEqualTo(expected);
@@ -60,7 +60,7 @@ public class DiscountPolicySelectorTest {
       Item item = Item.create(code, name, content, price, reviews);
 
       // when
-      DiscountResult discountResult = discountPolicySelector.select(rateDiscountCalculator, item);
+      DiscountResult discountResult = discountPolicySelector.select(item);
 
       // then
       assertThat(discountResult.getDiscountAmount()).isEqualTo(expected);

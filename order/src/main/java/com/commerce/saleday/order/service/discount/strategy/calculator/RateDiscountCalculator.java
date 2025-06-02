@@ -1,5 +1,6 @@
 package com.commerce.saleday.order.service.discount.strategy.calculator;
 
+import com.commerce.saleday.order.domain.discount.model.DiscountType;
 import com.commerce.saleday.order.domain.item.model.Item;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,8 +20,13 @@ public class RateDiscountCalculator implements DiscountCalculator {
 
   @Override
   public String getReason() {
-
     return "정률 할인";
+  }
+
+  @Override
+  public DiscountType getType() {
+
+    return DiscountType.RATED;
   }
 
   //할인되면 가격 0.x 가격은 버림을 비즈니스 룰로 정한다.

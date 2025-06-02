@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 public class DiscountService {
 
   private final DiscountPolicySelector discountPolicySelector;
-  private final FixedDiscountCalculator fixedDiscountCalculator;
 
   public DiscountResult getDiscountResult(Item item) {
-    return discountPolicySelector.select(fixedDiscountCalculator, item);
+    return discountPolicySelector.select(item);
   }
 
 }
