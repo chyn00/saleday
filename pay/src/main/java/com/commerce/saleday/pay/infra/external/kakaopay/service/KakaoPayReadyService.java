@@ -2,16 +2,18 @@ package com.commerce.saleday.pay.infra.external.kakaopay.service;
 
 import com.commerce.saleday.order.domain.order.model.OrderItem;
 import com.commerce.saleday.order.domain.order.model.Orders;
+import com.commerce.saleday.pay.common.utils.JwtUtilsStub;
 import com.commerce.saleday.pay.domain.model.Payment;
 import com.commerce.saleday.pay.infra.external.kakaopay.KakaoPayClient;
 import com.commerce.saleday.pay.infra.external.kakaopay.KakaoPayProperties;
+import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayForApproval;
 import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayReadyRequest;
+import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayReadyResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,35 +21,62 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KakaoPayReadyService {
 
+  public static final String KAKAO_PAY_FIX_QUANTITY = "1";
+  public static final String ZERO = "0";
   private final KakaoPayClient kakaoPayClient;
   private final KakaoPayProperties kakaoPayProperties;
   private final RedisTemplate<String, Object> redisTemplate;
 
   //외부 API요청
-  public String singlePayReadyRequest(Payment payment) {
+  public KakaoPayReadyResponse singlePayReadyRequest(String userId, Payment payment) {
 
-    KakaoPayReadyRequest kakaoPayReadyRequest = createKakaoPayReadyRequest(payment);
+    KakaoPayReadyRequest kakaoPayReadyRequest = this.createKakaoPayReadyRequest(userId, payment);
 
-    // Redis에 상태 저장
-    String key = kakaoPayReadyRequest.getRedisKey();
-    redisTemplate.opsForValue().set(key, kakaoPayReadyRequest, Duration.ofMinutes(5));
+    KakaoPayReadyResponse kakaoPayReadyResponse = kakaoPayClient.requestReady(kakaoPayReadyRequest);
 
-    return kakaoPayClient.requestReady(kakaoPayReadyRequest);
+    // Redis에 response 상태 저장
+    KakaoPayForApproval kakaoPayForApproval = KakaoPayForApproval
+        .builder()
+        .cid(kakaoPayReadyRequest.getCid())
+        .tid(kakaoPayReadyResponse.getTid())
+        .partnerOrderId(kakaoPayReadyRequest.getPartner_order_id())
+        .partnerUserId(kakaoPayReadyRequest.getPartner_user_id())
+        .build();
+
+    redisTemplate.opsForValue()
+        .set(KakaoPayForApproval.getRedisKey(userId), kakaoPayForApproval, Duration.ofMinutes(5));
+    return kakaoPayReadyResponse;
   }
 
-  //스프링 캐시 또한 proxy 때문에 public 메서드로 만들어야함
-  public KakaoPayReadyRequest createKakaoPayReadyRequest(Payment payment) {
+  //외부 API요청
+  public String singlePayApproveRequest(String pgToken) {
+
+    //todo: 실제의 경우 jwtUtils가 아닌 어노테이션을 활용하여, userId를 추출
+    String userId = String.valueOf(JwtUtilsStub.getUserId());
+
+    KakaoPayForApproval kakaoPayForApproval = (KakaoPayForApproval) redisTemplate.opsForValue()
+        .get(KakaoPayForApproval.getRedisKey(userId));
+
+    //todo: 공통 Exception handler 처리
+    if (kakaoPayForApproval == null) {
+      throw new RuntimeException("레디스에 저장된 값이 없습니다.");
+    }
+
+    return kakaoPayClient.requestApprove(kakaoPayForApproval.toKakaoPayApproveRequest(pgToken));
+  }
+
+  public KakaoPayReadyRequest createKakaoPayReadyRequest(String userId, Payment payment) {
     Orders order = payment.getOrder();
     return KakaoPayReadyRequest
         .builder()
         .cid(kakaoPayProperties.getClientId())
         .partner_order_id(order.getCode())
-        .partner_user_id("order")
+        .partner_user_id(userId)
         .item_name(summarizeItemName(order.getOrderItems()))
-        .quantity("1")
-        .total_amount(order.getTotalOrderPrice().toString())//orderItem의 모든 orderPrice를 계산해줘야함.
-        .vat_amount(calculateVatAmount(order.getTotalOrderPrice()).toString())
-        .tax_free_amount("0")
+        .quantity(KAKAO_PAY_FIX_QUANTITY)
+        .total_amount(String.valueOf(order.getTotalOrderPrice()))//orderItem의 모든 orderPrice를 계산해줘야함.
+        .vat_amount(String.valueOf(calculateVatAmount(order.getTotalOrderPrice())))
+        .tax_free_amount(ZERO)
         .approval_url(kakaoPayProperties.getApprovalUrl())
         .fail_url(kakaoPayProperties.getFailUrl())
         .cancel_url(kakaoPayProperties.getCancelUrl())

@@ -39,7 +39,7 @@ class KakaoPayReadyServiceTest {
     Payment payment = Payment.create(order, PaymentStatus.PENDING, PaymentProvider.KAKAO_PAY);
 
     //then
-    assertThat(kakaoPayReadyService.singlePayReadyRequest(payment)).isNotBlank();
+    assertThat(kakaoPayReadyService.singlePayReadyRequest("1234",payment)).isNotNull();
   }
 
   private Orders createOrderForTest() {
