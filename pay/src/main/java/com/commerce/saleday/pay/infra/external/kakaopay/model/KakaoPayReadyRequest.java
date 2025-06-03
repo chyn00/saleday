@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class KakaoPayReadyRequest {
 
-  public final String KAKAO_PAY_READY = "kakao-pay-ready:";
+  public final static String KAKAO_PAY_READY = "kakao-pay-ready:";
   private final String cid;
   private final String partner_order_id;
   private final String partner_user_id;
@@ -23,7 +23,7 @@ public class KakaoPayReadyRequest {
   private final String fail_url;
   private final String cancel_url;
 
-  public String getRedisKey(){
-    return KAKAO_PAY_READY + this.partner_order_id;
+  public static String getRedisKey(String userId){
+    return KAKAO_PAY_READY + userId;
   }
 }
