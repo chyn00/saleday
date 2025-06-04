@@ -2,3 +2,14 @@ spring:
   datasource:
     username: root
     password: 1234
+
+external:
+  kakao-pay:
+    url: https://open-api.kakaopay.com/online
+    headers:
+      client-id: TC0ONETIME
+      client-secret-key: SECRET_KEY DEV9F7F65279B7C1EABD6FCCE96C44E34462E354
+    redirect:
+      approval: http://localhost:9999/success
+      fail: http://localhost:9999/fail
+      cancel: http://localhost:9999/cancel
