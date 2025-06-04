@@ -49,6 +49,7 @@ public class KakaoPayReadyService extends AbstractPayService {
         .tid(kakaoPayReadyResponse.getTid())
         .partnerOrderId(kakaoPayReadyRequest.getPartner_order_id())
         .partnerUserId(kakaoPayReadyRequest.getPartner_user_id())
+        .totalAmount(this.toInteger(order.getTotalOrderPrice()))
         .build();
 
     redisTemplate.opsForValue()
@@ -102,7 +103,8 @@ public class KakaoPayReadyService extends AbstractPayService {
   // 추상 클래스의 메서드를 재정의
   @Override
   protected String doRequestToExternalPay(String userId, Orders order) {
-    return this.singlePayReadyRequest(userId, order).getTid();
+    KakaoPayReadyResponse response = this.singlePayReadyRequest(userId, order);
+    return  "nextUrl(PC) : " + response.getNextRedirectPcUrl() + "\n tid: "+ response.getTid();
   }
 
 }

@@ -4,10 +4,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor //GenericJackson2JsonRedisSerializer 역직렬화 시 필요(기본 생성자 사용)
 public class KakaoPayForApproval {
 
   private String cid; // 가맹점 코드 (필수)

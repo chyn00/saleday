@@ -18,7 +18,7 @@ public class KakaoPayClient {
   private final RestClient restClient;
   private final KakaoPayProperties kakaoPayProperties;
 
-  public KakaoPayReadyResponse requestReady(KakaoPayReadyRequest kakaoPayReadyRequest){
+  public KakaoPayReadyResponse requestReady(KakaoPayReadyRequest kakaoPayReadyRequest) {
     return restClient.post()
         .uri(kakaoPayProperties.getUrl() + "/v1/payment/ready")
         .header(HttpHeaders.AUTHORIZATION, kakaoPayProperties.getClientSecretKey())
@@ -28,7 +28,7 @@ public class KakaoPayClient {
         .body(KakaoPayReadyResponse.class);
   }
 
-  public String requestApprove(KakaoPayApproveRequest kakaoPayApproveRequest){
+  public String requestApprove(KakaoPayApproveRequest kakaoPayApproveRequest) {
     return restClient.post()
         .uri(kakaoPayProperties.getUrl() + "/v1/payment/approve")
         .header(HttpHeaders.AUTHORIZATION, kakaoPayProperties.getClientSecretKey())
