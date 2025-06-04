@@ -18,10 +18,10 @@ public abstract class AbstractPayService {
   public final String pay(String userId, String orderCode) {
 
     Orders order = this.getOrder(orderCode);
-    String tid = doRequestToExternalPay(userId, order);
+    String redirectUrl = doRequestToExternalPay(userId, order);
 
     //todo: payment db에 저장 로직 까지 필요
-    return tid;
+    return redirectUrl;
   }
 
   // kakaoPayService, naverPayService 등에서 오버라이딩하여 사용
