@@ -1,4 +1,4 @@
-package com.commerce.saleday.order;
+package com.commerce.saleday.api;
 
 import com.commerce.saleday.order.domain.item.model.Item;
 import com.commerce.saleday.order.domain.review.model.Review;
