@@ -14,10 +14,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class KakaoPayReadyService extends AbstractPayService {
 
   public static final String KAKAO_PAY_FIX_QUANTITY = "1";
@@ -27,17 +30,9 @@ public class KakaoPayReadyService extends AbstractPayService {
   private final RedisTemplate<String, Object> redisTemplate;
   private final OrderService orderService;
 
-  public KakaoPayReadyService(
-      OrderService orderService,
-      KakaoPayClient kakaoPayClient,
-      KakaoPayProperties kakaoPayProperties,
-      RedisTemplate<String, Object> redisTemplate
-  ) {
-    super(orderService);
-    this.orderService = orderService;
-    this.kakaoPayClient = kakaoPayClient;
-    this.kakaoPayProperties = kakaoPayProperties;
-    this.redisTemplate = redisTemplate;
+  @Override
+  protected OrderService getOrderService() {
+    return orderService;
   }
 
   //외부 API요청
@@ -69,13 +64,17 @@ public class KakaoPayReadyService extends AbstractPayService {
         .partner_user_id(userId)
         .item_name(summarizeItemName(order.getOrderItems()))
         .quantity(KAKAO_PAY_FIX_QUANTITY)
-        .total_amount(String.valueOf(order.getTotalOrderPrice()))//orderItem의 모든 orderPrice를 계산해줘야함.
+        .total_amount(String.valueOf(this.toInteger(order.getTotalOrderPrice())))//orderItem의 모든 orderPrice를 계산해줘야함.
         .vat_amount(String.valueOf(calculateVatAmount(order.getTotalOrderPrice())))
         .tax_free_amount(ZERO)
         .approval_url(kakaoPayProperties.getApprovalUrl())
         .fail_url(kakaoPayProperties.getFailUrl())
         .cancel_url(kakaoPayProperties.getCancelUrl())
         .build();
+  }
+
+  private int toInteger(BigDecimal totalOrderPrice) {
+    return totalOrderPrice.setScale(0, RoundingMode.DOWN).intValueExact();
   }
 
   // 카카오페이에 넘길 상품 이름(보통 묶어서 ex. 아이템 외 1건으로 보냄)
