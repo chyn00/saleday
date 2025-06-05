@@ -1,5 +1,7 @@
 package com.commerce.saleday.order.domain.stock.model;
 
+import com.commerce.saleday.common.exception.ExceptionCode;
+import com.commerce.saleday.common.exception.SaleDayException;
 import com.commerce.saleday.common.model.BaseEntity;
 import com.commerce.saleday.order.domain.item.model.Item;
 import jakarta.persistence.Entity;
@@ -37,8 +39,7 @@ public class ItemStock extends BaseEntity {
   }
 
   public void decrease(long quantity) {
-    //todo: exception refactoring 필요.
-    if (this.quantity <= 0) throw new IllegalStateException("재고가 부족합니다.");
+    if (this.quantity <= 0) throw new SaleDayException(ExceptionCode.OUT_OF_STOCK);
     this.quantity -= 1;
   }
 

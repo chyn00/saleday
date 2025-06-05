@@ -1,5 +1,7 @@
 package com.commerce.saleday.pay.infra.external.kakaopay.service;
 
+import com.commerce.saleday.common.exception.ExceptionCode;
+import com.commerce.saleday.common.exception.SaleDayException;
 import com.commerce.saleday.pay.common.utils.JwtUtilsStub;
 import com.commerce.saleday.pay.infra.external.kakaopay.KakaoPayClient;
 import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayForApproval;
@@ -23,9 +25,8 @@ public class KakaoPayApproveService {
     KakaoPayForApproval kakaoPayForApproval = (KakaoPayForApproval) redisTemplate.opsForValue()
         .get(KakaoPayForApproval.getRedisKey(userId));
 
-    //todo: 공통 Exception handler 처리
     if (kakaoPayForApproval == null) {
-      throw new RuntimeException("레디스에 저장된 값이 없습니다.");
+      throw new SaleDayException(ExceptionCode.NO_SUCH_DATA);
     }
 
     return kakaoPayClient.requestApprove(kakaoPayForApproval.toKakaoPayApproveRequest(pgToken));

@@ -19,7 +19,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-//todo: 직렬화/역직렬화는 공통으로 빼 줄 필요가 있다.
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -16,7 +16,7 @@ import org.springframework.context.event.EventListener;
 public class DataInitForOrderTest {
   private final ItemService itemService;
 
-  //todo: test 데이터 세팅 수정 필요
+  //todo: test 데이터 세팅 방법 수정 필요
   //스프링 부트가 빈 세팅 외부 설정 등 모두 boot up 되고 나서, 실행되도록 개발
   @EventListener(ApplicationReadyEvent.class)
   public void initData() {
