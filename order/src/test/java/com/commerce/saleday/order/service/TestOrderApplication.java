@@ -1,0 +1,24 @@
+package com.commerce.saleday.order.service;
+
+import com.commerce.saleday.common.jpa.config.QuerydslConfig;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+@EnableJpaAuditing
+@SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.commerce.saleday.order")
+@EntityScan(basePackages = "com.commerce.saleday.order")
+@ComponentScan(basePackages = "com.commerce.saleday.order")
+@Import(QuerydslConfig.class)
+public class TestOrderApplication {
+
+    @Bean
+    public DataInitForOrderTest dataInitForOrderTest(ItemService itemService) {
+        return new DataInitForOrderTest(itemService);
+    }
+}

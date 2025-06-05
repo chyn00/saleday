@@ -77,6 +77,23 @@ public class Item extends BaseEntity {
     return item;
   }
 
+  public static Item createWithDiscountType(String code, String name, String content, BigDecimal price, List<Review> reviews, DiscountType discountType){
+    Item item = Item
+        .builder()
+        .code(code)
+        .name(name)
+        .content(content)
+        .price(price)
+        .reviews(reviews)
+        .discountType(discountType)
+        .build();
+
+    for (Review review : reviews) {
+      item.addReview(review);
+    }
+    return item;
+  }
+
   // 객체 List 저장 및 연관관계 주인 쪽에도 매핑 데이터 세팅
   public void addReview(Review review) {
     review.mapTo(this); // 연관관계 주인 세팅(객체참조라서 .add와 순서 바뀌어도 상관없으나 명시성을 위해 앞에 배치)

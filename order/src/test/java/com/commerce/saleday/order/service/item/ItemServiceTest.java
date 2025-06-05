@@ -3,6 +3,7 @@ package com.commerce.saleday.order.service.item;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.commerce.saleday.order.service.ItemService;
+import com.commerce.saleday.order.service.TestOrderApplication;
 import com.commerce.saleday.order.service.review.ReviewService;
 import com.commerce.saleday.order.domain.item.model.Item;
 import com.commerce.saleday.order.domain.review.model.Review;
@@ -17,8 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = TestOrderApplication.class)
+@ActiveProfiles("test")  // application-test.yml 사용
 @Transactional
 class ItemServiceTest {
 
