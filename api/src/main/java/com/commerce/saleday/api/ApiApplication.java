@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaAuditing
 @SpringBootApplication
-@ComponentScan(basePackages = "com.commerce.saleday") // todo: 하위 전체 커버되게 설정(나중에 분리 필요.)
+@ComponentScan(basePackages = "com.commerce.saleday")
 @EnableJpaRepositories(basePackages = {"com.commerce.saleday"})
 @EntityScan(basePackages = "com.commerce.saleday")
 public class ApiApplication {
