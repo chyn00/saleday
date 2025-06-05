@@ -2,6 +2,8 @@ package com.commerce.saleday.order.service.discount.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.commerce.saleday.order.domain.discount.model.DiscountType;
+import com.commerce.saleday.order.service.TestOrderApplication;
 import com.commerce.saleday.order.service.discount.DiscountService;
 import com.commerce.saleday.order.domain.discount.DiscountResult;
 import com.commerce.saleday.order.domain.item.model.Item;
@@ -14,8 +16,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = TestOrderApplication.class)
+@ActiveProfiles("test")  // application-test.yml 사용
 @Transactional
 class DiscountServiceTest {
 
@@ -31,7 +35,7 @@ class DiscountServiceTest {
     String content = "test-달달한과자";
     List<Review> reviews = new ArrayList<>();
 
-    Item item = Item.create(code, name, content, itemPrice, reviews);
+    Item item = Item.createWithDiscountType(code, name, content, itemPrice, reviews, DiscountType.FIXED);
 
     //when
     DiscountResult discountResult = discountService.getDiscountResult(item);

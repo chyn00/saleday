@@ -2,13 +2,16 @@ package com.commerce.saleday.order.service.review;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.commerce.saleday.order.service.TestOrderApplication;
 import com.commerce.saleday.order.service.review.model.CreateReviewCommand;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = TestOrderApplication.class)
+@ActiveProfiles("test")  // application-test.yml 사용
 @Transactional
 class ReviewServiceTest {
 

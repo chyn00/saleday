@@ -2,6 +2,8 @@ package com.commerce.saleday.order.service.discount.policy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.commerce.saleday.order.domain.discount.model.DiscountType;
+import com.commerce.saleday.order.service.TestOrderApplication;
 import com.commerce.saleday.order.service.discount.strategy.calculator.FixedDiscountCalculator;
 import com.commerce.saleday.order.service.discount.strategy.calculator.RateDiscountCalculator;
 import com.commerce.saleday.order.domain.discount.DiscountResult;
@@ -16,8 +18,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = TestOrderApplication.class)
+@ActiveProfiles("test")  // application-test.yml 사용
 @Transactional
 public class DiscountPolicySelectorTest {
 
@@ -39,7 +43,7 @@ public class DiscountPolicySelectorTest {
       String content = "test-달달한과자";
       List<Review> reviews = new ArrayList<>();
 
-      Item item = Item.create(code, name, content, price, reviews);
+      Item item = Item.createWithDiscountType(code, name, content, price, reviews, DiscountType.FIXED);
 
       // when
       DiscountResult discountResult = discountPolicySelector.select(item);
@@ -57,7 +61,7 @@ public class DiscountPolicySelectorTest {
       String content = "test-달달한과자";
       List<Review> reviews = new ArrayList<>();
 
-      Item item = Item.create(code, name, content, price, reviews);
+      Item item = Item.createWithDiscountType(code, name, content, price, reviews,DiscountType.RATED);
 
       // when
       DiscountResult discountResult = discountPolicySelector.select(item);

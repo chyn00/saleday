@@ -3,6 +3,7 @@ package com.commerce.saleday.order.service.order;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.commerce.saleday.order.domain.order.model.Orders;
+import com.commerce.saleday.order.service.TestOrderApplication;
 import com.commerce.saleday.order.service.order.model.CreateOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateBulkOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateOrderItemCommand;
@@ -11,8 +12,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = TestOrderApplication.class)
+@ActiveProfiles("test")  // application-test.yml 사용
 @Transactional
 class OrderServiceTest {
 
