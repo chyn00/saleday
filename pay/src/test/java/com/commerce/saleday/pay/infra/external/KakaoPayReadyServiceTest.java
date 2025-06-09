@@ -8,6 +8,7 @@ import com.commerce.saleday.order.domain.order.model.OrderItem;
 import com.commerce.saleday.order.domain.order.model.Orders;
 import com.commerce.saleday.order.domain.review.model.Review;
 import com.commerce.saleday.order.service.order.OrderService;
+import com.commerce.saleday.pay.TestPayApplication;
 import com.commerce.saleday.pay.domain.model.Payment;
 import com.commerce.saleday.pay.domain.model.PaymentProvider;
 import com.commerce.saleday.pay.domain.model.PaymentStatus;
@@ -19,16 +20,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = TestPayApplication.class)
 class KakaoPayReadyServiceTest {
 
   @Autowired
   KakaoPayReadyService kakaoPayReadyService;
-
-  @Autowired
-  OrderService orderService;
 
   @Test
   void singleRequest() {
