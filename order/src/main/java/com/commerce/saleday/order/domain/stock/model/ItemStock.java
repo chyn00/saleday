@@ -3,7 +3,7 @@ package com.commerce.saleday.order.domain.stock.model;
 import com.commerce.saleday.common.exception.ExceptionCode;
 import com.commerce.saleday.common.exception.SaleDayException;
 import com.commerce.saleday.common.model.BaseEntity;
-import com.commerce.saleday.order.domain.item.model.Item;
+import com.commerce.saleday.item.domain.item.model.Item;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

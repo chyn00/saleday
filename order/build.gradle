@@ -1,6 +1,8 @@
 dependencies {
     implementation project(':message')      // message module 의존성 추가
     implementation project(':common')      // common module 의존성 추가
+    implementation project(':item')      // item module 의존성 추가
+    implementation project(':discount')      // discount module 의존성 추가
 }
 
 bootJar.enabled = true

@@ -1,19 +1,17 @@
 package com.commerce.saleday.order.service.order;
 
 
-import com.commerce.saleday.order.domain.discount.DiscountResult;
-import com.commerce.saleday.order.domain.item.model.Item;
+import com.commerce.saleday.discount.domain.discount.DiscountResult;
+import com.commerce.saleday.discount.service.discount.DiscountService;
+import com.commerce.saleday.item.domain.item.model.Item;
+import com.commerce.saleday.item.service.item.ItemService;
 import com.commerce.saleday.order.domain.order.model.OrderItem;
 import com.commerce.saleday.order.domain.order.model.Orders;
 import com.commerce.saleday.order.domain.order.repository.OrderRepository;
-import com.commerce.saleday.order.service.discount.DiscountService;
-import com.commerce.saleday.order.service.ItemService;
 import com.commerce.saleday.order.service.order.model.CreateOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateBulkOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateOrderItemCommand;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +43,7 @@ public class OrderService {
     Item item = itemService.getItem(orderCommand.itemCode());
 
     //할인 객체 조회
-    DiscountResult discountResult = discountService.getDiscountResult(item);
+    DiscountResult discountResult = discountService.getDiscountResult(item.toDiscountCommand());
 
     //주문 정보 저장을 위해 orderItem에 세팅
     OrderItem orderItem = OrderItem.create(item, orderCommand.quantity(), discountResult);
@@ -100,7 +98,7 @@ public class OrderService {
 
     //할인 객체 조회
     for (Item item : itemList) {
-      DiscountResult discountResult = discountService.getDiscountResult(item);
+      DiscountResult discountResult = discountService.getDiscountResult(item.toDiscountCommand());
 
       // 계산된 수량 가져오기
       int quantityByItemCode = quantityMapByItemCode.get(item.getCode());

@@ -1,7 +1,7 @@
 package com.commerce.saleday.api.presentation.review.controller;
 
-import com.commerce.saleday.order.service.review.ReviewService;
 import com.commerce.saleday.api.presentation.review.model.ReviewRequestDto;
+import com.commerce.saleday.item.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

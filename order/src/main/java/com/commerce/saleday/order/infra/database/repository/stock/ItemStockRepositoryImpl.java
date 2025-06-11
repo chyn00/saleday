@@ -1,7 +1,6 @@
 package com.commerce.saleday.order.infra.database.repository.stock;
 
-
-import com.commerce.saleday.order.domain.item.model.QItem;
+import com.commerce.saleday.item.domain.item.model.QItem;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import com.commerce.saleday.order.domain.stock.model.QItemStock;
 import com.commerce.saleday.order.domain.stock.repository.ItemStockRepository;
@@ -30,7 +29,7 @@ public class ItemStockRepositoryImpl implements ItemStockRepository {
     return Optional.ofNullable(
             jpaQueryFactory
                 .selectFrom(itemStock)
-                .join(itemStock.item, item)
+                .join(itemStock.item)
                 .fetchJoin()
                 .where(item.code.eq(itemCode))
                 .fetchOne()

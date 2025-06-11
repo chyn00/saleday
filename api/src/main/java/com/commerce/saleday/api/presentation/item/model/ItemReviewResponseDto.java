@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.presentation.item.model;
 
-import com.commerce.saleday.order.domain.review.model.Review;
+import com.commerce.saleday.item.domain.review.model.Review;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
