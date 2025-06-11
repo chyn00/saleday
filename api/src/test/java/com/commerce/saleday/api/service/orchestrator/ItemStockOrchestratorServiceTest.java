@@ -1,8 +1,8 @@
 package com.commerce.saleday.api.service.orchestrator;
 
-import com.commerce.saleday.order.service.ItemService;
-import com.commerce.saleday.order.domain.item.model.Item;
-import com.commerce.saleday.order.domain.review.model.Review;
+import com.commerce.saleday.item.domain.item.model.Item;
+import com.commerce.saleday.item.domain.review.model.Review;
+import com.commerce.saleday.item.service.item.ItemService;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;

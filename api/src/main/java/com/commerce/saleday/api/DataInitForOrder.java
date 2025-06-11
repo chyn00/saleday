@@ -1,8 +1,8 @@
 package com.commerce.saleday.api;
 
-import com.commerce.saleday.order.domain.item.model.Item;
-import com.commerce.saleday.order.domain.review.model.Review;
-import com.commerce.saleday.order.service.ItemService;
+import com.commerce.saleday.item.domain.item.model.Item;
+import com.commerce.saleday.item.domain.review.model.Review;
+import com.commerce.saleday.item.service.item.ItemService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

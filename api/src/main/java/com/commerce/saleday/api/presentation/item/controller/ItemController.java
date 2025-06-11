@@ -1,13 +1,12 @@
 package com.commerce.saleday.api.presentation.item.controller;
 
 import com.commerce.saleday.api.common.utils.PageUtils;
-import com.commerce.saleday.order.service.ItemService;
 import com.commerce.saleday.api.presentation.item.model.ItemResponseDto;
 import com.commerce.saleday.api.presentation.item.model.ItemReviewResponseDto;
+import com.commerce.saleday.item.service.item.ItemService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.presentation.review.model;
 
-import com.commerce.saleday.order.service.review.model.CreateReviewCommand;
+import com.commerce.saleday.item.service.review.model.CreateReviewCommand;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;

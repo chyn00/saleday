@@ -2,16 +2,13 @@ package com.commerce.saleday.pay.infra.external;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.commerce.saleday.order.domain.discount.DiscountResult;
-import com.commerce.saleday.order.domain.item.model.Item;
+import com.commerce.saleday.discount.domain.discount.DiscountResult;
+import com.commerce.saleday.item.domain.item.model.Item;
+import com.commerce.saleday.item.domain.review.model.Review;
 import com.commerce.saleday.order.domain.order.model.OrderItem;
 import com.commerce.saleday.order.domain.order.model.Orders;
-import com.commerce.saleday.order.domain.review.model.Review;
-import com.commerce.saleday.order.service.order.OrderService;
+
 import com.commerce.saleday.pay.TestPayApplication;
-import com.commerce.saleday.pay.domain.model.Payment;
-import com.commerce.saleday.pay.domain.model.PaymentProvider;
-import com.commerce.saleday.pay.domain.model.PaymentStatus;
 import com.commerce.saleday.pay.infra.external.kakaopay.service.KakaoPayReadyService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -20,7 +17,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 @Transactional
 @SpringBootTest(classes = TestPayApplication.class)

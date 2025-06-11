@@ -1,7 +1,7 @@
 package com.commerce.saleday.api;
 
-import com.commerce.saleday.order.service.ItemService;
 import com.commerce.saleday.api.service.orchestrator.ItemStockOrchestratorService;
+import com.commerce.saleday.item.service.item.ItemService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.presentation.item.model;
 
-import com.commerce.saleday.order.domain.item.model.Item;
+import com.commerce.saleday.item.domain.item.model.Item;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
