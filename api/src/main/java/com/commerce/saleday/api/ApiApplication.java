@@ -1,5 +1,8 @@
 package com.commerce.saleday.api;
 
+import com.commerce.saleday.api.init.DataInit;
+import com.commerce.saleday.api.init.DataInitBulk;
+import com.commerce.saleday.api.init.DataInitForOrder;
 import com.commerce.saleday.api.service.orchestrator.ItemStockOrchestratorService;
 import com.commerce.saleday.item.service.item.ItemService;
 import org.springframework.boot.SpringApplication;
@@ -34,4 +37,10 @@ public class ApiApplication {
   public DataInitForOrder dataInitForOrderTest(ItemService itemService) {
     return new DataInitForOrder(itemService);
   }
+
+//  @Bean
+//  @Profile("local")//수동 등록시에는 주입이 필요함, 로컬 환경일떄만 사용을 위해 이렇게 구성
+//  public DataInitBulk dataInitBulk(ItemService itemService) {
+//    return new DataInitBulk(itemService);
+//  }
 }

@@ -34,7 +34,7 @@ class ItemStockOrchestratorServiceTest {
     BigDecimal price = BigDecimal.valueOf(3000);
     List<Review> reviews = new ArrayList<>();
 
-    Item item = Item.create(code, name, content, price, reviews);
+    Item item = Item.create(5L, code, name, content, price, reviews);
 
     ItemStock itemStock = ItemStock
         .builder()

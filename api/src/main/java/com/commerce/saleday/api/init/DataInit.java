@@ -1,4 +1,4 @@
-package com.commerce.saleday.api;
+package com.commerce.saleday.api.init;
 
 import com.commerce.saleday.api.service.orchestrator.ItemStockOrchestratorService;
 
@@ -20,6 +20,7 @@ public class DataInit {
   private final ItemService itemService;
   private final ItemStockOrchestratorService itemStockOrchestratorService;
 
+  //todo: item직접 생성 말고, command -> save 리팩토링 필요
   //스프링 부트가 빈 세팅 외부 설정 등 모두 boot up 되고 나서, 실행되도록 개발
   @EventListener(ApplicationReadyEvent.class)
   public void initData() {
@@ -31,7 +32,7 @@ public class DataInit {
     BigDecimal price = BigDecimal.valueOf(5000);
     List<Review> reviews = new ArrayList<>();
 
-    Item item = Item.create(code, name, content, price, reviews);
+    Item item = Item.create(4L, code, name, content, price, reviews);
 
     ItemStock itemStock = ItemStock
         .builder()

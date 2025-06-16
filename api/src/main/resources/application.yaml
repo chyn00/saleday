@@ -7,11 +7,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create #data init 작성해두어서 일단 create
-    show-sql: true
+#    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect #엔진 명시(명시하지 않으면, 잘못된 sql 인식될 수 있음)
+        jdbc.batch_size: 1000
+        order_inserts: true
+        order_updates: true
+        batching:
+          batch_versioned_data: true # Hibernate 6.x용 배치 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/saleday
+    url: jdbc:mysql://127.0.0.1:3306/saleday?rewriteBatchedStatements=true&useServerPrepStmts=false
+    #rewriteBatchedStatements=true	insert 문을 한 줄로 합쳐줌 (values(...), (...), (...))
+    #useServerPrepStmts=false	서버측 prepared statement 사용 막고, 클라이언트에서 재작성 허용
 
 logging:
   level:
     org.hibernate.orm.connections.pooling: WARN #connection 관련로그 warn 레벨 이상 부터 출력
+    #org.hibernate: DEBUG로 배치가 정확히 처리되었는지 확인 가능
+    #2025-06-17T06:17:08.640+09:00 DEBUG 18495 --- [discount] [           main] o.h.e.i.AbstractFlushingEventListener    : Flushed: 1000 insertions, 0 updates, 0 deletions to 1000 objects
+#    org.springframework.orm.jpa: DEBUG
+#    org.springframework.transaction: DEBUG
+#    org.hibernate.orm.jdbc.batch: DEBUG
