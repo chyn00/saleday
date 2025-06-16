@@ -43,6 +43,11 @@ public class ItemRepositoryImpl implements ItemRepository {
   }
 
   @Override
+  public List<Item> saveAll(List<Item> items) {
+    return itemJpaRepository.saveAll(items);
+  }
+
+  @Override
   public Page<Item> findByCodeContains(String code, Pageable pageable) {
 
     // 콘텐츠 조회

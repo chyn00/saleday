@@ -41,6 +41,12 @@ public class ItemService {
     return itemRepository.save(item).getId();
   }
 
+  //관리자 입장에서의 상품 저장 로직
+  @Transactional
+  public List<Item> saveAll(List<Item> items) {
+    return itemRepository.saveAll(items);
+  }
+
   //containing으로 복수조회
   public Page<Item> getItemsByCodeContaining(String code, Pageable pageable) {
     return itemRepository.findByCodeContains(code, pageable);
