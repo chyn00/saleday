@@ -6,8 +6,11 @@ import static com.commerce.saleday.item.domain.review.model.QReview.review;
 import com.commerce.saleday.item.domain.item.model.Item;
 import com.commerce.saleday.item.domain.item.repository.ItemRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,14 +18,18 @@ import org.springframework.stereotype.Repository;
 
 //Jpa Data Repository를 활용하여, 인프라스트럭쳐 레이어에서의 JPA 종속적 로직(도메인에서 종속성을 떼어내기 위해 이렇게 사용)
 //필요하면 쿼리 DSL도 이 구현체에 만들어 놓는다.
+@Slf4j
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
 
+  public static final int BATCH_SIZE = 1000;
+  private final EntityManager entityManager;
   private final ItemJpaRepository itemJpaRepository;
   private final JPAQueryFactory jpaQueryFactory;
 
-  public ItemRepositoryImpl(ItemJpaRepository itemJpaRepository,
+  public ItemRepositoryImpl(EntityManager entityManager, ItemJpaRepository itemJpaRepository,
       JPAQueryFactory jpaQueryFactory) {
+    this.entityManager = entityManager;
     this.itemJpaRepository = itemJpaRepository;
     this.jpaQueryFactory = jpaQueryFactory;
   }
@@ -40,6 +47,25 @@ public class ItemRepositoryImpl implements ItemRepository {
   @Override
   public Item save(Item item) {
     return itemJpaRepository.save(item);
+  }
+
+  //saveAll은 벌크 저장 시 review의 값을 모두, select 하는 문제가 있어서, persistAll로 변경
+  @Override
+  public void persistAll(List<Item> items) {
+    for (int i = 0; i < items.size(); i++) {
+      entityManager.persist(items.get(i));
+      //처음 0은 제외하고 999일때마다 flush
+      if ((i+1) % BATCH_SIZE == 0) {
+        entityManager.flush();
+        entityManager.clear();
+      }
+    }
+
+    // 남은 나머지 처리
+    if (items.size() % BATCH_SIZE != 0) {
+      entityManager.flush();
+      entityManager.clear();
+    }
   }
 
   @Override

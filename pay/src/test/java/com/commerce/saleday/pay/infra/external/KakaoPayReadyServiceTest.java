@@ -45,7 +45,7 @@ class KakaoPayReadyServiceTest {
     BigDecimal price = BigDecimal.valueOf(10000);
     List<Review> reviews = new ArrayList<>();
 
-    Item item = Item.create(code, name, content, price, reviews);
+    Item item = Item.create(1L, code, name, content, price, reviews);
 
     OrderItem orderItem =
         OrderItem.create(item, 3, DiscountResult.builder().discountAmount(BigDecimal.valueOf(1000)).build());

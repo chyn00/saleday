@@ -28,8 +28,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// 하이버네이트 Proxy에서 사용하도록 단계 조정
 public class Item extends BaseEntity {
 
+  //  @GeneratedValue(strategy = GenerationType.IDENTITY)//배치 처리 때문에 삭제
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;// +1로 생성되는 id(고유번호)
 
   @Column(unique = true, nullable = false)
@@ -46,12 +46,14 @@ public class Item extends BaseEntity {
   @Enumerated(EnumType.STRING) //enum Type을 string으로 저장
   private DiscountType discountType;
 
-  //연관관계 지워질때도 연관되도록 구현
-  @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  //연관관계 지워질때도 연관되도록 구현(강하게 묶으면, 벌크 저장 시 select 혹은 성능에 문제 있을 수 있어서 최소화만 관리)
+  //@OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
   private List<Review> reviews;
 
   @Builder(access = AccessLevel.PRIVATE)
-  private Item(String code, String name, String content, BigDecimal price, List<Review> reviews, DiscountType discountType) {
+  private Item(Long id, String code, String name, String content, BigDecimal price, List<Review> reviews, DiscountType discountType) {
+    this.id = id;
     this.code = code;
     this.name = name;
     this.content = content;
@@ -60,9 +62,10 @@ public class Item extends BaseEntity {
     this.discountType = discountType;
   }
 
-  public static Item create(String code, String name, String content, BigDecimal price, List<Review> reviews){
+  public static Item create(Long id, String code, String name, String content, BigDecimal price, List<Review> reviews){
     Item item = Item
         .builder()
+        .id(id)
         .code(code)
         .name(name)
         .content(content)
