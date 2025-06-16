@@ -14,7 +14,7 @@ public interface ItemRepository {
 
   Item save(Item item);
 
-  List<Item> saveAll(List<Item> item);
+  void persistAll(List<Item> item);
 
   Page<Item> findByCodeContains(String code, Pageable pageable);
 }

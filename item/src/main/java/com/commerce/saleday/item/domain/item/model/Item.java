@@ -46,8 +46,9 @@ public class Item extends BaseEntity {
   @Enumerated(EnumType.STRING) //enum Type을 string으로 저장
   private DiscountType discountType;
 
-  //연관관계 지워질때도 연관되도록 구현
-  @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  //연관관계 지워질때도 연관되도록 구현(강하게 묶으면, 벌크 저장 시 select 혹은 성능에 문제 있을 수 있어서 최소화만 관리)
+  //@OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
   private List<Review> reviews;
 
   @Builder(access = AccessLevel.PRIVATE)

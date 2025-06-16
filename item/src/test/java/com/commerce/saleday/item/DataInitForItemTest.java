@@ -28,7 +28,7 @@ public class DataInitForItemTest {
     BigDecimal price = BigDecimal.valueOf(10000);
     List<Review> reviews = new ArrayList<>();
 
-    Item item = Item.create(code, name, content, price, reviews);
+    Item item = Item.create(1L, code, name, content, price, reviews);
 
     //item세팅
     itemService.save(item);
@@ -40,7 +40,7 @@ public class DataInitForItemTest {
     BigDecimal price1 = BigDecimal.valueOf(2000);
     List<Review> reviews1 = new ArrayList<>();
 
-    Item item1 = Item.create(code1, name1, content1, price1, reviews1);
+    Item item1 = Item.create(2L, code1, name1, content1, price1, reviews1);
 
     //item세팅
     itemService.save(item1);
@@ -50,7 +50,7 @@ public class DataInitForItemTest {
     BigDecimal price2 = BigDecimal.valueOf(210);
     List<Review> reviews2 = new ArrayList<>();
 
-    Item item2 = Item.create(code2, name2, content2, price2, reviews2);
+    Item item2 = Item.create(3L, code2, name2, content2, price2, reviews2);
 
     //item세팅
     itemService.save(item2);
