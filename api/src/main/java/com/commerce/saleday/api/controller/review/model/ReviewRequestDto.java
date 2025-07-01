@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.presentation.review.model;
+package com.commerce.saleday.api.controller.review.model;
 
 import com.commerce.saleday.item.service.review.model.CreateReviewCommand;
 import jakarta.validation.constraints.DecimalMax;

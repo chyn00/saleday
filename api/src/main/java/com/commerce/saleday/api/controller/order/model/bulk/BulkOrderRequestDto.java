@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.presentation.order.model.bulk;
+package com.commerce.saleday.api.controller.order.model.bulk;
 
 import com.commerce.saleday.order.service.order.model.bulk.CreateBulkOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateOrderItemCommand;

@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.presentation.item.model;
+package com.commerce.saleday.api.controller.item.model;
 
 import com.commerce.saleday.item.domain.review.model.Review;
 import java.util.List;

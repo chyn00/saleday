@@ -1,8 +1,8 @@
-package com.commerce.saleday.api.presentation.item.controller;
+package com.commerce.saleday.api.controller.item.controller;
 
 import com.commerce.saleday.api.common.utils.PageUtils;
-import com.commerce.saleday.api.presentation.item.model.ItemResponseDto;
-import com.commerce.saleday.api.presentation.item.model.ItemReviewResponseDto;
+import com.commerce.saleday.api.controller.item.model.ItemResponseDto;
+import com.commerce.saleday.api.controller.item.model.ItemReviewResponseDto;
 import com.commerce.saleday.item.service.item.ItemService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

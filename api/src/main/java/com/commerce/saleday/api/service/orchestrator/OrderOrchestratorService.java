@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.service.orchestrator;
 
-import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
+import com.commerce.saleday.api.controller.order.model.OrderRequestDto;
 import com.commerce.saleday.order.service.order.OrderService;
 import com.commerce.saleday.order.service.stock.ItemStockService;
 import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;

@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.presentation.pay.model;
+package com.commerce.saleday.api.controller.internal.pay.model;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

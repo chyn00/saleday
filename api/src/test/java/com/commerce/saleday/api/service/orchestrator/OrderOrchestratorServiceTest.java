@@ -2,7 +2,7 @@ package com.commerce.saleday.api.service.orchestrator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
+import com.commerce.saleday.api.controller.order.model.OrderRequestDto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
