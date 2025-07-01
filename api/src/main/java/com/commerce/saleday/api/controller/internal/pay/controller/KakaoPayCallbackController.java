@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.presentation.pay.controller;
+package com.commerce.saleday.api.controller.internal.pay.controller;
 
 import com.commerce.saleday.pay.infra.external.kakaopay.service.KakaoPayApproveService;
 import lombok.RequiredArgsConstructor;

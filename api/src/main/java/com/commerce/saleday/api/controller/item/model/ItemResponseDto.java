@@ -1,9 +1,7 @@
-package com.commerce.saleday.api.presentation.item.model;
+package com.commerce.saleday.api.controller.item.model;
 
 import com.commerce.saleday.item.domain.item.model.Item;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

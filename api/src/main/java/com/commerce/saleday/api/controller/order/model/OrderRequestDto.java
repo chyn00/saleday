@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.presentation.order.model;
+package com.commerce.saleday.api.controller.order.model;
 
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.service.order.model.CreateOrderCommand;

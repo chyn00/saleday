@@ -1,6 +1,6 @@
-package com.commerce.saleday.api.presentation.pay.controller;
+package com.commerce.saleday.api.controller.internal.pay.controller;
 
-import com.commerce.saleday.api.presentation.pay.model.ExternalPayRequest;
+import com.commerce.saleday.api.controller.internal.pay.model.ExternalPayRequest;
 import com.commerce.saleday.pay.infra.external.kakaopay.service.KakaoPayReadyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

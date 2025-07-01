@@ -1,5 +1,7 @@
 package com.commerce.saleday.item.service.item;
 
+import com.commerce.saleday.common.exception.ExceptionCode;
+import com.commerce.saleday.common.exception.SaleDayException;
 import com.commerce.saleday.item.domain.item.ItemCreateCommand;
 import com.commerce.saleday.item.domain.item.model.Item;
 import com.commerce.saleday.item.domain.item.repository.ItemRepository;
@@ -83,6 +85,9 @@ public class ItemService {
 
   //containing으로 복수조회
   public Page<Item> getItemsByCodeContaining(String code, Pageable pageable) {
+    if (code == null || code.isBlank()) {
+      throw new SaleDayException(ExceptionCode.NO_SUCH_DATA);
+    }
     return itemRepository.findByCodeContains(code, pageable);
   }
 }

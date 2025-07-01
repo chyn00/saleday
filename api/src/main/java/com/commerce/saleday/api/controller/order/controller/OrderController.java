@@ -1,17 +1,16 @@
-package com.commerce.saleday.api.presentation.order.controller;
+package com.commerce.saleday.api.controller.order.controller;
 
 import com.commerce.saleday.api.service.orchestrator.OrderOrchestratorService;
 import com.commerce.saleday.order.service.order.OrderService;
-import com.commerce.saleday.api.presentation.order.model.OrderRequestDto;
-import com.commerce.saleday.api.presentation.order.model.OrderResponseDto;
-import com.commerce.saleday.api.presentation.order.model.bulk.BulkOrderRequestDto;
+import com.commerce.saleday.api.controller.order.model.OrderRequestDto;
+import com.commerce.saleday.api.controller.order.model.OrderResponseDto;
+import com.commerce.saleday.api.controller.order.model.bulk.BulkOrderRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
