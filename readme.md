@@ -25,7 +25,7 @@ e-commerce backend project
 | 분야 | 기술                                           |
 |------|----------------------------------------------|
 | Language | Java 17                                      |
-| Framework | Spring Boot 3.x, Spring Web, Spring Data JPA |
+| Framework | Spring Boot 3.x |
 | ORM & DB | JPA (Hibernate), QueryDSL, MySQL             |
 | Concurrency & Locking | Redis (`INCR`, `DECR` 등 원자 연산 기반 동시성 제어)     |
 | Messaging | Kafka (Outbox 기반 이벤트 발행 및 처리)                |
