@@ -101,3 +101,6 @@ e-commerce backend project
 **Outbox 테이블 Count 결과**<br>
 
 ![image](https://github.com/user-attachments/assets/920580cc-51e6-4898-8cb7-2972cdb41192)<br>
+
+## 이슈
+- 더 높은 트래픽에서, RDB 정합성 이슈가 발생하기 때문에 조치 필요
