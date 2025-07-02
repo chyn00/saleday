@@ -5,5 +5,7 @@ import java.util.List;
 
 public interface ItemStockConsumerRepository {
   List<ItemStock> findItemStocksByItemCodes(List<String> itemCode);
+
+  ItemStock findItemStockByItemCode(String itemCode);
   void flush();
 }

@@ -8,6 +8,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -31,6 +32,7 @@ public class KafkaConsumerConfig {
     config.put(ConsumerConfig.GROUP_ID_CONFIG, "stock.decreased.consumer");
     config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+    config.put("spring.json.value.default.type", "com.commerce.saleday.message.stock.DecreaseStockEvent");
 
     // listen batch 적용
     config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 500);

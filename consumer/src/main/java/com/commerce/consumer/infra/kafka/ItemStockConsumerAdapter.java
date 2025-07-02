@@ -21,6 +21,7 @@ public class ItemStockConsumerAdapter implements ItemStockConsumerKafkaPort {
   @Override
   @KafkaListener(topics = "stock.decreased", groupId = "stock.decreased.consumer", containerFactory = "kafkaListenerContainerFactory")
   public void decreaseStockListener(List<DecreaseStockEvent> decreaseStockEvents) {
+
     try {
       itemStockConsumerService.decreaseStock(decreaseStockEvents);
     } catch (Exception e) {
