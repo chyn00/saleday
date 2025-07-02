@@ -22,5 +22,9 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
-
+  redis:
+    image: redis:latest
+    container_name: myredis
+    ports:
+      - "6379:6379"
 #docker start kafka zookeeper myredis mysql-container
