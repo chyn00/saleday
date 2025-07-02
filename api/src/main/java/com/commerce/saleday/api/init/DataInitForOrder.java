@@ -1,8 +1,10 @@
 package com.commerce.saleday.api.init;
 
+import com.commerce.saleday.api.service.orchestrator.ItemStockOrchestratorService;
 import com.commerce.saleday.item.domain.item.model.Item;
 import com.commerce.saleday.item.domain.review.model.Review;
 import com.commerce.saleday.item.service.item.ItemService;
+import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.springframework.context.event.EventListener;
 @RequiredArgsConstructor//빈 등록이 Application class에 있다.(로컬만 설정해주기 위해 수동 빈 등록)
 public class DataInitForOrder {
   private final ItemService itemService;
+  private final ItemStockOrchestratorService itemStockOrchestratorService;
 
   //todo: item직접 생성 말고, command -> save 리팩토링 필요
   //스프링 부트가 빈 세팅 외부 설정 등 모두 boot up 되고 나서, 실행되도록 개발
@@ -30,8 +33,17 @@ public class DataInitForOrder {
 
     Item item = Item.create(1L, code, name, content, price, reviews);
 
-    //item세팅
+    ItemStock itemStock = ItemStock
+        .builder()
+        .item(item)
+        .quantity(1000000)
+        .build();
+
+    // item세팅
     itemService.save(item);
+
+    // item 수량 세팅
+    itemStockOrchestratorService.saveItemStockWithRLock(code, itemStock);
 
 
     String code1 = "1238";

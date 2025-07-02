@@ -43,7 +43,7 @@ public class DataInit {
     //item세팅
     itemService.save(item);
     //item의 수량 세팅
-    itemStockOrchestratorService.saveItemWithRLock(code, itemStock);
+    itemStockOrchestratorService.saveItemStockWithRLock(code, itemStock);
     log.info("------data init end line -----");
   }
 }
