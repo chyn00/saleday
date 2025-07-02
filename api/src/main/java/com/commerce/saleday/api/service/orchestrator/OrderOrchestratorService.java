@@ -5,10 +5,13 @@ import com.commerce.saleday.order.service.order.OrderService;
 import com.commerce.saleday.order.service.stock.ItemStockService;
 import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 // 고트래픽 대응을 위한 재고 수량 감소, 트랜잭션 등을 처리하기 위한 Order 퍼사드 서비스
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderOrchestratorService {
@@ -20,6 +23,7 @@ public class OrderOrchestratorService {
 
   //고트래픽 대용으로 제한된 재고에서 동시성제어로 주문하며, 주문 코드를 리턴한다.
   //레디스의 트랜잭션은 보상트랜잭션을 활용한다.
+  @Transactional
   public String orderWithLimitedStock(OrderRequestDto orderRequestDto) throws Exception {
 
     long remaining = itemStockService.decrementAndCountItemStock(orderRequestDto.getItemCode());
@@ -40,7 +44,7 @@ public class OrderOrchestratorService {
 
       return orderCode;
     } catch (Exception e) {
-      itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode()); // 주문 실패시 redis 보상 트랜잭션
+      log.error("order fail : " + e.getMessage());
       throw e;
     }
   }

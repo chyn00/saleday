@@ -35,6 +35,19 @@ public class ItemStockConsumerRepositoryImpl implements ItemStockConsumerReposit
   }
 
   @Override
+  public ItemStock findItemStockByItemCode(String itemCode) {
+    QItemStock itemStock = QItemStock.itemStock;
+    QItem item = QItem.item;
+
+    return jpaQueryFactory
+        .selectFrom(itemStock)
+        .join(itemStock.item, item)
+        .fetchJoin()
+        .where(item.code.eq(itemCode))
+        .fetchOne(); // ★ 한 개만 조회(없으면 null)
+  }
+
+  @Override
   public void flush() {
     itemStockJpaRepository.flush();
   }
