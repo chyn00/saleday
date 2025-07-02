@@ -17,7 +17,7 @@ public class ItemStockOrchestratorService {
   private static final String LOCK_PREFIX = "LOCK";
 
   // 분산락을 활용하여 최초 세팅 시에, 정합성을 보장해준다.
-  public Long saveItemWithRLock(String itemCode, ItemStock itemStock) {
+  public Long saveItemStockWithRLock(String itemCode, ItemStock itemStock) {
     RLock lock = redissonClient.getLock(LOCK_PREFIX + itemCode);
 
     try {
