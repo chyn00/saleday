@@ -84,3 +84,10 @@ e-commerce backend project
 - **신뢰성**: `@TransactionalEventListener` 및 Outbox Pattern을 활용하여 커밋 이후에만 메시지 발행
 - **확장성**: 할인 정책, 이벤트 핸들링, 메시지 채널 등을 쉽게 확장 가능하도록 설계
 - **테스트**: 실제 Bean 기반의 테스트 환경 구성
+
+## 테스트 결과
+- Locust를 활용한 1000TPS 테스트 시, Redis로 선처리 후 RDB 후속처리 정합성 테스트 통과(트래픽을 더 늘려서 테스트 예정)
+- 카프카 비동기 후속 DB 처리 정합성(RLock과 함께 활용), Outbox Pattern(추후 정합성 보정을 위해 필요), Redis 원자성 재고 감소 정합성
+![image](https://github.com/user-attachments/assets/9c3167ee-d0dc-4801-ac97-ee8a290a4096)
+![image](https://github.com/user-attachments/assets/6af13f3b-1d4b-4e2e-b6ee-815ff6ddd763)
+![image](https://github.com/user-attachments/assets/920580cc-51e6-4898-8cb7-2972cdb41192)
