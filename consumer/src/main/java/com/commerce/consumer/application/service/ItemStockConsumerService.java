@@ -50,7 +50,8 @@ public class ItemStockConsumerService {
           count++;
 
           //카프카 listener 에서 1차캐싱영역에 gc가 일어나지 않을정도로 제어해준 뒤, flush를 활용하여 배치 처리
-          //todo: 실시간 배치 쪽 처리하면서, 성능 튜닝과 GC처리 deep 하게 공부
+          //todo: 여기서 더 최적화 할 수 있는 방법 존재(미리 계산을 해서 배치사이즈마다 1개의 쿼리만 날린다.)
+          //todo: 이유는 어차피 flush도 명령어를 모아놓고 출력하는 것이기 때문에 미리 계산해서 보내도 괜찮다.
           if(count % batchSize == 0 || count == itemStocksSize){
             itemStockConsumerRepository.flush();
           }
