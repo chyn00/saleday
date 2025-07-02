@@ -102,5 +102,6 @@ e-commerce backend project
 
 ![image](https://github.com/user-attachments/assets/920580cc-51e6-4898-8cb7-2972cdb41192)<br>
 
-## 이슈
-- 더 높은 트래픽에서, RDB 정합성 이슈가 발생하기 때문에 조치 필요
+## 특이사항
+- 더 높은 트래픽에서, RDB와의 Sync 속도가 느려짐(정합성은 틀어지지 않음)
+- 영속성 저장에 대한 정합성을 높이고, 속도가 느리더라도 정확히 보장하기 위한 Trade-off
