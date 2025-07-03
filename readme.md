@@ -81,7 +81,7 @@ e-commerce backend project
 - **객체지향**: 할인 정책, 주문 로직을 전략 패턴과 도메인 중심 설계로 분리
 - **트래픽 대응**: Redis 기반 원자 연산 + Kafka 이벤트 구조를 통해 TPS 향상
 - **정합성과 고속성의 균형**: 재고수량이 한정되어 있는 등의 동시성이 필요한 주문 요청 시 Redis로 병렬 제어 → 커밋 후 Outbox 이벤트 발행 및 Kafka Publish → Consumer에서 재고 DB 반영
-- **신뢰성**: `@TransactionalEventListener` 및 Outbox Pattern을 활용하여 커밋 이후에만 메시지 발행
+- **신뢰성**: `@TransactionalEventListener` 및 Outbox Pattern을 활용하여 주문 커밋 이후에만 메시지 발행
 - **확장성**: 할인 정책, 이벤트 핸들링, 메시지 채널 등을 쉽게 확장 가능하도록 설계
 - **테스트**: 실제 Bean 기반의 테스트 환경 구성
 
