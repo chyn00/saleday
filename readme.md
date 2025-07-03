@@ -31,7 +31,7 @@ e-commerce backend project
 | Messaging | Kafka (Outbox 기반 이벤트 발행 및 처리)                |
 | Infra | Docker, Docker Compose                       |
 | Build | Gradle (Multi-module)                        |
-| Test | JUnit5 (실제 Bean 기반 통합 및 단위 테스트)              |
+| Test | JUnit5 (실제 Bean 기반 통합 및 단위 테스트), Locust 부하테스트              |
 | 문서화 | Swagger (Springdoc OpenAPI) *(예정)*           |
 
 ---
