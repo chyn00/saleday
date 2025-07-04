@@ -2,9 +2,7 @@ package com.commerce.saleday.api.init;
 
 import com.commerce.saleday.discount.domain.discount.model.DiscountType;
 import com.commerce.saleday.item.domain.item.ItemCreateCommand;
-import com.commerce.saleday.item.domain.item.model.Item;
 import com.commerce.saleday.item.domain.review.model.Review;
-import com.commerce.saleday.item.infra.redis.RedisItemIdGenerator;
 import com.commerce.saleday.item.service.item.ItemService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
