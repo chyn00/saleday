@@ -1,7 +1,6 @@
 package com.commerce.consumer.infra.kafka;
 
 import com.commerce.consumer.application.service.ItemStockConsumerService;
-
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.port.ItemStockConsumerKafkaPort;
 import java.util.List;

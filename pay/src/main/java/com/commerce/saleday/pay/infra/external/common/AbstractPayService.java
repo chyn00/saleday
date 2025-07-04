@@ -2,7 +2,6 @@ package com.commerce.saleday.pay.infra.external.common;
 
 import com.commerce.saleday.order.domain.order.model.Orders;
 import com.commerce.saleday.order.service.order.OrderService;
-import org.springframework.transaction.annotation.Transactional;
 
 // 추상 클래스는 인스턴스를 직접 생성하지 않음.(템플릿 역할을 통해, 다른 클래스가 사용 하도록 설계되었기 때문)
 public abstract class AbstractPayService {

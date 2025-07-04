@@ -9,13 +9,11 @@ import com.commerce.saleday.pay.infra.external.kakaopay.KakaoPayProperties;
 import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayForApproval;
 import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayReadyRequest;
 import com.commerce.saleday.pay.infra.external.kakaopay.model.KakaoPayReadyResponse;
-import jakarta.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

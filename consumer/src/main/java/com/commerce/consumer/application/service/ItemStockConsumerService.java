@@ -1,13 +1,10 @@
 package com.commerce.consumer.application.service;
 
 import com.commerce.consumer.infra.database.repository.ItemStockConsumerRepositoryImpl;
-import com.commerce.saleday.item.domain.item.model.Item;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
