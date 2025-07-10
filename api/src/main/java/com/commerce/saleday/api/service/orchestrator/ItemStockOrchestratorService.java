@@ -25,7 +25,7 @@ public class ItemStockOrchestratorService {
       if (!isGetLock) {//락을 획득 하지 못하면 종료
         return null;
       }
-      return itemStockService.setUpItemStock(itemCode, itemStock);
+      return itemStockService.initializeItemStock(itemCode, itemStock);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     } finally {
