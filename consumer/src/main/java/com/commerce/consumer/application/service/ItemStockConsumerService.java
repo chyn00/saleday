@@ -4,7 +4,10 @@ import com.commerce.consumer.infra.database.repository.ItemStockConsumerReposito
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -18,22 +21,32 @@ public class ItemStockConsumerService {
   private final RedissonClient redissonClient;
   private final ItemStockConsumerRepositoryImpl itemStockConsumerRepository;
 
-  //dirty check update 활용하여 save 없이 저장.
+  /** 연산을 미리 해둠으로 인하여,
+   * 병렬처리시에 멀티 인스턴스, 쓰레드에서는 계산을 빠르게 해놓고,
+   * 최소한의 DB Connection을 사용한다.
+   * 또한, RLock을 사용하여 동시성까지 보장한다.
+   * **/
   //성능 향상을 위해 batch 로 개발
   @Transactional
   public void decreaseStock(List<DecreaseStockEvent> decreaseStockEvents)
       throws InterruptedException {
 
+    // quantityByItemoCode
+    Map<String, Long> quantityByItemCodeMap = decreaseStockEvents.stream()
+        .collect(Collectors.groupingBy(
+            DecreaseStockEvent::getItemCode,
+            Collectors.summingLong(DecreaseStockEvent::getQuantity)
+        ));
+
     //itemCode만 분리
-    List<String> itemCodes = decreaseStockEvents
-        .stream()
-        .map(DecreaseStockEvent::getItemCode)
-        .toList();
+    Set<String> itemCodes = quantityByItemCodeMap.keySet();
+
 
     int batchSize = 100;
     int count = 0;
     int itemStocksSize = itemCodes.size();
 
+    // 최소화된 key만 들어온다.
     //Process & Write :itemStocks 의 quantity 변경하여, 배치처리로 저장
     for(String itemCode : itemCodes){
 
@@ -43,12 +56,11 @@ public class ItemStockConsumerService {
       if (lock.tryLock(30, 3, TimeUnit.SECONDS)) {//최대 3초 락 획득, 30초 넘으면 획득 실패
         try {
           ItemStock itemStock = itemStockConsumerRepository.findItemStockByItemCode(itemCode);
-          itemStock.decrease(itemStock.getQuantity());
+          itemStock.decrease(quantityByItemCodeMap.get(itemCode));
           count++;
 
-          //카프카 listener 에서 1차캐싱영역에 gc가 일어나지 않을정도로 제어해준 뒤, flush를 활용하여 배치 처리
-          //todo: 여기서 더 최적화 할 수 있는 방법 존재(미리 계산을 해서 배치사이즈마다 1개의 쿼리만 날린다.)
-          //todo: 이유는 어차피 flush도 명령어를 모아놓고 출력하는 것이기 때문에 미리 계산해서 보내도 괜찮다.
+          // flush 사용해서 커넥션 최소화
+          // 카프카 listener 에서 1차캐싱영역에 gc가 일어나지 않을정도로 제어해준 뒤, flush를 활용하여 배치 처리
           if(count % batchSize == 0 || count == itemStocksSize){
             itemStockConsumerRepository.flush();
           }

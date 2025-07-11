@@ -40,7 +40,7 @@ public class ItemStock extends BaseEntity {
 
   public void decrease(long quantity) {
     if (this.quantity <= 0) throw new SaleDayException(ExceptionCode.OUT_OF_STOCK);
-    this.quantity -= 1;
+    this.quantity -= quantity;
   }
 
   @Builder
