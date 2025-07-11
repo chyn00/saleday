@@ -88,19 +88,31 @@ e-commerce backend project
 ## 재고 테스트(동시성 제어) 결과
 - Locust를 활용한 1000TPS 테스트 시, Redis로 선처리 후 RDB 후속처리 정합성 테스트 통과(트래픽을 더 늘려서 테스트 예정)
 - 카프카 비동기 후속 DB 처리 정합성(RLock과 함께 활용), Outbox Pattern(추후 정합성 보정을 위해 필요), Redis 원자성 재고 감소 정합성
-- 최초 1,000,000의 재고에서 17,172의 요청으로 인한 결과
+- 최초 1,000,000의 재고에서 99,999의 요청으로 인한 결과
+- 배치 병합으로 인한 속도 개선
+
+정확한 통계를 위해, headless locust 사용(UI사용시에 실제요청과 다른 request count 불일치 문제)
+Locust표(속도 ms, percentile) --> ex. P95 : 490ms 
+┌───────┬──────────────────────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬───────┬───────┬───────┬─────────┐
+│ Type  │ Name                 │ 50% │ 66% │ 75% │ 80% │ 90% │ 95% │ 98% │ 99% │ 99.9% │99.99% │ 100%  │ # reqs  │
+├───────┼──────────────────────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼───────┼───────┼───────┼─────────┤
+│ POST  │ /order/stock/limit   │230  │300  │340  │360  │400  │490  │550  │670  │1300   │1500   │1900   │ 99,999  │
+├───────┼──────────────────────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼───────┼───────┼───────┼─────────┤
+│ 합계  │ Aggregated           │230  │300  │340  │360  │400  │490  │550  │670  │1300   │1500   │1900   │ 99,999  │
+└───────┴──────────────────────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴───────┴───────┴───────┴─────────┘
+
 
 **Redis 결과**<br>
 
-![image](https://github.com/user-attachments/assets/6af13f3b-1d4b-4e2e-b6ee-815ff6ddd763)<br>
+<img width="543" height="54" alt="image" src="https://github.com/user-attachments/assets/86704bcb-befd-40a6-8b35-1696cf29b914" /><br>
 
-**Kafka(컨슈머 + RLock) 결과** <br>
+**Kafka(컨슈머 + RLock) DB 결과** <br>
 
-![image](https://github.com/user-attachments/assets/9c3167ee-d0dc-4801-ac97-ee8a290a4096)<br>
+<img width="1159" height="44" alt="image" src="https://github.com/user-attachments/assets/5bf991e2-f259-484c-9e47-78119b59862f" /><br>
 
 **Outbox 테이블 Count 결과**<br>
 
-![image](https://github.com/user-attachments/assets/920580cc-51e6-4898-8cb7-2972cdb41192)<br>
+<img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
 
 ## 특이사항
 - 더 높은 트래픽에서, RDB와의 Sync 속도가 느려짐(정합성은 틀어지지 않음)
