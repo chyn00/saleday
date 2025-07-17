@@ -23,7 +23,7 @@ public class TomcatThreadConfig implements WebServerFactoryCustomizer<TomcatServ
     // TPS 1,000 이상 처리 위한 수준
     // CPU * 30~50 수준 추천 (I/O bound 기준)
     // 너무 높으면 context switching 비용 증가
-    private final int maxThreads = cpuCores * 50;
+    private final int maxThreads = cpuCores * 30;
 
     // 톰캣 부팅 시 생성할 워커 수 (웜업 용도)
     // 초기 burst traffic 방어
@@ -33,7 +33,7 @@ public class TomcatThreadConfig implements WebServerFactoryCustomizer<TomcatServ
     // maxThreads 초과 시 요청을 대기시킬 큐 크기
     // TPS 폭주 시 처리 지연 없이 수용 가능
     // 큐 초과 시 503 반환 → 적절히 버퍼 확보
-    private final int acceptCount = 500;
+    private final int acceptCount = 710;
 
     // 클라이언트 연결 요청 대기 시간 (ms)
     // 네트워크 지연 수용을 위한 평균적 타임아웃
