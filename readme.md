@@ -85,45 +85,16 @@ e-commerce backend project
 - **확장성**: 할인 정책, 이벤트 핸들링, 메시지 채널 등을 쉽게 확장 가능하도록 설계
 - **테스트**: 실제 Bean 기반의 테스트 환경 구성
 
-## 재고 테스트(동시성 제어) 결과
+## Tomcat Thread Pool 설정별 성능 비교
 > 본 테스트는 **싱글 인스턴스 환경**에서 실행되었습니다.  
 > 서비스 구조는 분산 환경에 맞게 개발되어 있어, 언제든 **Scale Out(확장)** 이 가능합니다.
 
 - Locust를 활용한 10만건의 1,000TPS 테스트 시, Redis로 선처리 후 RDB 후속처리 정합성 테스트 통과(트래픽을 더 늘려서 테스트 예정)
 - 카프카 비동기 후속 DB 처리 정합성(RLock과 함께 활용), Outbox Pattern(추후 정합성 보정을 위해 필요), Redis 원자성 재고 감소 정합성
-- 최초 1,000,000의 재고에서 99,999의 요청으로 인한 결과
-- 배치 병합으로 인한 속도 개선
+- 최초 1,000,000의 재고에서 약 100,000의 요청 부하 테스트
+- 배치 병합으로 인한 속도 개선 완료
 
-정확한 통계를 위해, headless locust 사용(UI사용시에 실제요청과 다른 request count 불일치 문제)
-Locust표(속도 ms, percentile) --> ex. P95 : 490ms 
-| # reqs  | Type | Name                | 100% | 99.99% | 99.9% | 99% | 98% | 95% | 90% | 80% | 75% | 66% | 50% |
-|---------|------|---------------------|------|--------|-------|-----|-----|-----|-----|-----|-----|-----|-----|
-| 99,999  | POST | /order/stock/limit  | 1900 | 1500   | 1300  | 670 | 550 | 490 | 400 | 360 | 340 | 300 | 230 |
-| 99,999  | 합계 | Aggregated          | 1900 | 1500   | 1300  | 670 | 550 | 490 | 400 | 360 | 340 | 300 | 230 |
-
-
-**Redis 결과**<br>
-
-<img width="543" height="54" alt="image" src="https://github.com/user-attachments/assets/86704bcb-befd-40a6-8b35-1696cf29b914" /><br>
-
-**Kafka(컨슈머 + RLock) DB 결과** <br>
-
-<img width="1159" height="44" alt="image" src="https://github.com/user-attachments/assets/5bf991e2-f259-484c-9e47-78119b59862f" /><br>
-
-**Outbox 테이블 Count 결과**<br>
-
-<img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
-
-## 특이사항
-- 더 높은 트래픽에서, RDB와의 Sync 속도가 느려짐(정합성은 틀어지지 않음)
-- 영속성 저장에 대한 정합성을 높이고, 속도가 느리더라도 정확히 보장하기 위한 Trade-off
-
-## 테스트 예외
-스프링 I/O 등 트래픽 대응은 EKS등 멀티 인스턴스에 있다고 가정(하지만, 쓰레드 풀 설정 및 커넥션을 활용해서 싱글 인스턴스에서 최적의 처리 방안 고민 필요.)
-
-## Tomcat Thread Pool 설정별 성능 비교
-
-Spring Boot 내장 Tomcat 서버의 워커 스레드 설정(`maxThreads`)을 조정하여, I/O Bound 성격의 API(`/order/stock/limit`)에 대한 **응답 시간과 처리량(TPS)**을 측정하였습니다.  
+- Spring Boot 내장 Tomcat 서버의 워커 스레드 설정(`maxThreads`)을 조정하여, I/O Bound 성격의 API(`/order/stock/limit`)에 대한 **응답 시간과 처리량(TPS)**을 측정하였습니다.  
 테스트는 [Locust](https://locust.io/)를 사용하여 100,000건의 요청을 기준으로 진행되었습니다.
 
 ## Tomcat Thread Pool 테스트 결과 요약
@@ -152,4 +123,34 @@ Spring Boot 내장 Tomcat 서버의 워커 스레드 설정(`maxThreads`)을 조
 - **x30 설정**에서 대부분의 응답 시간 구간에서 **개선된 수치**를 보였으며, 평균 응답 시간 또한 가장 낮았습니다.
 - **x15, x18 설정**도 응답 시간의 안정성 측면에서는 준수한 성능을 보였지만, 평균 응답 시간이 다소 높아졌습니다.
 - **x50**은 과도한 context switching으로 인해 최대 응답 시간이 오히려 증가함을 확인했습니다.
+
+
+## Tomcat Thread Pool Default(쓰레드 200)
+
+정확한 통계를 위해, headless locust 사용하여 최대한 요청값 근접하게 출력(Request count오차 범위 1~10)
+Locust표(속도 ms, percentile) --> ex. P95 : 490ms 
+| # reqs  | Type | Name                | 100% | 99.99% | 99.9% | 99% | 98% | 95% | 90% | 80% | 75% | 66% | 50% |
+|---------|------|---------------------|------|--------|-------|-----|-----|-----|-----|-----|-----|-----|-----|
+| 99,999  | POST | /order/stock/limit  | 1900 | 1500   | 1300  | 670 | 550 | 490 | 400 | 360 | 340 | 300 | 230 |
+| 99,999  | 합계 | Aggregated          | 1900 | 1500   | 1300  | 670 | 550 | 490 | 400 | 360 | 340 | 300 | 230 |
+
+
+**Redis 결과**<br>
+
+<img width="543" height="54" alt="image" src="https://github.com/user-attachments/assets/86704bcb-befd-40a6-8b35-1696cf29b914" /><br>
+
+**Kafka(컨슈머 + RLock) DB 결과** <br>
+
+<img width="1159" height="44" alt="image" src="https://github.com/user-attachments/assets/5bf991e2-f259-484c-9e47-78119b59862f" /><br>
+
+**Outbox 테이블 Count 결과**<br>
+
+<img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
+
+## 특이사항
+- 더 높은 트래픽에서, RDB와의 Sync 속도가 느려짐(정합성은 틀어지지 않음)
+- 영속성 저장에 대한 정합성을 높이고, 속도가 느리더라도 정확히 보장하기 위한 Trade-off
+
+## 테스트 예외
+스프링 I/O 등 트래픽 대응은 EKS등 멀티 인스턴스에 있다고 가정(하지만, 쓰레드 풀 설정 및 커넥션을 활용해서 싱글 인스턴스에서 최적의 처리 방안 고민 필요.)
 
