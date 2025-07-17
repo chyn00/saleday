@@ -125,9 +125,9 @@ e-commerce backend project
 - **x50**은 과도한 context switching으로 인해 최대 응답 시간이 오히려 증가함을 확인했습니다.
 
 
-## Tomcat Thread Pool Default(쓰레드 200)
+## Tomcat Thread Pool Default(200 Thread)
 
-- 정확한 통계를 위해, headless locust 사용하여 최대한 요청값 근접하게 출력(Request count오차 범위 1~10)
+정확한 통계를 위해, headless locust 사용하여 최대한 요청값 근접하게 출력(Request count오차 범위 1~10)
 <br>Locust표(속도 ms, percentile) --> ex. P95 : 490ms 
 | # 요청 수 | Type | Endpoint              | 100% | 99.99% | 99.9% | 99% | 98% | 95% | 90% | 80% | 75% | 66% | 50% |
 |----------|------|------------------------|------|--------|-------|-----|-----|-----|-----|-----|-----|-----|-----|
