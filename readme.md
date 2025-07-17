@@ -97,7 +97,7 @@ e-commerce backend project
 - Spring Boot 내장 Tomcat 서버의 워커 스레드 설정(`maxThreads`)을 조정하여, I/O Bound 성격의 API(`/order/stock/limit`)에 대한 **응답 시간과 처리량(TPS)**을 측정하였습니다.  
 - 테스트는 [Locust](https://locust.io/)를 사용하여 100,000건의 요청을 기준으로 진행되었습니다.
 
-## Tomcat Thread Pool 테스트 결과 요약
+## Tomcat Thread Pool 테스트 결과 요약(CPU 논리코어 10가정)
 
 | Percentile    | Default<br>(기본값 200) | x50 Threads | x30 Threads | x18 Threads | x15 Threads | x10 Threads |
 | ------------- | -------------------- | ----------- | ----------- | ----------- | ----------- | ----------- |
