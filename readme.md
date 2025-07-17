@@ -95,7 +95,7 @@ e-commerce backend project
 - 배치 병합으로 인한 속도 개선 완료
 
 - Spring Boot 내장 Tomcat 서버의 워커 스레드 설정(`maxThreads`)을 조정하여, I/O Bound 성격의 API(`/order/stock/limit`)에 대한 **응답 시간과 처리량(TPS)**을 측정하였습니다.  
-테스트는 [Locust](https://locust.io/)를 사용하여 100,000건의 요청을 기준으로 진행되었습니다.
+- 테스트는 [Locust](https://locust.io/)를 사용하여 100,000건의 요청을 기준으로 진행되었습니다.
 
 ## Tomcat Thread Pool 테스트 결과 요약
 
@@ -127,25 +127,25 @@ e-commerce backend project
 
 ## Tomcat Thread Pool Default(쓰레드 200)
 
-정확한 통계를 위해, headless locust 사용하여 최대한 요청값 근접하게 출력(Request count오차 범위 1~10)
-Locust표(속도 ms, percentile) --> ex. P95 : 490ms 
+- 정확한 통계를 위해, headless locust 사용하여 최대한 요청값 근접하게 출력(Request count오차 범위 1~10)
+- Locust표(속도 ms, percentile) --> ex. P95 : 490ms 
 | # reqs  | Type | Name                | 100% | 99.99% | 99.9% | 99% | 98% | 95% | 90% | 80% | 75% | 66% | 50% |
 |---------|------|---------------------|------|--------|-------|-----|-----|-----|-----|-----|-----|-----|-----|
 | 99,999  | POST | /order/stock/limit  | 1900 | 1500   | 1300  | 670 | 550 | 490 | 400 | 360 | 340 | 300 | 230 |
 | 99,999  | 합계 | Aggregated          | 1900 | 1500   | 1300  | 670 | 550 | 490 | 400 | 360 | 340 | 300 | 230 |
-
+---------------------------------------------------------------------------------------------------------------
 
 **Redis 결과**<br>
 
-<img width="543" height="54" alt="image" src="https://github.com/user-attachments/assets/86704bcb-befd-40a6-8b35-1696cf29b914" /><br>
+- <img width="543" height="54" alt="image" src="https://github.com/user-attachments/assets/86704bcb-befd-40a6-8b35-1696cf29b914" /><br>
 
 **Kafka(컨슈머 + RLock) DB 결과** <br>
 
-<img width="1159" height="44" alt="image" src="https://github.com/user-attachments/assets/5bf991e2-f259-484c-9e47-78119b59862f" /><br>
+- <img width="1159" height="44" alt="image" src="https://github.com/user-attachments/assets/5bf991e2-f259-484c-9e47-78119b59862f" /><br>
 
 **Outbox 테이블 Count 결과**<br>
 
-<img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
+- <img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
 
 ## 특이사항
 - 더 높은 트래픽에서, RDB와의 Sync 속도가 느려짐(정합성은 틀어지지 않음)
