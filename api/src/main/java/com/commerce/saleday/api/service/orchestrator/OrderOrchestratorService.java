@@ -26,7 +26,7 @@ public class OrderOrchestratorService {
   //고트래픽 대용으로 제한된 재고에서 동시성제어로 주문하며, 주문 코드를 리턴한다.
   //레디스의 트랜잭션은 보상트랜잭션을 활용한다.
   @Transactional
-  public String orderWithLimitedStock(OrderRequestDto orderRequestDto) throws Exception {
+  public String orderWithLimitedStock(OrderRequestDto orderRequestDto) {
 
     long remaining = itemStockService.decrementAndCountItemStock(orderRequestDto.getItemCode());
 
