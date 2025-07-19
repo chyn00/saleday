@@ -1,6 +1,8 @@
 package com.commerce.saleday.api.service.orchestrator;
 
 import com.commerce.saleday.api.controller.order.model.OrderRequestDto;
+import com.commerce.saleday.common.exception.ExceptionCode;
+import com.commerce.saleday.common.exception.SaleDayException;
 import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import com.commerce.saleday.order.service.order.OrderService;
 import com.commerce.saleday.order.service.stock.ItemStockService;
@@ -24,13 +26,13 @@ public class OrderOrchestratorService {
   //고트래픽 대용으로 제한된 재고에서 동시성제어로 주문하며, 주문 코드를 리턴한다.
   //레디스의 트랜잭션은 보상트랜잭션을 활용한다.
   @Transactional
-  public String orderWithLimitedStock(OrderRequestDto orderRequestDto) throws Exception {
+  public String orderWithLimitedStock(OrderRequestDto orderRequestDto) {
 
     long remaining = itemStockService.decrementAndCountItemStock(orderRequestDto.getItemCode());
 
     if (remaining < 0) {
       itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode());
-      throw new Exception("재고가 부족합니다");// todo : exception 추후 일괄 수정
+      throw new SaleDayException(ExceptionCode.OUT_OF_STOCK);
     }
 
     try {

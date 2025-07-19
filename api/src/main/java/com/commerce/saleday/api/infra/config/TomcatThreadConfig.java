@@ -27,7 +27,7 @@ public class TomcatThreadConfig implements WebServerFactoryCustomizer<TomcatServ
 
     // 톰캣 부팅 시 생성할 워커 수 (웜업 용도)
     // 과도하면 메모리 낭비
-    private final int minSpareThreads = cpuCores * 3;
+    private final int minSpareThreads = cpuCores * 15;
 
     // maxThreads 초과 시 요청을 대기시킬 큐 크기
     // TPS 폭주 시 처리 지연 없이 수용 가능

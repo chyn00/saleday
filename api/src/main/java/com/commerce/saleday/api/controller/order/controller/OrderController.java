@@ -29,7 +29,7 @@ public class OrderController {
 
   //단건 주문 저장(대용량 트래픽 제한된 재고 내에서, 동시성 보장 API)
   @PostMapping("/order/stock/limit")
-  public String orderLimitedStock(@Valid @RequestBody OrderRequestDto requestDto) throws Exception {
+  public String orderLimitedStock(@Valid @RequestBody OrderRequestDto requestDto) {
 
     return orderOrchestratorService.orderWithLimitedStock(requestDto);
   }
