@@ -26,14 +26,13 @@ public class TomcatThreadConfig implements WebServerFactoryCustomizer<TomcatServ
     private final int maxThreads = cpuCores * 30;
 
     // 톰캣 부팅 시 생성할 워커 수 (웜업 용도)
-    // 초기 burst traffic 방어
-    // 과도하면 메모리 낭비, 너무 낮으면 cold start latency ↑
+    // 과도하면 메모리 낭비
     private final int minSpareThreads = cpuCores * 3;
 
     // maxThreads 초과 시 요청을 대기시킬 큐 크기
     // TPS 폭주 시 처리 지연 없이 수용 가능
     // 큐 초과 시 503 반환 → 적절히 버퍼 확보
-    private final int acceptCount = 710;
+    private final int acceptCount = 850;
 
     // 클라이언트 연결 요청 대기 시간 (ms)
     // 네트워크 지연 수용을 위한 평균적 타임아웃
