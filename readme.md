@@ -37,6 +37,7 @@ e-commerce backend project
 ---
 
 ## 아키텍처
+
 - **멀티모듈 구조**
     - `:api` – 외부 요청 처리 및 Swagger 제공
     - `:domain` – 도메인 로직 및 서비스 계층
@@ -46,7 +47,9 @@ e-commerce backend project
 - **Outbox 패턴 기반 Kafka 메시지 전송으로 재고 처리 분리**
 
 ---
-<img width="960" height="540" alt="image" src="https://github.com/user-attachments/assets/06fced9d-27a4-4220-b2dd-b3c6f73a9911" />
+
+![SaleDay Server Architecture](https://github.com/user-attachments/assets/06fced9d-27a4-4220-b2dd-b3c6f73a9911)
+
 
 ## 주요 기능
 
