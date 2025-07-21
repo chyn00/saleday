@@ -78,10 +78,6 @@
 
 - <img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
 
-## 특이사항
-- 더 높은 트래픽에서, RDB와의 Sync 속도가 느려짐(정합성은 틀어지지 않음)
-- 영속성 저장에 대한 정합성을 높이고, 속도가 느리더라도 정확히 보장하기 위한 Trade-off
-
 ## 테스트 예외
 - 멀티 인스턴스 환경 테스트 예외
 - 싱글 인스턴스를 최적화하여 확장 할 수 있도록 설계
