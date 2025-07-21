@@ -37,7 +37,7 @@ e-commerce backend project
 ---
 
 ## 아키텍처
-
+<img width="960" height="540" alt="image" src="https://github.com/user-attachments/assets/06fced9d-27a4-4220-b2dd-b3c6f73a9911" />
 - **멀티모듈 구조**
     - `:api` – 외부 요청 처리 및 Swagger 제공
     - `:domain` – 도메인 로직 및 서비스 계층
@@ -88,8 +88,6 @@ e-commerce backend project
 ## 성능 테스트 결과
 자세한 성능 테스트 결과는 [load-test.md](./load-test.md)를 참고하세요.
 
-## 서버 아키텍쳐
-<img width="960" height="540" alt="image" src="https://github.com/user-attachments/assets/06fced9d-27a4-4220-b2dd-b3c6f73a9911" />
 
 
 
