@@ -1,5 +1,5 @@
 
-## Tomcat Thread Pool 설정별 성능 비교
+## 성능 테스트(Tomcat Thread Pool, HikariCP, Warm-up 튜닝 활용)
 > 본 테스트는 **싱글 인스턴스 환경**에서 실행되었습니다.  
 > 서비스 구조는 분산 환경에 맞게 개발되어 있어, 언제든 **Scale Out(확장)** 이 가능합니다.
 
