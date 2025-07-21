@@ -89,6 +89,7 @@ e-commerce backend project
 자세한 성능 테스트 결과는 [load-test.md](./load-test.md)를 참고하세요.
 
 ## 서버 아키텍쳐
-<img width="1101" height="600" alt="image" src="https://github.com/user-attachments/assets/c95efb7c-a286-4a65-bf6b-f67a39d7b9d1" />
+<img width="1101" height="600" alt="image" src="https://github.com/user-attachments/assets/4a7174e9-deb3-4a46-bd57-a53528d70166" />
+
 
 
