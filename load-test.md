@@ -63,8 +63,9 @@
 
 
 ## 정합성 테스트 결과
-> 최초 1,000,000의 재고에서 99,999개의 재고감소 요청
+> 최초 1,000,000의 재고에서 99,999개의 재고감소 요청<br>
 > Redis, Outbox, Consumer Module DB의 재고량 모두 같음
+
 **Redis 결과**<br>
 
 - <img width="543" height="54" alt="image" src="https://github.com/user-attachments/assets/86704bcb-befd-40a6-8b35-1696cf29b914" /><br>
