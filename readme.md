@@ -48,7 +48,8 @@ e-commerce backend project
 
 ---
 
-![SaleDay Server Architecture](https://github.com/user-attachments/files/21352894/SaleDayServer.pdf)
+[SaleDay Server Architecture]<img width="1270" height="710" alt="image" src="https://github.com/user-attachments/assets/9ab94096-de35-4509-b29a-c060b7f20f70" />
+
 
 
 ## 주요 기능
