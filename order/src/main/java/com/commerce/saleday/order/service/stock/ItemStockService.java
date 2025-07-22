@@ -58,4 +58,9 @@ public class ItemStockService {
 
     return itemStockRedisPort.incrementItemStock(itemCode);
   }
+
+
+  public String getItemStock(String itemCode) {
+    return itemStockRedisPort.getItemStock(itemCode);
+  }
 }
