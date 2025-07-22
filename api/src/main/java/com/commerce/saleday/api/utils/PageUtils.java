@@ -1,4 +1,4 @@
-package com.commerce.saleday.api.common.utils;
+package com.commerce.saleday.api.utils;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

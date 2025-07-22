@@ -1,6 +1,6 @@
 package com.commerce.saleday.api.controller.item.controller;
 
-import com.commerce.saleday.api.common.utils.PageUtils;
+import com.commerce.saleday.api.utils.PageUtils;
 import com.commerce.saleday.api.controller.item.model.ItemResponseDto;
 import com.commerce.saleday.api.controller.item.model.ItemReviewResponseDto;
 import com.commerce.saleday.api.controller.item.model.ItemStockResponseDto;
