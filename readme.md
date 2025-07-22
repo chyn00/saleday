@@ -92,6 +92,8 @@ e-commerce backend project
 ## 성능 테스트 결과
 자세한 성능 테스트 결과는 [load-test.md](./load-test.md)를 참고하세요.
 
+## Swagger
+http://localhost:9999/swagger-ui/index.html
 
 
 
