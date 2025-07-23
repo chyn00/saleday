@@ -32,7 +32,7 @@ e-commerce backend project
 | Infra | Docker, Docker Compose                       |
 | Build | Gradle (Multi-module)                        |
 | Test | JUnit5 (실제 Bean 기반 통합 및 단위 테스트), Locust 부하테스트              |
-| 문서화 | Swagger (Springdoc OpenAPI) *(예정)*           |
+| 문서화 | Swagger (Springdoc OpenAPI)                   |
 
 ---
 
