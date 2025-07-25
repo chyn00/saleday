@@ -92,6 +92,32 @@ e-commerce backend project
 ## 성능 테스트 결과
 자세한 성능 테스트 결과는 [load-test.md](./load-test.md)를 참고하세요.
 
+## ✅ Kafka 병목 및 Outbox 안정성 개선 (2025.07)
+
+Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox 기반 아키텍처를 구조적으로 개선했습니다.
+
+### 개선 내용(2025.07.26)
+
+- **Outbox 메시지 처리 흐름 분리**
+  - 트랜잭션 커밋 전(Before Commit): 모든 메시지를 `INIT` 상태로 기록
+  - Kafka 전송 결과 콜백에서 JPA `@Transactional` 기반으로 `SUCCESS` / `FAIL` 상태 마킹
+  - 콜백 안에서 DB 접근해도 문제 없도록 트랜잭션 경계 명확히 보장
+
+- **Kafka 병목 해소**
+  - `acks=all` → `acks=1` 변경: 복제 대기 제거로 전송 속도 향상
+  - 기본 Sticky 파티셔너 → `RoundRobinPartitioner` 설정 변경: 메시지 분산으로 특정 파티션 몰림 방지
+  - 전송 중단 없이 Timeout 문제 전면 해결
+
+- **실패 메시지 처리 보완**
+  - 주기적 Polling Scheduler를 통해 `FAIL` 상태 메시지 재전송 처리
+
+### 개선 결과(2025.07.26)
+
+- TPS 하락 없이 Kafka 안정성 확보
+- 이벤트 전송 흐름과 DB 트랜잭션 경계 분리
+- 운영 가시성과 장애 대응력 향상
+
+
 ## Swagger
 http://localhost:9999/swagger-ui/index.html
 
