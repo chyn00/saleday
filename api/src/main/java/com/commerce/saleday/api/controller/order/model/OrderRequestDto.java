@@ -26,7 +26,7 @@ public class OrderRequestDto {
   private int quantity; // 주문 수량
 
   public DecreaseStockEvent toDecreaseStockEvent() {
-    return new DecreaseStockEvent(this.itemCode, this.quantity);
+    return DecreaseStockEvent.toEventMessage(this.itemCode, this.quantity);
   }
 
   public CreateOrderCommand toCommand() {

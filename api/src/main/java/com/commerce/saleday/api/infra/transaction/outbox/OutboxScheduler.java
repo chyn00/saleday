@@ -24,13 +24,7 @@ public class OutboxScheduler {
 
     //실패된 메세지 재전송
     for (OutboxMessage msg : failedMessages) {
-      try {
         itemStockPublisherKafkaPort.publishDecreaseStock(msg.getPayloadAs(DecreaseStockEvent.class));
-        msg.markSuccess();//재전송 성공
-      } catch (Exception e) {
-        msg.markFailed();// 재전송 실패
-        log.error("재전송 실패: {}", msg.getId(), e);
-      }
     }
     outboxRepository.saveAll(failedMessages);//기록을 위해, 성공/실패 모두 저장, 변경감지로 업데이트 되어있음
   }

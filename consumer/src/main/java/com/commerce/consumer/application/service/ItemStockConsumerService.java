@@ -1,6 +1,7 @@
 package com.commerce.consumer.application.service;
 
 import com.commerce.consumer.infra.database.repository.ItemStockConsumerRepositoryImpl;
+import com.commerce.consumer.infra.redis.IdempotencyChecker;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ItemStockConsumerService {
 
+  private final IdempotencyChecker idempotencyChecker;//멱등처리는 redistTemplate사용
   private final RedissonClient redissonClient;
   private final ItemStockConsumerRepositoryImpl itemStockConsumerRepository;
 
@@ -31,8 +33,11 @@ public class ItemStockConsumerService {
   public void decreaseStock(List<DecreaseStockEvent> decreaseStockEvents)
       throws InterruptedException {
 
+    // 1차적으로 레디스 SETNX(redis lock의 원리)에 처리가 된 eventId는 필터링 해서, consumer쪽에서 중복처리가 일어나지 않도록 방어
+    List<DecreaseStockEvent> filteredIdempotentEvents = idempotencyChecker.filterIdempotentEvents(decreaseStockEvents);
+
     // quantityByItemoCode
-    Map<String, Long> quantityByItemCodeMap = decreaseStockEvents.stream()
+    Map<String, Long> quantityByItemCodeMap = filteredIdempotentEvents.stream()
         .collect(Collectors.groupingBy(
             DecreaseStockEvent::getItemCode,
             Collectors.summingLong(DecreaseStockEvent::getQuantity)

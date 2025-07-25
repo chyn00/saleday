@@ -3,6 +3,9 @@ package com.commerce.saleday.api.service.orchestrator;
 import com.commerce.saleday.api.controller.order.model.OrderRequestDto;
 import com.commerce.saleday.common.exception.ExceptionCode;
 import com.commerce.saleday.common.exception.SaleDayException;
+import com.commerce.saleday.common.outbox.model.OutboxMessage;
+import com.commerce.saleday.common.outbox.repository.OutboxRepository;
+import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
 import com.commerce.saleday.order.service.order.OrderService;
 import com.commerce.saleday.order.service.stock.ItemStockService;
@@ -18,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderOrchestratorService {
 
-  private final ItemStockPublisherKafkaPort itemStockPublisherKafkaPort;
+  private final OutboxRepository outboxRepository;
   private final ItemStockService itemStockService;
   private final OrderService orderService;
   private final ApplicationEventPublisher applicationEventPublisher;
@@ -39,10 +42,13 @@ public class OrderOrchestratorService {
       //saveOrder에는 트랜잭션이 물리지 않기 떄문에 카프카로 넘겨주는 거 명시
       String orderCode = orderService.saveOrder(orderRequestDto.toCommand());
 
+      DecreaseStockEvent decreaseStockEvent = orderRequestDto.toDecreaseStockEvent();
+      decreaseStockEvent.initEventId(orderCode);
+
       //주문이 성공한 경우에, decrease item Stock pub 실행
       //주문이 성공해야만 재고가 감소되며, 이미 redis 에서 감소되었기 때문에 실패할 경우 outBox pattern으로 재시도
       //주문의 성공 여부는 transaction이 commit된 시점에 pub이 실행되도록함.(OrderEventHandler)
-      applicationEventPublisher.publishEvent(orderRequestDto.toDecreaseStockEvent());
+      applicationEventPublisher.publishEvent(decreaseStockEvent);
 
       return orderCode;
     } catch (Exception e) {

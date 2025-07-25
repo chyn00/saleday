@@ -5,9 +5,11 @@ import com.commerce.saleday.common.outbox.model.OutboxStatus;
 import com.commerce.saleday.common.outbox.model.QOutboxMessage;
 import com.commerce.saleday.common.outbox.repository.OutboxRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -24,6 +26,12 @@ public class OutboxRepositoryImpl implements OutboxRepository {
     this.outboxJpaRepository = outboxJpaRepository;
     this.jpaQueryFactory = jpaQueryFactory;
   }
+
+  @Override
+  public Optional<OutboxMessage> findById(String id) {
+    return outboxJpaRepository.findById(id);
+  }
+
 
   @Override
   public OutboxMessage save(OutboxMessage outboxMessage) {

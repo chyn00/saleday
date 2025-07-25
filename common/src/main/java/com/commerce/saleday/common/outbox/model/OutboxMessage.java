@@ -31,8 +31,7 @@ import lombok.NoArgsConstructor;
 public class OutboxMessage extends BaseEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private String id;
 
   @Column(nullable = false)
   private String type;
@@ -51,8 +50,9 @@ public class OutboxMessage extends BaseEntity {
   private LocalDateTime sentAt;
 
   @Builder(access = AccessLevel.PRIVATE)
-  private OutboxMessage(String type, Object payload, OutboxStatus status, LocalDate createDate,
+  private OutboxMessage(String id, String type, Object payload, OutboxStatus status, LocalDate createDate,
       LocalDateTime sentAt) {
+    this.id = id;
     this.type = type;
     this.payload = this.serializePayload(payload); // 직렬화 책임 위임
     this.status = status;
@@ -60,13 +60,19 @@ public class OutboxMessage extends BaseEntity {
     this.sentAt = sentAt;
   }
 
-  public static OutboxMessage of(String type, Object payload) {
+  public static OutboxMessage create(String id, String type, Object payload) {
     return OutboxMessage.builder()
+        .id(id)
         .type(type)
         .payload(payload)
         .status(OutboxStatus.INIT)
         .createDate(LocalDate.now())
         .build();
+  }
+
+  public void markPending() {
+    this.status = OutboxStatus.PENDING;
+    this.sentAt = LocalDateTime.now();
   }
 
   public void markSuccess() {

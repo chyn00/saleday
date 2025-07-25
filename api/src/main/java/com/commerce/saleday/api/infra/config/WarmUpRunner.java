@@ -19,7 +19,7 @@ public class WarmUpRunner {
         log.info("Warm-up process started...");
         int warmUpCount = 0;
         RestClient restClient = RestClient.builder().baseUrl("http://localhost:9999").build();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 200; i++) {
             try {
                 restClient.post()
                     .uri("/order/stock/limit")
@@ -31,6 +31,6 @@ public class WarmUpRunner {
             }
             warmUpCount++;
         }
-        log.info("Warm-up process finished. warmUpCount requests: {}/50", warmUpCount);
+        log.info("Warm-up process finished. warmUpCount requests: {}/200", warmUpCount);
     }
 }

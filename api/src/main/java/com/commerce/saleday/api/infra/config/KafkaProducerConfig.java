@@ -23,6 +23,12 @@ public class KafkaProducerConfig {
     config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
+    // 데이터 정합성을 높이기 위해 카프카 설정 추가(producer -> broker)
+    // todo: ack를 활용하여, produce 쪽 at least once 보장, consumer는 멱등성 필요하여 재설계 필요
+    config.put(ProducerConfig.ACKS_CONFIG, "all"); // 가장 강력한 ack 설정
+    config.put(ProducerConfig.RETRIES_CONFIG, 3); // 재시도 횟수
+    config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true); // 멱등성 보장
+//    config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 3000); // 전송 타임아웃
     return new DefaultKafkaProducerFactory<>(config);
   }
 
