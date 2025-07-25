@@ -24,20 +24,7 @@ public class OrderEventPublishHandler {
   @TransactionalEventListener(phase = AFTER_COMMIT)
   public void handleOrderCompleted(DecreaseStockEvent event) {
 
-    OutboxMessage outboxMessage = OutboxMessage.of("stock", event);
-    try {
-      itemStockPublisherKafkaPort.publishDecreaseStock(event);
-      outboxMessage.markSuccess();
-    } catch (Exception e) {
-      outboxMessage.markFailed();
-      // 실패 로그 남기기
-      log.error(e.getMessage());
-    }
-
-    try {
-      outboxRepository.save(outboxMessage);// 무조건 저장
-    } catch (Exception dbEx) {
-      log.error(dbEx.getMessage());
-    }
+    // pending 처리 후 카프카 ACK를 활용한 success, fail 처리
+    itemStockPublisherKafkaPort.publishDecreaseStock(event);
   }
 }

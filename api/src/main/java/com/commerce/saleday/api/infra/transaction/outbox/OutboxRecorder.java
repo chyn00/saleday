@@ -16,7 +16,7 @@ public class OutboxRecorder {
 
   @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
   public void saveOutbox(DecreaseStockEvent event) {
-    OutboxMessage message = OutboxMessage.of("stock", event);
+    OutboxMessage message = OutboxMessage.create(event.getEventId(), "stock", event);
     outboxRepository.save(message);
   }
 }
