@@ -57,7 +57,7 @@
 
 ## Tomcat Thread Pool, HikariCP, Warm-up 튜닝 성능 비교
 
-| Percentile    | Default<br>(Tomcat 200 / Hikari 기본) | x30 Threads<br>(Tomcat 300 / Hikari 기본) | x30 Threads + Hikari 300 | + Warm-up (RestClient 50회) | + ACK를 활용한 정합성 향상 |
+| Percentile    | Default<br>(Tomcat 200 / Hikari 기본) | x30 Threads<br>(Tomcat 300 / Hikari 기본) | x30 Threads + Hikari 300 | + Warm-up (RestClient 50회) | + ACK를 활용한 정합성 향상<br> Warm-up 200회|
 |---------------|----------------------------------------|--------------------------------------------|----------------------------|-----------------------------|-------------------------------|
 | **100%**      | 1900ms                                 | 1900ms ✅                                   | 1630ms ✅                  | **960ms ✅**                | **1200ms ✅**                 |
 | **99.99%**    | 1500ms                                 | 1800ms ❌                                   | 1600ms ❌                  | **950ms ✅**                | **1200ms ✅**                 |
