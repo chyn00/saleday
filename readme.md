@@ -100,7 +100,7 @@ Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox �
 
 - **Outbox 메시지 처리 흐름 분리**
   - 트랜잭션 커밋 전(Before Commit): 모든 메시지를 `INIT` 상태로 기록
-  - Kafka 전송 결과 콜백에서 JPA `@Transactional` 기반으로 `SUCCESS` / `FAIL` 상태 마킹
+  - Kafka 전송 결과를 CompletableFuture 콜백에서 ACK를 받아서 JPA `@Transactional` 기반으로 `SUCCESS` / `FAIL` 상태 마킹
   - 콜백 안에서 DB 접근해도 문제 없도록 트랜잭션 경계 명확히 보장
 
 - **Kafka 병목 해소**
