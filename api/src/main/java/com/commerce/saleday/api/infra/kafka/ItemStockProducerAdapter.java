@@ -11,13 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
+import com.commerce.saleday.api.infra.kafka.OutboxStatusService;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ItemStockProducerAdapter implements ItemStockPublisherKafkaPort {
 
-  private final OutboxRepository outboxRepository;
+  private final OutboxStatusService outboxStatusService;
   private final KafkaTemplate<String, Object> kafkaTemplate;
 
   // 쓰레드를 기다리지 않음(ex. completableFuture get, allof 등 사용하지 않아서 비동기 처리)
@@ -36,22 +37,12 @@ public class ItemStockProducerAdapter implements ItemStockPublisherKafkaPort {
         kafkaTemplate.send("stock.decreased", decreaseStockEvent);
 
     future.whenComplete((result, ex) -> {
-      // OutBoxMessage 호출(콜백 내부에서 실행해줘야 같은 쓰레드 요청 내 처리)
-      OutboxMessage outboxMessage = outboxRepository.findById(decreaseStockEvent.getEventId())
-          .orElseThrow(() -> new EntityNotFoundException("OutboxMessage not found. id=" + decreaseStockEvent.getEventId()));
-
       if (ex == null) {
-        //ack 리턴 받은 경우
-        outboxMessage.markSuccess();
-//        log.info("✅ Kafka ACK Success: {}", result.getRecordMetadata());
+        outboxStatusService.markSuccess(decreaseStockEvent.getEventId());
       } else {
-        // ack 리턴 받지 못한 경우
-        outboxMessage.markFailed();
-//        log.error("❌ Kafka ACK Failed: {}", ex.getMessage(), ex);
-        // DLQ 전환 또는 재시도 로직도 이 안에
+        outboxStatusService.markFailed(decreaseStockEvent.getEventId());
+        // Optional: DLQ 처리 or alert
       }
-
-      outboxRepository.save(outboxMessage);
     });
   }
 }

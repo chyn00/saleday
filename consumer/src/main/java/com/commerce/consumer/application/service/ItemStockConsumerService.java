@@ -47,7 +47,7 @@ public class ItemStockConsumerService {
     Set<String> itemCodes = quantityByItemCodeMap.keySet();
 
 
-    int batchSize = 100;
+    int batchSize = 300;
     int count = 0;
     int itemStocksSize = itemCodes.size();
 
