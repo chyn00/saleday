@@ -1,6 +1,6 @@
 e-commerce backend project
 
-이 프로젝트는 바로 실행이 어려울 수 있습니다.(AWS IAM과 같은 일부 설정이 local yaml에 의해 가려져 있습니다.)
+이 프로젝트는 바로 실행이 어려울 수 있습니다.(일부 설정이 local yaml에 의해 가려져 있습니다.)
 
 # SaleDay - 고성능 커머스 백엔드 시스템
 
