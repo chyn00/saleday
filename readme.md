@@ -102,7 +102,6 @@ Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox �
 
 - **Kafka 병목 해소**
   - `acks=all` → `acks=1` 변경: 복제 대기 제거로 전송 속도 향상
-  - 기본 Sticky 파티셔너 → `RoundRobinPartitioner` 설정 변경: 메시지 분산으로 특정 파티션 몰림 방지
   - 전송 중단 없이 Timeout 문제 전면 해결
 
 - **실패 메시지 처리 보완**
