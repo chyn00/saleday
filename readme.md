@@ -41,6 +41,10 @@ e-commerce backend project
 - **멀티모듈 구조**
     - `:api` – 외부 요청 처리 및 Swagger 제공
     - `:domain` – 도메인 로직 및 서비스 계층
+      :domain:item – 상품 도메인 (조회, 등록, 할인 등)
+      :domain:stock – 재고 도메인 (재고 관리 및 동시성 제어)
+      :domain:order – 주문 도메인 (주문 처리 및 정합성 보장)
+
     - `:consumer` – Kafka 기반 비동기 처리 담당
 - **계층 분리를 고려한 설계 구조**
 - **Redis 기반 재고 감소 동시성 제어 (`INCR`, `DECR`)**
