@@ -27,7 +27,7 @@ e-commerce backend project
 | Language | Java 17                                      |
 | Framework | Spring Boot 3.x |
 | ORM & DB | JPA (Hibernate), QueryDSL, MySQL             |
-| Concurrency & Locking | Redis (`INCR`, `DECR` 등 원자 연산 기반 동시성 제어)     |
+| Concurrency & Locking | Redis (`INCR`, `DECR` 등 원자 연산 기반 동시성 제어, 등록 패턴 분산락)     |
 | Messaging | Kafka (Outbox 기반 이벤트 발행 및 처리)                |
 | Infra | Docker, Docker Compose                       |
 | Build | Gradle (Multi-module)                        |
