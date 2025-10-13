@@ -42,9 +42,9 @@ e-commerce backend project
     - `:api` – 외부 요청 처리 및 Swagger 제공
     - `:domain` – 도메인 로직 및 서비스 계층
       ```text
-        :domain:item - 상품 도메인 (조회, 등록, 할인 등)
-        :domain:stock - 재고 도메인 (재고 관리 및 동시성 제어)
-        :domain:order - 주문 도메인 (주문 처리 및 정합성 보장)
+        :1. item - 상품 도메인 (조회, 등록, 할인 등)
+        :2. stock - 재고 도메인 (재고 관리 및 동시성 제어)
+        :3. order - 주문 도메인 (주문 처리 및 정합성 보장)
       ```
     - `:consumer` – Kafka 기반 비동기 처리 담당 인스턴스
 - **계층 분리를 고려한 설계 구조**
