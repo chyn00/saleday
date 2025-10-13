@@ -89,11 +89,11 @@ e-commerce backend project
 - **확장성**: 할인 정책, 이벤트 핸들링, 메시지 채널 등을 쉽게 확장 가능하도록 설계
 - **테스트**: 실제 Bean 기반의 테스트 환경 구성
 
-## ✅ Kafka 병목 및 Outbox 안정성 개선 (2025.07)
+## ✅ Kafka 병목 및 Outbox 안정성 개선
 
 Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox 기반 아키텍처를 구조적으로 개선했습니다.
 
-### 개선 내용(2025.07.26)
+### 개선 내용
 
 - **Outbox 메시지 처리 흐름 분리**
   - 트랜잭션 커밋 전(Before Commit): 모든 메시지를 `INIT` 상태로 기록
@@ -109,7 +109,7 @@ Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox �
   - 주기적 Polling Scheduler를 통해 `FAIL` 상태 메시지 재전송 처리
   - (기존에 있던 기능이지만 관련도가 높아서, 개선사항에 같이 기록)
 
-### 개선 결과(2025.07.26)
+### 개선 결과
 
 - 처리 성능 하락 없이 Kafka 안정성 확보
 - 이벤트 전송 흐름과 DB 트랜잭션 경계 분리
