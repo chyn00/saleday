@@ -119,6 +119,5 @@
 
 - <img width="230" height="79" alt="image" src="https://github.com/user-attachments/assets/b7a22cec-9d0f-4a61-824a-f994299e9938" /><br>
 
-## 테스트 예외
-- 멀티 인스턴스 환경 테스트 예외
+## 비고
 - 싱글 인스턴스를 최적화하여 확장 할 수 있도록 설계
