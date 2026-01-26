@@ -12,11 +12,13 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -54,7 +56,6 @@ public class ItemService {
   public boolean saveAll(List<ItemCreateCommand> items) {
     long itemId = redisItemIdGenerator.generateBatchAndGetStartId(BATCH_SIZE);
     List<Item> itemsPartition = new ArrayList<>(BATCH_SIZE);
-
     for(ItemCreateCommand itemCreateCommand : items){
       Item item = Item.create
           (itemId

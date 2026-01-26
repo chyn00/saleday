@@ -1,11 +1,10 @@
-package com.commerce.saleday.api.infra.kafka;
+package com.commerce.saleday.api.infra.transaction.outbox;
 
 import com.commerce.saleday.common.outbox.model.OutboxMessage;
 import com.commerce.saleday.common.outbox.repository.OutboxRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
