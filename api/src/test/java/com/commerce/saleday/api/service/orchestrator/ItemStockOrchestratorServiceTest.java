@@ -46,7 +46,7 @@ class ItemStockOrchestratorServiceTest {
     itemService.save(item);
 
     //itemStock 세팅
-    itemStockOrchestratorService.saveItemWithRLock("1236", itemStock);
+    itemStockOrchestratorService.saveItemStockWithRLock("1236", itemStock);
     log.info("–--------test end line----------------");
   }
 }

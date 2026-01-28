@@ -1,5 +1,6 @@
 package com.commerce.saleday.api.infra.kafka;
 
+import com.commerce.saleday.api.infra.transaction.outbox.OutboxStatusService;
 import com.commerce.saleday.common.outbox.model.OutboxMessage;
 import com.commerce.saleday.common.outbox.repository.OutboxRepository;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
-import com.commerce.saleday.api.infra.kafka.OutboxStatusService;
+
 
 @Component
 @RequiredArgsConstructor
