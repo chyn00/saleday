@@ -52,6 +52,9 @@ public class OrderOrchestratorService {
 
       return orderCode;
     } catch (Exception e) {
+
+      //주문 실패에 대한 부분도 보상 트랜잭션
+      itemStockService.incrementAndCountItemStock(orderRequestDto.getItemCode());
       log.error("order fail : " + e.getMessage());
       throw e;
     }
