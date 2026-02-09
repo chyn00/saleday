@@ -113,6 +113,17 @@ Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox �
 - **실패 메시지 처리 보완**
   - 주기적 Polling Scheduler를 통해 `FAIL` 상태 메시지 재전송 처리
   - (기존에 있던 기능이지만 관련도가 높아서, 개선사항에 같이 기록)
+ 
+- 스레드풀 계층적 설계 (운영 관점 핵심)
+  - 단일 스레드풀 최적화가 아닌, 요청 흐름 전체를 고려한 분리 설계를 적용했습니다.
+  - 계층역할
+    - Tomcat Thread Pool	HTTP 요청 수용 (CPU 기반 튜닝)
+    - Service Async Executor	비즈니스 로직 비동기 분리
+    - Kafka Callback Executor	ACK 후 DB 업데이트 전용 (부하 제한)
+    - whenCompleteAsync + 전용 Executor로 Kafka 콜백 스레드 보호
+    - DB 부하를 스레드풀로 1차 제한
+    - 복합적인 Context Switching 고려한 전체 조율
+    - 단순한 “비동기 사용”이 아닌 운영 안정성을 고려한 스레드 설계
 
 ### 개선 결과
 
