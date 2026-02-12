@@ -45,9 +45,8 @@ public class AsyncExecutorsConfig {
     executor.setKeepAliveSeconds(30);
     executor.setWaitForTasksToCompleteOnShutdown(true);
     executor.setAwaitTerminationSeconds(10);
-    // DB 업데이트가 밀리면 시스템이 무너질 수 있으니, 강한 backpressure(또는 드랍) 중 택1
-    // 1) backpressure: CallerRunsPolicy (안전하지만 caller가 Kafka callback thread면 주의)
-    // 2) drop: AbortPolicy (명확히 실패 처리 + 리트라이/스케줄러로 회수)
+
+    //현재 drop형식으로 구현되어있음 -> 백프레셔로 대체가능
     executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
     executor.initialize();
     return executor;
