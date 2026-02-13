@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ExceptionCode {
 
-  CONFLICT("이미 존재하는 데이터입니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+  CONFLICT("이미 존재하는 데이터입니다.", HttpStatus.CONFLICT),
   NO_SUCH_DATA("존재하지 않는 데이터입니다.", HttpStatus.BAD_REQUEST),
   OUT_OF_STOCK("재고가 부족합니다.", HttpStatus.CONFLICT);
 
