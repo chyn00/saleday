@@ -26,6 +26,5 @@ public class OutboxStatusService {
     OutboxMessage message = outboxRepository.findById(eventId)
         .orElseThrow(() -> new EntityNotFoundException("OutboxMessage not found. id=" + eventId));
     message.markFailed();
-    outboxRepository.save(message);
   }
 }
