@@ -117,4 +117,5 @@ docker compose down
 
 ## 성능 테스트
 
-- 부하 테스트 결과 및 시나리오: [load-test.md](./load-test.md)
+- 부하 테스트 시나리오: [`./load-test/load-test.md`](./load-test/load-test.md)
+- 단일 인스턴스 실행 결과 리포트: [`./load-test/test.md`](./load-test/test.md)

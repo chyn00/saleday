@@ -19,6 +19,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/saleday?rewriteBatchedStatements=true&useServerPrepStmts=false}
+    username: ${SPRING_DATASOURCE_USERNAME:saleday}
+    password: ${SPRING_DATASOURCE_PASSWORD:saleday}
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
   data:

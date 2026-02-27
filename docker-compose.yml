@@ -64,6 +64,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/saleday?rewriteBatchedStatements=true&useServerPrepStmts=false
+      SPRING_DATASOURCE_USERNAME: saleday
+      SPRING_DATASOURCE_PASSWORD: saleday
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       SPRING_DATA_REDIS_HOST: myredis
       SPRING_DATA_REDIS_PORT: 6379
@@ -83,6 +85,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/saleday
+      SPRING_DATASOURCE_USERNAME: saleday
+      SPRING_DATASOURCE_PASSWORD: saleday
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       SPRING_DATA_REDIS_HOST: myredis
       SPRING_DATA_REDIS_PORT: 6379
