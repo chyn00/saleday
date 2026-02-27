@@ -203,7 +203,6 @@ Redis는 영속 저장소가 아니라 **빠른 판단 계층**으로 제한해 
 자세한 내용:
 
 - 부하 테스트 시나리오: [`./load-test/load-test.md`](./load-test/load-test.md)
-- 실행 결과 리포트: [`./load-test/test.md`](./load-test/test.md)
 
 ---
 
