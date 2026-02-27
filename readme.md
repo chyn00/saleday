@@ -1,139 +1,199 @@
-e-commerce backend project
+# SaleDay
 
-이 프로젝트는 바로 실행이 어려울 수 있습니다.(일부 설정이 local yaml에 의해 가려져 있습니다.)
+사용자가 몰리는 상황에서도 **주문과 재고 데이터가 어긋나지 않도록 설계한 커머스 백엔드 프로젝트**입니다.  
+핵심 목표는 **데이터 정확성(주문/재고)** 과 **빠른 처리 속도**를 함께 달성하는 것입니다.
 
-# SaleDay - 고성능 커머스 백엔드 시스템
-
-**SaleDay**는 대규모 트래픽 환경에서도 안정적으로 동작하는 커머스 백엔드 시스템을 목표로 설계된 개인 프로젝트입니다.  
-실무에서 마주한 문제의식을 바탕으로, 객체지향 원칙, 대용량 트래픽 대응, 분산 환경에서의 트랜잭션 처리 등 **현실적인 기술 스택과 구조**를 기반으로 구현했습니다.
+**기간:** 2025.03 ~ (지속적 설계·검증 및 고도화)
 
 ---
 
-## 프로젝트 개요
+## 시작 전 안내
 
-- **개발 기간**: 2025.03.24 ~ 진행중
-- **목표**:
-    - 실무 기반의 트래픽 대응 구조 설계 및 구현
-    - 다양한 할인 정책을 유연하게 처리하는 OOP 설계
-    - Kafka 기반 비동기 메시징, Redis 기반 동시성 제어 적용
-    - 메세지 큐 처리, 계층 분리 등 구조적 설계 원칙을 고려한 아키텍처 구성
+- 일부 설정은 `local` 프로파일에 의존하므로 바로 실행이 어려울 수 있습니다.
+- Kafka / Redis / MySQL 인프라가 준비되지 않으면 일부 기능은 동작하지 않습니다.
 
 ---
 
-## 기술 스택
+## 실행 방법 (Docker Compose)
 
-| 분야 | 기술                                           |
-|------|----------------------------------------------|
-| Language | Java 17                                      |
+프로젝트 루트에서 실행:
+
+```bash
+docker compose up -d --build
+```
+
+확인:
+
+```bash
+docker ps
+```
+
+기본 포트:
+
+- API: `http://localhost:9999`
+- Consumer: `localhost:9998`
+- Kafka: `localhost:9092`
+- Redis: `localhost:6379`
+- MySQL: `localhost:3306`
+
+중지:
+
+```bash
+docker compose down
+```
+
+---
+
+# 핵심 설계 관점
+
+## 1️⃣ 재고 하한 제어
+
+재고는 어떤 상황에서도 0 이하로 내려가지 않도록 설계했습니다.
+
+- Redis `DECR`로 재고 선차감
+- 감소 결과 < 0 → 즉시 보정 후 실패 처리
+- DB 반영은 이후 단계에서 수행
+
+Redis는 영속 계층이 아닌 **빠른 판단 계층**으로 한정해 사용했습니다.
+
+---
+
+## 2️⃣ 동기 / 비동기 경계 설정
+
+모든 처리를 동기 트랜잭션으로 묶을 경우, 고트래픽 상황에서 DB 경합이 급격히 증가할 수 있습니다.
+
+따라서:
+
+- **동기 구간:** 재고 감소 가능 여부 판단
+- **비동기 구간:** 주문 커밋 이후 DB 재고 반영
+
+으로 경계를 분리했습니다.
+
+---
+
+## 3️⃣ Outbox + 재처리 구조
+
+비동기 구조에서 가장 중요하게 고려한 부분은 “실패 이후의 복구 가능성”이었습니다.
+
+- 주문 트랜잭션 내부에서 Outbox 기록
+- 상태 관리: `INIT / SUCCESS / FAILED`
+- FAILED 이벤트 재전송 스케줄링
+- Consumer 멱등 처리
+
+이를 통해 메시지 지연·실패 상황에서도 최종적으로 DB 재고가 맞춰지도록 구성했습니다.
+
+---
+
+# 아키텍처
+
+- 멀티 모듈 구조
+  - `api` : 요청 처리, Outbox 기록, Kafka Producer
+  - `order` : 주문 / 재고 도메인
+  - `item` : 상품 / 리뷰
+  - `discount` : 할인 정책
+  - `consumer` : Kafka Consumer
+  - `pay` : 결제 연동
+  - `common` : 공통 설정 및 Outbox 모델
+  - `message` : 이벤트 계약
+
+- Redis 기반 재고 감소 제어
+- Outbox 기반 이벤트 발행
+- Kafka Consumer를 통한 DB 반영
+
+![SaleDay Server Architecture](https://github.com/user-attachments/assets/9ab94096-de35-4509-b29a-c060b7f20f70)
+
+---
+
+# 기술 스택
+
+| 영역 | 기술 |
+|------|------|
+| Language | Java 17 |
 | Framework | Spring Boot 3.x |
-| ORM & DB | JPA (Hibernate), QueryDSL, MySQL             |
-| Concurrency & Locking | Redis (`INCR`, `DECR` 등 원자 연산 기반 동시성 제어, 등록 패턴 분산락)     |
-| Messaging | Kafka (Outbox 기반 이벤트 발행 및 처리)                |
-| Infra | Docker, Docker Compose                       |
-| Build | Gradle (Multi-module)                        |
-| Test | JUnit5 (실제 Bean 기반 통합 및 단위 테스트), Locust 부하테스트              |
-| 문서화 | Swagger (Springdoc OpenAPI)                   |
+| DB/ORM | MySQL, Spring Data JPA, QueryDSL |
+| Messaging | Kafka |
+| Cache/Lock | Redis, Redisson |
+| Build | Gradle Multi-module |
+| Test | JUnit5, Mockito, Spring Test |
+| Docs | Springdoc OpenAPI |
 
 ---
 
-## 아키텍처
+# 테스트 전략
 
-- **멀티모듈 구조**
-    - `:api` – 외부 요청 처리 및 Swagger 제공
-    - `:domain` – 도메인 로직 및 서비스 계층 멀티 모듈
-      ```text
-        1. item module - 상품 도메인 (조회, 등록 등)
-        2. stock module - 재고 도메인 (재고 관리 및 동시성 제어)
-        3. order module - 주문 도메인 (주문 처리 및 정합성 보장)
-        4. discount module - 할인 도메인 (할인)
-      ```
-    - `:consumer` – Kafka 기반 비동기 처리 담당 인스턴스
-- **계층 분리를 고려한 설계 구조**
-- **Redis 기반 재고 감소 동시성 제어 (`INCR`, `DECR`)**
-- **Outbox 패턴 기반 Kafka 메시지 전송으로 재고 처리 분리**
+## 단위 테스트 중심
 
----
+- 주문 / 재고 / 할인 핵심 분기(성공·실패·보상) 검증
+- Kafka, Redis, 외부 API는 mock 처리
+- 빠른 피드백 루프 유지
 
-[SaleDay Server Architecture]<img width="1270" height="710" alt="image" src="https://github.com/user-attachments/assets/9ab94096-de35-4509-b29a-c060b7f20f70" />
+## 통합 테스트 최소화
 
+- 실제 장애 가능성이 높은 경계 구간만 선택 검증
+  - Kafka 메시징
+  - Redis 동시성
+  - DB 반영
 
+## 비동기 테스트 단순화
 
-## 주요 기능
-
-### 주문 기능
-- **단건 주문 처리 구조**: 선착순 이벤트 및 재고 한정 상황에 최적화
-    - Kafka + Redis 기반 비동기 처리로 정합성과 동시성 모두 확보
-- **다건 주문 처리 (장바구니)**: 일반 상품에 대해 `BulkRequest` 기반으로 트랜잭션 내 일괄 저장 처리
-    - 메시징 불필요, DB 트랜잭션만으로 충분한 정합성 보장
-- 할인 정책 적용 및 주문 금액 계산
-- 트랜잭션 내 `Order -> OrderItem` 일괄 처리
-
-### 할인 정책
-- 전략 패턴 기반 할인 정책 선택기 구현
-- 고정 할인, 비율 할인 등 정책 확장 가능
-
-### 동시성 재고 처리
-- 주문 요청 시 Redis에서 `DECR`를 활용해 병렬 재고 수량 제어
-- 주문 커밋 후 Outbox 이벤트 발행 및 Kafka 메시지 전송
-- Kafka Consumer에서 실제 재고 DB 반영 처리
-- **정합성과 고속성**을 모두 확보한 재고 처리 구조 구현
-
-### 비동기 메시징
-- 주문 성공 후 Kafka를 통해 `stock.decreased` 이벤트 발행
-- Consumer는 별도 모듈로 분리하여 비동기 처리
+- 테스트 환경에서는 executor를 동기 방식으로 주입
+- `CompletableFuture` 분기 흐름 예측 가능하게 구성
 
 ---
 
-## 설계 포인트
+# 성능 테스트
 
-- **단건 주문 기반 트래픽 설계**: 선착순 이벤트, 재고 한정 상황에서 고속 트래픽 처리를 위해 단건 주문 구조를 채택하고, Kafka + Redis로 비동기 처리
-- **다건 주문과 단건 주문 분리 설계**: 일반 상품 주문은 `BulkRequest`와 트랜잭션으로 처리, 메시징 구조 없이 단순하게 유지
-- **객체지향**: 할인 정책, 주문 로직을 전략 패턴과 도메인 중심 설계로 분리
-- **트래픽 대응**: Redis 기반 원자 연산 + Kafka 이벤트 구조를 통해 TPS 처리 향상
-- **정합성과 고속성의 균형**: 재고수량이 한정되어 있는 등의 동시성이 필요한 주문 요청 시 Redis로 병렬 제어 → 커밋 후 Outbox 이벤트 발행 및 Kafka Publish → Consumer에서 재고 DB 반영
-- **신뢰성**: `@TransactionalEventListener` 및 Outbox Pattern을 활용하여 주문 커밋 이후에만 메시지 발행
-- **확장성**: 할인 정책, 이벤트 핸들링, 메시지 채널 등을 쉽게 확장 가능하도록 설계
-- **테스트**: 실제 Bean 기반의 테스트 환경 구성
+- 1,000 TPS
+- 100,000 요청
+- 초기 재고 1,000,000
+- 요청당 1 감소
+- 싱글 인스턴스 기준
 
-## ✅ Kafka 병목 및 Outbox 안정성 개선
+결과:
 
-Kafka 전송 시 간헐적 TimeoutException, 전송 실패가 발생해 Outbox 기반 아키텍처를 구조적으로 개선했습니다.
+- 평균 응답 시간 약 170~190ms
+- P99 약 900~1200ms
+- 실패율 0%
 
-### 개선 내용
+정합성 검증 기준:
 
-- **Outbox 메시지 처리 흐름 분리**
-  - 트랜잭션 커밋 전(Before Commit): 모든 메시지를 `INIT` 상태로 기록
-  - Kafka 전송 결과를 CompletableFuture 콜백에서 ACK를 받아서 JPA `@Transactional` 기반으로 `SUCCESS` / `FAIL` 상태 마킹
-  - 콜백 안에서 DB 접근해도 문제 없도록 트랜잭션 경계 명확히 보장
+```
+초기재고 - 주문수량합 = DB재고 = Redis재고
+```
 
-- **Kafka 병목 해소**
-  - `acks=all` → `acks=1` 변경: 복제 대기 제거로 전송 속도 향상
-  - 전송 중단 없이 Timeout 문제 전면 해결
+- Redis 재고 확인
+- DB 재고 확인
+- Outbox 처리 건수 확인
+- Consumer 반영 건수 확인
 
-- **실패 메시지 처리 보완**
-  - 주기적 Polling Scheduler를 통해 `FAIL` 상태 메시지 재전송 처리
-  - (기존에 있던 기능이지만 관련도가 높아서, 개선사항에 같이 기록)
- 
-- 스레드풀 계층적 설계 (운영 관점 핵심)
-  - 단일 스레드풀 최적화가 아닌, 요청 흐름 전체를 고려한 분리 설계를 적용했습니다.
-  - 계층역할
-    - Tomcat Thread Pool	HTTP 요청 수용 (CPU 기반 튜닝)
-    - Service Async Executor	비즈니스 로직 비동기 분리
-    - Kafka Callback Executor	ACK 후 DB 업데이트 전용 (부하 제한)
-    - whenCompleteAsync + 전용 Executor로 Kafka 콜백 스레드 보호
-    - DB 부하를 스레드풀로 1차 제한
-    - 복합적인 Context Switching 고려한 전체 조율
-    - 단순한 “비동기 사용”이 아닌 운영 안정성을 고려한 스레드 설계
+성능 수치뿐 아니라 데이터 일치까지 검증했습니다.
 
-### 개선 결과
+자세한 내용:
 
-- 처리 성능 하락 없이 Kafka 안정성 확보
-- 이벤트 전송 흐름과 DB 트랜잭션 경계 분리
+- 부하 테스트 시나리오: [`./load-test/load-test.md`](./load-test/load-test.md)
+- 실행 결과 리포트: [`./load-test/test.md`](./load-test/test.md)
 
+---
 
-## 성능 테스트 결과
-자세한 성능 테스트 결과는 [load-test.md](./load-test.md)를 참고하세요.
+# AI Agent 활용
 
+AI는 설계를 대신하는 역할이 아니라, 다음 영역에서 활용했습니다.
 
+- 테스트 코드 작성 가속
+- 부하 테스트 반복 실행 자동화
+- 설계 대안 비교 시 사고 확장
+- 정합성 검증 리포트 정리
 
+설계 기준 정의, 동기/비동기 경계 설정, 재처리 전략 수립, 최종 구조 결정은 직접 수행했습니다.
 
+AI는 생산성과 검증 속도를 높이는 보조 도구로 활용했습니다.
+
+---
+
+# 프로젝트를 통해 얻은 것
+
+- 정합성과 성능은 선택이 아니라 경계 설계의 문제라는 점
+- 고트래픽 환경에서는 동기/비동기 분리가 핵심이라는 점
+- 재처리를 포함한 설계가 운영 안정성에 중요하다는 점
+- 성능 수치와 데이터 일치 검증을 함께 수행해야 한다는 점
+- AI를 활용하되 설계 책임은 개발자가 가져가야 한다는 점

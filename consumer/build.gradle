@@ -5,5 +5,5 @@ dependencies {
     implementation project(':item')      // item module 의존성 추가
 }
 
-bootJar.enabled = false
-jar.enabled = true
+bootJar.enabled = true
+jar.enabled = false

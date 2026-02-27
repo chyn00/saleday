@@ -1,30 +1,92 @@
-#version: '3.8' #Docker Compose(2.x)에서는 yml 문법 version 생략이 가능
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.9.0
     container_name: zookeeper
+    restart: unless-stopped
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+
   kafka:
     image: confluentinc/cp-kafka:7.9.0
     container_name: kafka
+    restart: unless-stopped
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
-  redis:
-    image: redis:latest
+
+  myredis:
+    image: redis
     container_name: myredis
+    restart: unless-stopped
     ports:
       - "6379:6379"
-#docker start kafka zookeeper myredis mysql-container
+
+  mysql-container:
+    image: mysql:8.2.0
+    container_name: mysql-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: saleday
+      MYSQL_USER: saleday
+      MYSQL_PASSWORD: saleday
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: saleday-api
+    restart: unless-stopped
+    depends_on:
+      - kafka
+      - myredis
+      - mysql-container
+    ports:
+      - "9999:9999"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/saleday?rewriteBatchedStatements=true&useServerPrepStmts=false
+      SPRING_DATASOURCE_USERNAME: saleday
+      SPRING_DATASOURCE_PASSWORD: saleday
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_DATA_REDIS_HOST: myredis
+      SPRING_DATA_REDIS_PORT: 6379
+
+  consumer:
+    build:
+      context: .
+      dockerfile: docker/consumer.Dockerfile
+    container_name: saleday-consumer
+    restart: unless-stopped
+    depends_on:
+      - kafka
+      - myredis
+      - mysql-container
+    ports:
+      - "9998:9998"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/saleday
+      SPRING_DATASOURCE_USERNAME: saleday
+      SPRING_DATASOURCE_PASSWORD: saleday
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_DATA_REDIS_HOST: myredis
+      SPRING_DATA_REDIS_PORT: 6379
