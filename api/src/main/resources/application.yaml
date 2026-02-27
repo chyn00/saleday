@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: local
+    active: ${SPRING_PROFILES_ACTIVE:local}
   jpa:
     hibernate:
       ddl-auto: create #data init 작성해두어서 일단 create
@@ -18,7 +18,13 @@ spring:
           batch_versioned_data: true # Hibernate 6.x용 배치 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/saleday?rewriteBatchedStatements=true&useServerPrepStmts=false
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/saleday?rewriteBatchedStatements=true&useServerPrepStmts=false}
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:127.0.0.1}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
     #rewriteBatchedStatements=true	insert 문을 한 줄로 합쳐줌 (values(...), (...), (...))
     #useServerPrepStmts=false	서버측 prepared statement 사용 막고, 클라이언트에서 재작성 허용
 

@@ -8,6 +8,33 @@
 - 일부 설정은 `local` 프로파일에 의존하므로 바로 실행이 어려울 수 있습니다.
 - 인프라(Kafka/Redis/MySQL)가 준비되지 않으면 일부 기능은 동작하지 않습니다.
 
+## 실행 방법 (Docker Compose)
+
+프로젝트 루트에서 아래 명령으로 실행할 수 있습니다.
+
+```bash
+docker compose up -d --build
+```
+
+실행 후 확인:
+
+```bash
+docker ps
+```
+
+기본 포트:
+- API: `http://localhost:9999`
+- Consumer: `localhost:9998`
+- Kafka: `localhost:9092`
+- Redis: `localhost:6379`
+- MySQL: `localhost:3306`
+
+중지:
+
+```bash
+docker compose down
+```
+
 ## 강조 포인트
 
 1. **재고가 적은 상품 주문 처리**
@@ -91,4 +118,3 @@
 ## 성능 테스트
 
 - 부하 테스트 결과 및 시나리오: [load-test.md](./load-test.md)
-
