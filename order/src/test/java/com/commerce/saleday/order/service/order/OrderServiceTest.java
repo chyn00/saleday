@@ -1,89 +1,102 @@
 package com.commerce.saleday.order.service.order;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.commerce.saleday.discount.domain.discount.DiscountResult;
+import com.commerce.saleday.discount.domain.discount.model.DiscountType;
+import com.commerce.saleday.discount.service.discount.DiscountService;
+import com.commerce.saleday.item.domain.item.model.Item;
+import com.commerce.saleday.item.service.item.ItemService;
 import com.commerce.saleday.order.domain.order.model.Orders;
-import com.commerce.saleday.order.service.TestOrderApplication;
+import com.commerce.saleday.order.domain.order.repository.OrderRepository;
 import com.commerce.saleday.order.service.order.model.CreateOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateBulkOrderCommand;
 import com.commerce.saleday.order.service.order.model.bulk.CreateOrderItemCommand;
-import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest(classes = TestOrderApplication.class)
-@ActiveProfiles("test")  // application-test.yml 사용
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
-  @Autowired
+  @Mock
+  private OrderRepository orderRepository;
+
+  @Mock
+  private ItemService itemService;
+
+  @Mock
+  private DiscountService discountService;
+
+  @InjectMocks
   private OrderService orderService;
 
   @Test
-  void getOrder() {
-    //given
-    String orderCode = createOrderForTest();
+  @DisplayName("단건 주문 저장 시 주문코드를 반환한다")
+  void saveOrder_returnsOrderCode() {
+    Item item = Item.createWithDiscountType(
+        "ITEM-1",
+        "item",
+        "content",
+        BigDecimal.valueOf(10000),
+        new ArrayList<>(),
+        DiscountType.NONE
+    );
+    when(itemService.getItem("ITEM-1")).thenReturn(item);
+    when(discountService.getDiscountResult(any())).thenReturn(
+        DiscountResult.builder().discountAmount(BigDecimal.ZERO).reason("NONE").build()
+    );
+    when(orderRepository.createOrder(any(Orders.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-    //when
-    Orders orders = orderService.getOrder(orderCode);
+    String code = orderService.saveOrder(new CreateOrderCommand("ITEM-1", "USER-1", 2));
 
-    //then
-    assertThat(orders).isNotNull();
+    assertThat(code).isNotBlank();
+    verify(orderRepository).createOrder(any(Orders.class));
   }
 
   @Test
-  void getOrderItems() {
-    //given
-    String orderCode = createOrderForTest();
+  @DisplayName("다건 주문 저장 시 동일 itemCode는 수량 합산 후 주문아이템 1건으로 저장된다")
+  void saveOrders_mergesDuplicatedItemCodes() {
+    Item item = Item.createWithDiscountType(
+        "ITEM-1",
+        "item",
+        "content",
+        BigDecimal.valueOf(5000),
+        new ArrayList<>(),
+        DiscountType.NONE
+    );
 
-    //when
-    Orders orders = orderService.getOrder(orderCode);
+    CreateBulkOrderCommand command = new CreateBulkOrderCommand(
+        "USER-1",
+        List.of(
+            new CreateOrderItemCommand("ITEM-1", 1),
+            new CreateOrderItemCommand("ITEM-1", 2)
+        )
+    );
 
-    //then
-    assertThat(orders.getOrderItems()).isNotEmpty();
+    when(itemService.getItemsByItemCode(any())).thenReturn(List.of(item));
+    when(discountService.getDiscountResult(any())).thenReturn(
+        DiscountResult.builder().discountAmount(BigDecimal.ZERO).reason("NONE").build()
+    );
+    when(orderRepository.createOrder(any(Orders.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    orderService.saveOrders(command);
+
+    ArgumentCaptor<Orders> captor = ArgumentCaptor.forClass(Orders.class);
+    verify(orderRepository).createOrder(captor.capture());
+
+    Orders saved = captor.getValue();
+    assertThat(saved.getOrderItems()).hasSize(1);
+    assertThat(saved.getOrderItems().get(0).getQuantity()).isEqualTo(3);
   }
-
-  @Test
-  void saveOrder() {
-    //given
-    CreateOrderCommand command =
-        new CreateOrderCommand("1234", "USER01", 5);
-
-    // when
-    String orderCode = orderService.saveOrder(command);
-
-    // then
-    assertThat(orderCode).isNotBlank();
-  }
-
-  //다건 주문 테스트
-  @Test
-  void createOrdersTest() {
-    //given
-    List<CreateOrderItemCommand> orderItemCommands
-        = List.of(new CreateOrderItemCommand("1234",11));
-
-
-
-    CreateBulkOrderCommand command = new CreateBulkOrderCommand("TESTER", orderItemCommands);
-
-    // when
-    String orderCode = orderService.saveOrders(command);
-
-    // then
-    assertThat(orderCode).isNotBlank();
-  }
-
-  private String createOrderForTest() {
-    //given
-    CreateOrderCommand command =
-        new CreateOrderCommand("1234", "USER01", 5);
-
-    // 저장
-    return orderService.saveOrder(command);
-  }
-
 }
