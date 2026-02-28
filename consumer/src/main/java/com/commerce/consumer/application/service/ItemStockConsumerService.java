@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ItemStockConsumerService {
 
   private final IdempotencyChecker idempotencyChecker;//멱등처리는 redistTemplate사용
@@ -30,8 +32,7 @@ public class ItemStockConsumerService {
    * **/
   //성능 향상을 위해 batch 로 개발
   @Transactional
-  public void decreaseStock(List<DecreaseStockEvent> decreaseStockEvents)
-      throws InterruptedException {
+  public void decreaseStock(List<DecreaseStockEvent> decreaseStockEvents) {
 
     // 1차적으로 레디스 SETNX(redis lock의 원리)에 처리가 된 eventId는 필터링 해서, consumer쪽에서 중복처리가 일어나지 않도록 방어
     List<DecreaseStockEvent> filteredIdempotentEvents = idempotencyChecker.filterIdempotentEvents(decreaseStockEvents);
@@ -53,12 +54,22 @@ public class ItemStockConsumerService {
 
     // 최소화된 key만 들어온다.
     //Process & Write :itemStocks 의 quantity 변경하여, 배치처리로 저장
-    for(String itemCode : itemCodes){
+    for (String itemCode : itemCodes) {
 
       String lockKey = "lock:item:stock:" + itemCode;
 
       RLock lock = redissonClient.getLock(lockKey);
-      if (lock.tryLock(30, 3, TimeUnit.SECONDS)) {//최대 3초 락 획득, 30초 넘으면 획득 실패
+      final boolean locked;
+      try {
+        locked = lock.tryLock(30, 3, TimeUnit.SECONDS);//최대 3초 락 획득, 30초 넘으면 획득 실패
+      } catch (InterruptedException e) {
+        // 현재 스레드가 중단 신호를 받았다는 의미이므로, 인터럽트 상태를 복구하고 상위로 전파한다.
+        Thread.currentThread().interrupt();
+        log.error("Interrupted while waiting lock. lockKey={}", lockKey, e);
+        throw new IllegalStateException("Interrupted while waiting distributed lock", e);
+      }
+
+      if (locked) {
         try {
           ItemStock itemStock = itemStockConsumerRepository.findItemStockByItemCode(itemCode);
           itemStock.decrease(quantityByItemCodeMap.get(itemCode));
@@ -66,7 +77,7 @@ public class ItemStockConsumerService {
 
           // flush 사용해서 커넥션 최소화
           // 카프카 listener 에서 1차캐싱영역에 gc가 일어나지 않을정도로 제어해준 뒤, flush를 활용하여 배치 처리
-          if(count % batchSize == 0 || count == itemStocksSize){
+          if (count % batchSize == 0 || count == itemStocksSize) {
             itemStockConsumerRepository.flush();
           }
         } finally {
