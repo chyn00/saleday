@@ -71,4 +71,18 @@ class ItemStockProducerAdapterTest {
     verify(outboxStatusService).markFailed("EVENT-2");
     verify(outboxStatusService, never()).markSuccess("EVENT-2");
   }
+
+  @Test
+  @DisplayName("Kafka send 호출 단계에서 예외가 나면 Outbox 상태를 FAILED로 마킹한다")
+  void publishDecreaseStock_marksFailed_whenKafkaSendInvocationThrows() {
+    DecreaseStockEvent event = DecreaseStockEvent.toEventMessage("ITEM-1", 1L);
+    event.initEventId("EVENT-3");
+
+    when(kafkaTemplate.send("stock.decreased", event)).thenThrow(new RuntimeException("sync send failure"));
+
+    itemStockProducerAdapter.publishDecreaseStock(event);
+
+    verify(outboxStatusService).markFailed("EVENT-3");
+    verify(outboxStatusService, never()).markSuccess("EVENT-3");
+  }
 }
