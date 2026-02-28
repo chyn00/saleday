@@ -1,11 +1,8 @@
 package com.commerce.saleday.api.infra.kafka;
 
 import com.commerce.saleday.api.infra.transaction.outbox.OutboxStatusService;
-import com.commerce.saleday.common.outbox.model.OutboxMessage;
-import com.commerce.saleday.common.outbox.repository.OutboxRepository;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.port.ItemStockPublisherKafkaPort;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import lombok.RequiredArgsConstructor;
@@ -40,26 +37,60 @@ public class ItemStockProducerAdapter implements ItemStockPublisherKafkaPort {
      2. consumer(보내기 전 전처리) : 멱등성을 위해 eventId도 함께 전송.
      **/
     decreaseStockEvent.initEventId(decreaseStockEvent.getEventId());
+    final String eventId = decreaseStockEvent.getEventId();
     CompletableFuture.runAsync(() -> {
       // 콜백패턴을 활용한 ack 응답여부 확인용 세팅
-      CompletableFuture<SendResult<String, Object>> future =
-          kafkaTemplate.send("stock.decreased", decreaseStockEvent);
+      CompletableFuture<SendResult<String, Object>> future;
+      try {
+        future = kafkaTemplate.send("stock.decreased", decreaseStockEvent);
+      } catch (Exception sendInvocationEx) {
+        log.error("Kafka send invocation failed before callback registration. eventId={}", eventId,
+            sendInvocationEx);
+        safeMarkFailed(eventId);
+        return;
+      }
 
       // whenCompleteAsync는 completableFuture의 다른 쓰레드와 분리를 시켜 실행되도록하여서, 비동기의 장점을 더 살린다.
       // whenComplete를 사용하면 완료된 그쓰레드에서 다음 콜백이 실행된다.
       // 따라서, 아웃박스 패턴의 장점을 살리기 위해, 비교적 DB의 네트워크 부하가 걸리는 부분을 별도의 쓰레드 풀로 분리한다.
-      future.whenCompleteAsync((result, ex) -> {
+      future.handleAsync((result, ex) -> {
         if (ex == null) {
-          outboxStatusService.markSuccess(decreaseStockEvent.getEventId());
+          safeMarkSuccess(eventId);
         } else {
-          outboxStatusService.markFailed(decreaseStockEvent.getEventId());
+          safeMarkFailed(eventId);
           // Optional: DLQ 처리 or alert
           log.error("Outbox callback processing failed. eventId={}",
-              decreaseStockEvent.getEventId(),
+              eventId,
               ex);
         }
-      }, outboxCallbackExecutor);//callback에 대한 별도 쓰레드 풀 관리 -> DB연결이라서 안정성이 먼저
+        return null;
+      }, outboxCallbackExecutor)
+          .exceptionally(callbackStageEx -> {
+            log.error("Outbox callback stage failed. eventId={}", eventId, callbackStageEx);
+            safeMarkFailed(eventId);
+            return null;
+          }); // callback에 대한 별도 쓰레드 풀 관리 -> DB연결이라서 안정성이 먼저
 
-    }, kafkaPublishExecutor);
+    }, kafkaPublishExecutor).exceptionally(publishStageEx -> {
+      log.error("Kafka publish async stage failed. eventId={}", eventId, publishStageEx);
+      safeMarkFailed(eventId);
+      return null;
+    });
+  }
+
+  private void safeMarkSuccess(String eventId) {
+    try {
+      outboxStatusService.markSuccess(eventId);
+    } catch (Exception markSuccessEx) {
+      log.error("Failed to mark outbox success. eventId={}", eventId, markSuccessEx);
+    }
+  }
+
+  private void safeMarkFailed(String eventId) {
+    try {
+      outboxStatusService.markFailed(eventId);
+    } catch (Exception markFailedEx) {
+      log.error("Failed to mark outbox failed. eventId={}", eventId, markFailedEx);
+    }
   }
 }
