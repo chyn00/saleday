@@ -76,6 +76,33 @@ Redis는 영속 저장소가 아니라 **빠른 판단 계층**으로 제한해 
 
 즉시 일치가 아닌 구간도, 재처리를 통해 **최종 일관성**으로 수렴하도록 설계했습니다.
 
+### 3-1) Consumer 중복요청(멱등) 처리 방식 변경
+
+중복요청 방지는 초기에는 Redis `SETNX` 기반으로 처리했지만,
+현재는 `processed_event` 영속 테이블(Primary Key: `event_id`) 방식으로 변경했습니다.
+
+- 기존 방식: Redis `SETNX + TTL`
+  - 장점: 빠른 중복 필터링
+  - 한계: 처리 실패 시점과 키 기록 시점이 어긋나면 재처리 누락 위험이 생길 수 있음
+
+- 현재 방식: DB `processed_event`에 `INSERT IGNORE`
+  - `insertedCount == 1`: 신규 이벤트로 간주하고 재고 차감 진행
+  - `insertedCount == 0`: 이미 처리된 이벤트로 간주하고 skip
+  - 효과: 멱등 키를 영속적으로 관리해, TTL 만료/캐시 유실에 따른 중복 처리 리스크를 줄임
+
+- Producer/Consumer 관점 분리
+  - Producer 측 Outbox 상태(`INIT/SUCCESS/FAILED`)는 "전송 시도/성공" 관리용이다.
+  - Kafka 브로커/컨슈머 특성(at-least-once)상 같은 메시지가 2번 이상 전달될 수 있으므로,
+    소비 중복은 Consumer 멱등 계층(`processed_event`)에서 별도로 제어해야 한다.
+
+- 구현 방식 트레이드오프
+  - `INSERT IGNORE`(현재 선택): 목적이 "중복이면 무시"일 때 가장 단순하고 의도가 명확함.
+  - `UPSERT(ON DUPLICATE KEY UPDATE)`: 갱신까지 포함하는 일반 패턴이라, 순수 멱등 skip 목적에는 의도가 흐려질 수 있음.
+  - 예외 기반 처리(DuplicateKey catch): flush/트랜잭션 경계 영향으로 흐름이 복잡해지고 운영 로그 노이즈가 증가할 수 있음.
+
+참고로 분산락(Redisson `tryLock`)은 제거한 것이 아니라,
+동일 상품 재고에 대한 동시 업데이트 충돌 제어 용도로 유지하고 있습니다.
+
 ### 4) 락 전략 비교와 선택 근거
 
 이 프로젝트에서 락 전략은 "무엇이 가장 엄격한가"보다, **트래픽 대비 병목·운영 복잡도·정합성 수준**을 함께 비교해 선택했습니다.

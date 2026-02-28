@@ -1,9 +1,10 @@
 package com.commerce.consumer.application.service;
 
 import com.commerce.consumer.infra.database.repository.ItemStockConsumerRepositoryImpl;
-import com.commerce.consumer.infra.redis.IdempotencyChecker;
+import com.commerce.consumer.infra.database.repository.ProcessedEventJpaRepository;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ItemStockConsumerService {
 
-  private final IdempotencyChecker idempotencyChecker;//멱등처리는 redistTemplate사용
+  private final ProcessedEventJpaRepository processedEventJpaRepository;
   private final RedissonClient redissonClient;
   private final ItemStockConsumerRepositoryImpl itemStockConsumerRepository;
 
@@ -34,8 +35,7 @@ public class ItemStockConsumerService {
   @Transactional
   public void decreaseStock(List<DecreaseStockEvent> decreaseStockEvents) {
 
-    // 1차적으로 레디스 SETNX(redis lock의 원리)에 처리가 된 eventId는 필터링 해서, consumer쪽에서 중복처리가 일어나지 않도록 방어
-    List<DecreaseStockEvent> filteredIdempotentEvents = idempotencyChecker.filterIdempotentEvents(decreaseStockEvents);
+    List<DecreaseStockEvent> filteredIdempotentEvents = filterUnprocessedEvents(decreaseStockEvents);
 
     // quantityByItemoCode
     Map<String, Long> quantityByItemCodeMap = filteredIdempotentEvents.stream()
@@ -88,6 +88,25 @@ public class ItemStockConsumerService {
       }
     }
 
+  }
+
+  private List<DecreaseStockEvent> filterUnprocessedEvents(List<DecreaseStockEvent> decreaseStockEvents) {
+    List<DecreaseStockEvent> result = new ArrayList<>();
+
+    for (DecreaseStockEvent event : decreaseStockEvents) {
+      if (event.getEventId() == null || event.getEventId().isBlank()) {
+        throw new IllegalArgumentException("eventId is required for idempotent stock consume");
+      }
+
+      int insertedCount = processedEventJpaRepository.insertIgnore(event.getEventId());
+      if (insertedCount == 1) {
+        result.add(event);
+      } else {
+        log.debug("Skip duplicated stock event. eventId={}", event.getEventId());
+      }
+    }
+
+    return result;
   }
 
 }
