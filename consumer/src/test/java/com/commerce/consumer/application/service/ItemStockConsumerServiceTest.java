@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.commerce.consumer.infra.database.repository.ItemStockConsumerRepositoryImpl;
-import com.commerce.consumer.infra.redis.IdempotencyChecker;
+import com.commerce.consumer.infra.database.repository.ProcessedEventJpaRepository;
 import com.commerce.saleday.message.stock.DecreaseStockEvent;
 import com.commerce.saleday.order.domain.stock.model.ItemStock;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.redisson.api.RedissonClient;
 class ItemStockConsumerServiceTest {
 
   @Mock
-  private IdempotencyChecker idempotencyChecker;
+  private ProcessedEventJpaRepository processedEventJpaRepository;
 
   @Mock
   private RedissonClient redissonClient;
@@ -44,7 +44,7 @@ class ItemStockConsumerServiceTest {
   void decreaseStock_decreasesAndFlushes_whenLockAcquired() throws InterruptedException {
     DecreaseStockEvent event = new DecreaseStockEvent("ITEM-1", 3L, "EVENT-1");
 
-    when(idempotencyChecker.filterIdempotentEvents(List.of(event))).thenReturn(List.of(event));
+    when(processedEventJpaRepository.insertIgnore("EVENT-1")).thenReturn(1);
     when(redissonClient.getLock("lock:item:stock:ITEM-1")).thenReturn(lock);
     when(lock.tryLock(30, 3, java.util.concurrent.TimeUnit.SECONDS)).thenReturn(true);
     when(itemStockConsumerRepository.findItemStockByItemCode("ITEM-1")).thenReturn(itemStock);
@@ -61,7 +61,7 @@ class ItemStockConsumerServiceTest {
   void decreaseStock_skips_whenLockNotAcquired() throws InterruptedException {
     DecreaseStockEvent event = new DecreaseStockEvent("ITEM-2", 2L, "EVENT-2");
 
-    when(idempotencyChecker.filterIdempotentEvents(List.of(event))).thenReturn(List.of(event));
+    when(processedEventJpaRepository.insertIgnore("EVENT-2")).thenReturn(1);
     when(redissonClient.getLock("lock:item:stock:ITEM-2")).thenReturn(lock);
     when(lock.tryLock(30, 3, java.util.concurrent.TimeUnit.SECONDS)).thenReturn(false);
 
@@ -73,11 +73,11 @@ class ItemStockConsumerServiceTest {
   }
 
   @Test
-  @DisplayName("idempotent 필터 결과가 비어있으면 저장소 접근을 수행하지 않는다")
+  @DisplayName("이미 처리된 eventId면 저장소 접근을 수행하지 않는다")
   void decreaseStock_doesNothing_whenNoEventsAfterIdempotencyFilter() throws InterruptedException {
     DecreaseStockEvent event = new DecreaseStockEvent("ITEM-3", 1L, "EVENT-3");
 
-    when(idempotencyChecker.filterIdempotentEvents(List.of(event))).thenReturn(List.of());
+    when(processedEventJpaRepository.insertIgnore("EVENT-3")).thenReturn(0);
 
     itemStockConsumerService.decreaseStock(List.of(event));
 

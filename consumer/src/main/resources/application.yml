@@ -7,6 +7,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none #data init ?????? ?? create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
