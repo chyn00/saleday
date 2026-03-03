@@ -84,7 +84,8 @@ public class ItemStockConsumerService {
           lock.unlock();
         }
       } else {
-        // 락 실패 시 처리(재시도 or 누락 Outbox)
+        log.error("Failed to acquire distributed lock. itemCode={}", itemCode);
+        throw new IllegalStateException("Failed to acquire distributed lock for itemCode: " + itemCode);
       }
     }
 

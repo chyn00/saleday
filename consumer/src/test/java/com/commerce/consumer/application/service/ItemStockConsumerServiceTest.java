@@ -1,5 +1,6 @@
 package com.commerce.consumer.application.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,7 @@ class ItemStockConsumerServiceTest {
 
     when(processedEventJpaRepository.insertIgnore("EVENT-1")).thenReturn(1);
     when(redissonClient.getLock("lock:item:stock:ITEM-1")).thenReturn(lock);
-    when(lock.tryLock(30, 3, java.util.concurrent.TimeUnit.SECONDS)).thenReturn(true);
+    when(lock.tryLock(3, 30, java.util.concurrent.TimeUnit.SECONDS)).thenReturn(true);
     when(itemStockConsumerRepository.findItemStockByItemCode("ITEM-1")).thenReturn(itemStock);
 
     itemStockConsumerService.decreaseStock(List.of(event));
@@ -57,15 +58,17 @@ class ItemStockConsumerServiceTest {
   }
 
   @Test
-  @DisplayName("lock 획득 실패 시 재고 차감/flush를 수행하지 않는다")
-  void decreaseStock_skips_whenLockNotAcquired() throws InterruptedException {
+  @DisplayName("lock 획득 실패 시 IllegalStateException을 던져 DLQ로 전달된다")
+  void decreaseStock_throwsException_whenLockNotAcquired() throws InterruptedException {
     DecreaseStockEvent event = new DecreaseStockEvent("ITEM-2", 2L, "EVENT-2");
 
     when(processedEventJpaRepository.insertIgnore("EVENT-2")).thenReturn(1);
     when(redissonClient.getLock("lock:item:stock:ITEM-2")).thenReturn(lock);
-    when(lock.tryLock(30, 3, java.util.concurrent.TimeUnit.SECONDS)).thenReturn(false);
+    when(lock.tryLock(3, 30, java.util.concurrent.TimeUnit.SECONDS)).thenReturn(false);
 
-    itemStockConsumerService.decreaseStock(List.of(event));
+    assertThatThrownBy(() -> itemStockConsumerService.decreaseStock(List.of(event)))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("ITEM-2");
 
     verify(itemStockConsumerRepository, never()).findItemStockByItemCode("ITEM-2");
     verify(itemStockConsumerRepository, never()).flush();
