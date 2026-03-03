@@ -61,7 +61,7 @@ public class ItemStockConsumerService {
       RLock lock = redissonClient.getLock(lockKey);
       final boolean locked;
       try {
-        locked = lock.tryLock(30, 3, TimeUnit.SECONDS);//최대 3초 락 획득, 30초 넘으면 획득 실패
+        locked = lock.tryLock(3, 30, TimeUnit.SECONDS); // 최대 3초 대기 후 락 획득 실패, 락 보유 최대 30초
       } catch (InterruptedException e) {
         // 현재 스레드가 중단 신호를 받았다는 의미이므로, 인터럽트 상태를 복구하고 상위로 전파한다.
         Thread.currentThread().interrupt();
