@@ -99,10 +99,12 @@ public class ItemStockConsumerService {
         throw new IllegalArgumentException("eventId is required for idempotent stock consume");
       }
 
+      // processed_event에 먼저 기록을 시도해 신규 이벤트만 실제 재고 차감 단계로 보낸다.
       int insertedCount = processedEventJpaRepository.insertIgnore(event.getEventId());
       if (insertedCount == 1) {
         result.add(event);
       } else {
+        // PK 중복은 예외 대신 무시하고, 이미 처리된 이벤트로 간주해 skip 한다.
         log.debug("Skip duplicated stock event. eventId={}", event.getEventId());
       }
     }
